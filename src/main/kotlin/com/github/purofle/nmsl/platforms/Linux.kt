@@ -8,5 +8,5 @@ object Linux {
     get() {
          return System.getenv("HOME")
      }
-    val data = File(home, ".local/share/NMSL-Launcher").check(true)
+    val data = File(home, ".local/share/NMSL-Launcher")
 }
