@@ -1,5 +1,7 @@
 package com.github.purofle.nmsl.utils
 
+import com.github.purofle.nmsl.game.McVersionManifest
+import com.github.purofle.nmsl.game.Version
 import java.io.File
 
 /**
@@ -17,4 +19,12 @@ fun File.check(isDirectory: Boolean): Boolean {
         this.mkdirs()
         true
     }
+}
+
+fun McVersionManifest.toMap(): MutableMap<String, Version> {
+    val map = mutableMapOf<String, Version>()
+    this.versions.forEach { version ->
+        map[version.id] = version
+    }
+    return map
 }
