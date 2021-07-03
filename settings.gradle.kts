@@ -6,4 +6,3 @@ pluginManagement {
     
 }
 rootProject.name = "NMSL-Launcher"
-
