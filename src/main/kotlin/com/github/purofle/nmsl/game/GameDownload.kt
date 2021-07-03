@@ -6,27 +6,26 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
 
 class GameDownload(
     path: String
 ) {
-    val versionPath = File(Paths.get(path, "version").toString())
+    private val versionPath = File(path, "version")
 
-    val client = HttpClient(CIO) {
+    private val client = HttpClient(CIO) {
         install(Logging) {
             logger = Logger.DEFAULT
-            level = LogLevel.ALL
+            level = LogLevel.BODY
         }
     }
     init {
         File(path).check(true)
     }
-    suspend fun getVersionManifest() {
-        val resp = client.get<String>(
+    suspend fun getVersionManifest(): McVersionManifest {
+        val resp = client.get<McVersionManifest>(
             "https://launchermeta.mojang.com/mc/game/version_manifest.json"
         )
-        versionPath.writeText(resp)
+        versionPath.writeText(resp.toString())
+        return resp
     }
 }
