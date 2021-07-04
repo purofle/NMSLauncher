@@ -1,12 +1,12 @@
 package com.github.purofle.nmsl.platforms
 
-import com.github.purofle.nmsl.utils.check
 import java.io.File
 
-object Linux {
-    val home: String
-    get() {
-         return System.getenv("HOME")
-     }
-    val data = File(home, ".local/share/NMSL-Launcher")
+object Linux:Platforms {
+    override val home: File
+        get() = TODO("Not yet implemented")
+    override val cache: File
+        get() = TODO("Not yet implemented")
+    override val data: File
+        get() = TODO("Not yet implemented")
 }
