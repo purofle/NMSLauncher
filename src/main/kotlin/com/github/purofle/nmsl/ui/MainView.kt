@@ -10,15 +10,17 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import java.awt.datatransfer.UnsupportedFlavorException
 
-@OptIn(ExperimentalComposeUiApi::class, DelicateCoroutinesApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
 fun mainView() = application {
     setDefaultExceptionHandler()
     Window(
@@ -39,7 +41,6 @@ fun mainView() = application {
                     }
 
                 },
-
                 //标题栏区域
                 topBar = {
                     TopAppBar(
@@ -47,40 +48,36 @@ fun mainView() = application {
                         navigationIcon = {
                             IconButton(
                                 onClick = {
-                                        scope.launch {
-                                            scaffoldState.drawerState.open()
-                                        }
+                                    scope.launch {
+                                        scaffoldState.drawerState.open()
+                                    }
                                 }
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Menu,
-                                    contentDescription = null
+                                    contentDescription = "menu"
                                 )
                             }
                         }
                     )
                 },
-
                 //悬浮按钮
                 floatingActionButton = {
                     ExtendedFloatingActionButton(
-                        text = { Text("悬浮按钮") },
+                        text = { Text("刷新") },
                         onClick = { }
                     )
                 },
                 floatingActionButtonPosition = FabPosition.End,
 
                 //屏幕内容区域
-                content= {
+                content = {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "屏幕内容区域")
-                    }
-                },
+                    ) { }
+                }
             )
-
         }
     }
 }
@@ -96,14 +93,14 @@ private fun setDefaultExceptionHandler() {
         Window(
             title = "出现错误"
         ) {
-                Column {
-                    Button(
-                        {},
-                        Modifier.fillMaxWidth(),
-                        content = { Text("反馈") }
-                    )
-                    SelectionContainer {
-                        Text(exception.stackTraceToString())
+            Column {
+                Button(
+                    {},
+                    Modifier.fillMaxWidth(),
+                    content = { Text("反馈") }
+                )
+                SelectionContainer {
+                    Text(exception.stackTraceToString())
                 }
             }
         }

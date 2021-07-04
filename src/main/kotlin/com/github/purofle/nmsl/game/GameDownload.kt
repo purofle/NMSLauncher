@@ -8,7 +8,7 @@ import io.ktor.client.request.*
 import java.io.File
 
 class GameDownload(
-    path: String
+    path: File
 ) {
     private val versionPath = File(path, "version")
 
@@ -19,7 +19,7 @@ class GameDownload(
         }
     }
     init {
-        File(path).check(true)
+        path.check(true)
     }
     suspend fun getVersionManifest(): McVersionManifest {
         val resp = client.get<McVersionManifest>(
