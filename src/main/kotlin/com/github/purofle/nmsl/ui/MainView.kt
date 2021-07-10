@@ -8,23 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
+import com.github.purofle.nmsl.ui.view.Logindialog
 import java.awt.datatransfer.UnsupportedFlavorException
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Composable
 fun mainView() = application {
     setDefaultExceptionHandler()
     Window(
         title = "NMSL-Launcher"
     ) {
         DesktopMaterialTheme {
-            val scope = rememberCoroutineScope()
             val scaffoldState = rememberScaffoldState()
             Scaffold(
                 scaffoldState = scaffoldState,
@@ -49,7 +46,7 @@ fun mainView() = application {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-
+                        Logindialog()
                     }
                 }
             )
