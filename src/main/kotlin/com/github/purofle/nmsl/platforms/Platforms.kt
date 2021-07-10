@@ -14,7 +14,7 @@ interface Platforms {
 }
 
 fun system(): Platforms {
-    return when(System.getProperty("os.name").toLowerCase()) {
+    return when(System.getProperty("os.name").lowercase()) {
         "linux" -> Linux
         "windows" -> Windows
         else -> Linux
