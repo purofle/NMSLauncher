@@ -1,6 +1,5 @@
 package com.github.purofle.nmsl.game
 
-import com.github.purofle.nmsl.utils.check
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.logging.*
