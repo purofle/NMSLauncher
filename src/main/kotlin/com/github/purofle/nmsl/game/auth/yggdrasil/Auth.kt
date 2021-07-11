@@ -13,6 +13,20 @@ data class Agent(
 data class Auth(
     val username: String,
     val password: String,
-    val agent: @Contextual Agent.Companion = Agent,
-    val requestUser: Boolean = true
+    val agent: Agent = Agent(),
+)
+
+@Serializable
+data class AccessToken(
+    val iss: String,
+    val sub: String,
+    val yggt: String,
+    val exp: Long,
+    val iat: Long,
+    val spr: String
+)
+
+@Serializable
+data class Validate(
+    val accessToken: String
 )
