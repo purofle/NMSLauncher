@@ -15,7 +15,6 @@ import androidx.compose.ui.window.v1.Dialog
 import androidx.compose.ui.window.v1.DialogProperties
 import com.github.purofle.nmsl.game.auth.yggdrasil.Login
 import io.ktor.client.features.logging.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -44,7 +43,7 @@ fun Logindialog() {
                 )
                 Button({
                     scope.launch {
-                        if (Login(userName, password, LogLevel.NONE).authenticate()) {
+                        if (Login(userName, password, LogLevel.ALL).authenticate()) {
                             print("正版验证成功")
                         } else {
                             print("failed")

@@ -8,8 +8,8 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import java.nio.charset.Charset
-import java.util.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 class Login(
     private val username: String,
@@ -36,12 +36,10 @@ class Login(
     }
 
     suspend fun authenticate(): Boolean {
-        val resp = request<MojangAccount>("/authenticate", Auth(username, password))
-        val accessToken = Base64.getDecoder().decode(resp.accessToken.split(".")[1]).toString()
-        print(accessToken)
-        val refresh = Refresh(accessToken, resp.clientToken)
-        request<Refresh>("/refresh", refresh)
-        return when (request<HttpResponse>("/validate", """{"accessToken": ${accessToken}}""").status.value) {
+        val format = Json { encodeDefaults = true }
+        val data = Auth(username, password)
+        val resp = request<MojangAccount>("/authenticate", format.encodeToJsonElement(data))
+        return when (request<HttpResponse>("/validate", Validate(resp.accessToken)).status.value) {
             204 -> true
             else -> false
         }
