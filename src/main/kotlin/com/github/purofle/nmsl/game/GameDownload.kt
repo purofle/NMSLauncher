@@ -2,6 +2,8 @@ package com.github.purofle.nmsl.game
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import java.io.File
@@ -20,6 +22,9 @@ class GameDownload(
         install(Logging) {
             logger = Logger.DEFAULT
             level = logLevel
+        }
+        install(JsonFeature) {
+            serializer = KotlinxSerializer()
         }
     }
 
