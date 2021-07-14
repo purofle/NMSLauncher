@@ -53,7 +53,7 @@ fun mainView() = application {
                         contentAlignment = Alignment.Center
                     ) {
                         val scope = rememberCoroutineScope()
-                        var data by remember { mutableStateOf(listOf(Version("", "", "", "", ""))) }
+                        var data by remember { mutableStateOf(listOf(Version("正在获取中", "", "", "", ""))) }
                         scope.launch {
                             data = GameDownload(system().data, LogLevel.ALL).getVersionManifest().versions
                         }
