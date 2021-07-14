@@ -2,11 +2,13 @@ package com.github.purofle.nmsl.platforms
 
 import java.io.File
 
-object Linux:Platforms {
+object Linux: Platforms {
     override val home: File
-        get() = TODO("Not yet implemented")
-    override val cache: File
-        get() = TODO("Not yet implemented")
+        get() = File(System.getProperty("user.home"))
     override val data: File
-        get() = TODO("Not yet implemented")
+        get() {
+            val f = File(home, ".local/share/NMSL-Launcher")
+            if (!f.exists()) { f.mkdirs() }
+            return f
+        }
 }

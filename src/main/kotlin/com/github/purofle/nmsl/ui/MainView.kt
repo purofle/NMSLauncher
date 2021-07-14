@@ -8,11 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
-import com.github.purofle.nmsl.ui.view.Logindialog
+import com.github.purofle.nmsl.game.GameDownload
+import com.github.purofle.nmsl.game.Version
+import com.github.purofle.nmsl.platforms.system
+import com.github.purofle.nmsl.ui.view.DownloadView
+import io.ktor.client.features.logging.*
+import kotlinx.coroutines.launch
 import java.awt.datatransfer.UnsupportedFlavorException
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -46,7 +52,12 @@ fun mainView() = application {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Logindialog()
+                        val scope = rememberCoroutineScope()
+                        var data by remember { mutableStateOf(listOf(Version("", "", "", "", ""))) }
+                        scope.launch {
+                            data = GameDownload(system().data, LogLevel.ALL).getVersionManifest().versions
+                        }
+                        DownloadView(data)
                     }
                 }
             )

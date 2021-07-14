@@ -9,7 +9,6 @@ import java.io.File
  */
 interface Platforms {
     val home: File
-    val cache: File
     val data: File
 }
 
