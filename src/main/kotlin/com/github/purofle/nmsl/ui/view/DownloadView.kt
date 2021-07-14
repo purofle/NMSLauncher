@@ -27,7 +27,7 @@ fun DownloadView(data: List<Version>) {
                 .padding(end = 12.dp)
         ) {
             data.forEach {
-                TextBox("${it.id} ${it.releaseTime}")
+                TextBox("${it.id} - 发布时间：${it.releaseTime}")
                 Spacer(modifier = Modifier.height(5.dp))
             }
         }
