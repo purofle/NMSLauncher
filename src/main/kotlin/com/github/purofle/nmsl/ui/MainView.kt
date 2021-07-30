@@ -44,23 +44,24 @@ fun mainView() = application {
                         title = { Text(text = "NMSL-Launcher") },
                     )
                 },
-                floatingActionButtonPosition = FabPosition.End,
+                floatingActionButtonPosition = FabPosition.End
 
-                //屏幕内容区域
-                content = {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        val scope = rememberCoroutineScope()
-                        var data by remember { mutableStateOf(listOf(Version("正在获取中", "", "", "", ""))) }
-                        scope.launch {
-                            data = GameDownload(system().data, LogLevel.ALL).getVersionManifest().versions
-                        }
-                        DownloadView(data)
-                    }
-                }
             )
+
+            //屏幕内容区域
+            {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val scope = rememberCoroutineScope()
+                    var data by remember { mutableStateOf(listOf(Version("正在获取中", "", "", "", ""))) }
+                    scope.launch {
+                        data = GameDownload(system().data, LogLevel.ALL).getVersionManifest().versions
+                    }
+                    DownloadView(data)
+                }
+            }
         }
     }
 }
