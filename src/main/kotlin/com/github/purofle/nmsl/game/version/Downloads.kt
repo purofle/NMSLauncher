@@ -1,11 +1,11 @@
 package com.github.purofle.nmsl.game.version
 
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.*
 
 @Serializable
-data class DownloadsX(
+data class Downloads(
     val artifact: Artifact,
-    val classifiers: Classifiers
+    val classifiers: Classifiers? = null
 )

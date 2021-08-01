@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Library(
-    val downloads: DownloadsX,
+    val downloads: Downloads,
     val name: String, // com.mojang:blocklist:1.0.5
-    val natives: Natives,
+    val natives: Natives? = null,
 )

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Natives(
-    val linux: String, // natives-linux
-    val osx: String, // natives-macos
-    val windows: String // natives-windows
+    val linux: String? = null , // natives-linux
+    val osx: String? = null, // natives-macos
+    val windows: String? = null// natives-windows
 )
