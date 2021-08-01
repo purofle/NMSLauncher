@@ -2,10 +2,7 @@ package com.github.purofle.nmsl.ui
 
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.desktop.Window
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -79,7 +76,7 @@ private fun setDefaultExceptionHandler() {
         ) {
             Column {
                 Button(
-                    {},
+                    {TODO("反馈功能正在实现")},
                     Modifier.fillMaxWidth(),
                     content = { Text("反馈") }
                 )
