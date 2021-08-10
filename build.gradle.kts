@@ -3,31 +3,31 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
-    id("org.jetbrains.compose") version "0.4.0"
-    kotlin("plugin.serialization") version "1.5.10"
+    kotlin("jvm") version "1.5.21"
+    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    kotlin("plugin.serialization") version "1.5.21"
 }
 
 group = "com.github.purofle"
 version = "1.0"
 
 repositories {
-    jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+    google()
 }
 
 dependencies {
-    val ktorversion = "1.6.0"
-    val logbackversion = "1.2.3"
+    val ktorVersion = "1.6.0"
+    val logbackVersion = "1.2.3"
     testImplementation(kotlin("test"))
     implementation(compose.desktop.currentOs)
-    implementation("io.ktor:ktor-client-core:$ktorversion")
-    implementation("io.ktor:ktor-client-cio:$ktorversion")
-    implementation("io.ktor:ktor-client-serialization:$ktorversion")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
-    implementation("ch.qos.logback:logback-classic:$logbackversion")
-    implementation("io.ktor:ktor-client-logging:$ktorversion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
 }
 
 tasks.test {

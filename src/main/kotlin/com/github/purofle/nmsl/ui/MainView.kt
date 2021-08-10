@@ -1,28 +1,24 @@
 package com.github.purofle.nmsl.ui
 
 import androidx.compose.desktop.DesktopMaterialTheme
-import androidx.compose.desktop.Window
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.window.application
-import com.github.purofle.nmsl.game.GameDownload
-import com.github.purofle.nmsl.game.Version
-import com.github.purofle.nmsl.platforms.system
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.*
 import com.github.purofle.nmsl.ui.view.DownloadView
-import io.ktor.client.features.logging.*
-import kotlinx.coroutines.launch
-import java.awt.datatransfer.UnsupportedFlavorException
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun mainView() = application {
-    setDefaultExceptionHandler()
+    ExceptionWindows()
     Window(
-        title = "NMSL-Launcher"
+        title = "NMSL-Launcher",
+        onCloseRequest = ::exitApplication
     ) {
         DesktopMaterialTheme {
             val scaffoldState = rememberScaffoldState()
@@ -33,6 +29,7 @@ fun mainView() = application {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
+                        Text("test")
                     }
                 },
                 //标题栏区域
@@ -47,17 +44,7 @@ fun mainView() = application {
 
             //屏幕内容区域
             {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val scope = rememberCoroutineScope()
-                    var data by remember { mutableStateOf(listOf(Version("正在获取中", "", "", "", ""))) }
-                    scope.launch {
-                        data = GameDownload(system().data, LogLevel.ALL).getVersionManifest().versions
-                    }
-                    DownloadView(data)
-                }
+                DownloadView()
             }
         }
     }
@@ -65,25 +52,31 @@ fun mainView() = application {
 
 //从 mirai-compose 那里抄来的异常处理
 @ExperimentalComposeUiApi
-private fun setDefaultExceptionHandler() {
-    Thread.setDefaultUncaughtExceptionHandler { _, exception ->
-        if (exception is UnsupportedFlavorException) {
-            return@setDefaultUncaughtExceptionHandler
+@Composable
+fun ApplicationScope.ExceptionWindows(
+    onException: (throwable: Throwable) -> Unit = { it.stackTraceToString() },
+    state: WindowState = rememberWindowState(size = WindowSize(1280.dp, 768.dp))
+) {
+    var exception: Throwable? by remember { mutableStateOf(null) }
+    var showException: Boolean by remember { mutableStateOf(false) }
+
+    SideEffect {
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            onException(throwable)
+            exception = throwable
+            showException = true
         }
-        println(exception.stackTraceToString())
+    }
+
+    if (showException)
         Window(
-            title = "出现错误"
+            state = state,
+            onCloseRequest = ::exitApplication
         ) {
-            Column {
-                Button(
-                    {TODO("反馈功能正在实现")},
-                    Modifier.fillMaxWidth(),
-                    content = { Text("反馈") }
-                )
+            exception?.let {
                 SelectionContainer {
-                    Text(exception.stackTraceToString())
+                    Text(it.stackTraceToString())
                 }
             }
         }
-    }
 }
