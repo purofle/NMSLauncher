@@ -7,8 +7,10 @@ import java.io.File
 fun versionTest(json: String) {
     val format = Json { ignoreUnknownKeys = true }
     val version = format.decodeFromString<Version>(json)
-    version.libraries.forEach {
-        println(it.name)
+    version.libraries.filter {
+        it.natives != null
+    }.forEach {
+        println("${it.name}(${it.natives}): ${it.downloads.artifact.url}")
     }
 }
 
