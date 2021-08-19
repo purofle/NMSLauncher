@@ -11,19 +11,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.v1.Dialog
-import androidx.compose.ui.window.v1.DialogProperties
+import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.game.auth.yggdrasil.Login
+import com.github.purofle.nmsl.ui.root.AbstractChildrenComponent
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.launch
 
-@Composable
-fun Logindialog() {
-    Dialog(
-        {}, DialogProperties(
-        "Login"
-    )
-    ) {
+
+class LoginView(ctx: ComponentContext): AbstractChildrenComponent(ctx) {
+    @Composable
+    override fun render() {
         var mojang by remember { mutableStateOf(true) }
         val scope = rememberCoroutineScope()
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

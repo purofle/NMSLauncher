@@ -9,24 +9,30 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.io.File
 
 /**
  * 加载游戏相关文件
  * @param logLevel log 输出等级
  */
 class GameDownload(
-    logLevel: LogLevel
+    logLevel: LogLevel = LogLevel.NONE
 ) {
-    private val client = HttpClient(CIO) {
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = logLevel
-        }
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
+
+    companion object {
+        fun getClient(logLevel: LogLevel = LogLevel.NONE): HttpClient {
+            return HttpClient(CIO) {
+                install(Logging) {
+                    logger = Logger.DEFAULT
+                    level = logLevel
+                }
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer()
+                }
+            }
         }
     }
+
+    private val client = getClient(logLevel)
 
     /**
      * 下载并保存
