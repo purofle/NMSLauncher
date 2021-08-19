@@ -1,54 +1,63 @@
 package com.github.purofle.nmsl.ui.view
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.game.GameDownload
 import com.github.purofle.nmsl.game.Version
-import com.github.purofle.nmsl.game.version.parse.VersionParser
-import com.github.purofle.nmsl.platforms.system
+import com.github.purofle.nmsl.platforms.OperatingSystem
+import com.github.purofle.nmsl.ui.root.AbstractChildrenComponent
 import com.github.purofle.nmsl.utils.date
 import com.github.purofle.nmsl.utils.mkdirs
-import com.github.purofle.nmsl.utils.toMap
 import io.ktor.client.features.logging.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Composable
 //下载view
-fun DownloadView() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        val scope = rememberCoroutineScope()
-        val emptyData = listOf(Version("正在获取中", "", "", "", ""))
-        var data by remember { mutableStateOf(emptyData) }
-        val gameDownload = GameDownload(LogLevel.NONE)
-        system().data.mkdirs(listOf("assets", "libraries", "versions"))
-        if (data == emptyData) {
-            scope.launch {
-                val manifest = gameDownload.getVersionManifest()
-                data = manifest.versions
+class DownloadView(
+    ctx: ComponentContext,
+    private val onButtonPressed: () -> Unit
+): AbstractChildrenComponent(ctx) {
+    @Composable
+    override fun render() {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            val scope = rememberCoroutineScope()
+            val emptyData = listOf(Version("正在获取中", "", "", "", ""))
+            var data by remember { mutableStateOf(emptyData) }
+            val gameDownload = GameDownload(LogLevel.NONE)
+            OperatingSystem.getLauncherWorkingDirectory().toFile().mkdirs("assets", "libraries", "versions")
+            if (data == emptyData) {
+                scope.launch {
+                    val manifest = gameDownload.getVersionManifest()
+                    data = manifest.versions
+                }
             }
+            DownloadViewBody(data, onButtonPressed)
         }
-        DownloadViewBody(data, gameDownload)
     }
 }
 
 @Composable
-fun DownloadViewBody(data: List<Version>, gameDownload: GameDownload) {
+fun DownloadViewBody(data: List<Version>, onButtonPressed: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize()
             .padding(10.dp)
     ) {
         val state = rememberScrollState(0)
-        val scope = rememberCoroutineScope()
 
         Column(
             modifier = Modifier
@@ -58,15 +67,7 @@ fun DownloadViewBody(data: List<Version>, gameDownload: GameDownload) {
         ) {
             data.forEach {
                 TextBox("${it.id} - 发布时间：${it.releaseTime.date()}") {
-                    if (!data.toMap().containsKey(it.id)) {
-                        TODO("找不到版本：${it.id}")
-                    } else {
-                        scope.launch {
-                            val versionInfo = gameDownload.getVersionInfo(data.toMap()[it.id].toString())
-                            println(VersionParser(versionInfo).libraries())
-                        }
-
-                    }
+                    onButtonPressed()
                 }
                 Spacer(modifier = Modifier.height(5.dp))
             }

@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-parcelize-compiler:1.5.21")
     val ktorVersion = "1.6.0"
     val logbackVersion = "1.2.3"
     testImplementation(kotlin("test"))
@@ -28,6 +29,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("com.arkivanov.decompose:decompose:0.3.1")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.3.1")
 }
 
 tasks.test {
