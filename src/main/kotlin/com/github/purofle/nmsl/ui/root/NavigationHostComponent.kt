@@ -20,13 +20,16 @@ class NavigationHostComponent(
         when (state) {
             is ChildrenStates.DownloadView -> DownloadView(context, ::switchDownloadInfoView)
             is ChildrenStates.LoginView -> LoginView(context)
-            is ChildrenStates.MainView -> MainView(context)
+            is ChildrenStates.MainView -> MainView(context, ::switchLoginView)
             is ChildrenStates.DownloadInfoView -> DownloadInfoView(context)
         }
     }
 
     private fun switchDownloadInfoView() {
         navigationRouter.push(ChildrenStates.DownloadInfoView)
+    }
+    private fun switchLoginView() {
+        navigationRouter.push(ChildrenStates.LoginView)
     }
 
     @Composable

@@ -2,6 +2,7 @@ package com.github.purofle.nmsl.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -20,7 +21,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.ui.root.AbstractChildrenComponent
 import com.github.purofle.nmsl.ui.theme.MaterialColors
 
-class MainView(ctx: ComponentContext): AbstractChildrenComponent(ctx) {
+class MainView(ctx: ComponentContext, private val login: () -> Unit): AbstractChildrenComponent(ctx) {
     @Composable
     override fun render() {
         val scaffoldState = rememberScaffoldState()
@@ -45,7 +46,7 @@ class MainView(ctx: ComponentContext): AbstractChildrenComponent(ctx) {
                 {
                     Column(Modifier.fillMaxHeight().background(MaterialColors.Grey300)) {
                         Row {
-                            AccountCard("name", "account")
+                            AccountCard("name", "account", login)
                         }
                         actionButton({}, Icons.Filled.Build, "build")
                     }
@@ -54,9 +55,11 @@ class MainView(ctx: ComponentContext): AbstractChildrenComponent(ctx) {
         }
     }
     @Composable
-    fun AccountCard(name: String, account: String) {
+    fun AccountCard(name: String, account: String, login: () -> Unit) {
         Card(modifier = Modifier.padding(12.dp)
-            .fillMaxWidth()) {
+            .fillMaxWidth()
+            .clickable(onClick = login)
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(8.dp)
