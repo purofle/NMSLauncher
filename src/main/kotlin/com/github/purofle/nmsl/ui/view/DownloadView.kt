@@ -13,41 +13,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.game.GameDownload
 import com.github.purofle.nmsl.game.Version
 import com.github.purofle.nmsl.platforms.OperatingSystem
-import com.github.purofle.nmsl.ui.root.AbstractChildrenComponent
 import com.github.purofle.nmsl.utils.date
 import com.github.purofle.nmsl.utils.mkdirs
 import io.ktor.client.features.logging.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 //下载view
-class DownloadView(
-    ctx: ComponentContext,
-    private val onButtonPressed: () -> Unit
-): AbstractChildrenComponent(ctx) {
-    @Composable
-    override fun render() {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            val scope = rememberCoroutineScope()
-            val emptyData = listOf(Version("正在获取中", "", "", "", ""))
-            var data by remember { mutableStateOf(emptyData) }
-            val gameDownload = GameDownload(LogLevel.NONE)
-            OperatingSystem.getLauncherWorkingDirectory().toFile().mkdirs("assets", "libraries", "versions")
-            if (data == emptyData) {
-                scope.launch {
-                    val manifest = gameDownload.getVersionManifest()
-                    data = manifest.versions
-                }
+@Composable
+fun DownloadView(onButtonPressed: () -> Unit) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        val scope = rememberCoroutineScope()
+        val emptyData = listOf(Version("正在获取中", "", "", "", ""))
+        var data by remember { mutableStateOf(emptyData) }
+        val gameDownload = GameDownload(LogLevel.NONE)
+        OperatingSystem.getLauncherWorkingDirectory().toFile().mkdirs("assets", "libraries", "versions")
+        if (data == emptyData) {
+            scope.launch {
+                val manifest = gameDownload.getVersionManifest()
+                data = manifest.versions
             }
-            DownloadViewBody(data, onButtonPressed)
         }
+        DownloadViewBody(data, onButtonPressed)
     }
 }
 
