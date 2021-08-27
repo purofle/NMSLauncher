@@ -10,7 +10,7 @@ import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,12 +18,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
-import com.github.purofle.nmsl.ui.root.AbstractChildrenComponent
+import com.github.purofle.nmsl.ui.model.Login
 import com.github.purofle.nmsl.ui.theme.MaterialColors
 
-class MainView(ctx: ComponentContext, private val login: () -> Unit): AbstractChildrenComponent(ctx) {
-    @Composable
-    override fun render() {
+@Composable
+fun MainView(onLoginPressed: () -> Unit, login: Login) {
+    val account by login.model
+    print(account.account)
         val scaffoldState = rememberScaffoldState()
         Scaffold(
             scaffoldState = scaffoldState,
@@ -46,7 +47,7 @@ class MainView(ctx: ComponentContext, private val login: () -> Unit): AbstractCh
                 {
                     Column(Modifier.fillMaxHeight().background(MaterialColors.Grey300)) {
                         Row {
-                            AccountCard("name", "account", login)
+                            AccountCard(account.account.name, account.account.type, onLoginPressed)
                         }
                         actionButton({}, Icons.Filled.Build, "build")
                     }
@@ -73,17 +74,16 @@ class MainView(ctx: ComponentContext, private val login: () -> Unit): AbstractCh
             }
         }
     }
-    @Composable
-    fun actionButton(onClick: () -> Unit, imageVector: ImageVector, text: String) {
-        Button(
-            onClick,
-            Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(0.dp),
-            colors = buttonColors(MaterialColors.Teal400, contentColor = Color.White),
-            content = {
+@Composable
+fun actionButton(onClick: () -> Unit, imageVector: ImageVector, text: String) {
+    Button(
+        onClick,
+        Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(0.dp),
+        colors = buttonColors(MaterialColors.Teal400, contentColor = Color.White),
+        content = {
             Image(imageVector, null)
             Spacer(Modifier.width(80.dp))
             Text(text, modifier = Modifier.wrapContentWidth(Alignment.End))
         })
-    }
 }
