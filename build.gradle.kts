@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.21"
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    id("org.jetbrains.compose") version "1.0.0-beta5"
     kotlin("plugin.serialization") version "1.5.21"
 }
 
@@ -19,8 +19,8 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-parcelize-compiler:1.5.21")
-    val ktorVersion = "1.6.0"
-    val logbackVersion = "1.2.3"
+    val ktorVersion = "1.6.4"
+    val logbackVersion = "1.2.6"
     testImplementation(kotlin("test"))
     implementation(compose.desktop.currentOs)
     implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -29,8 +29,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    implementation("com.arkivanov.decompose:decompose:0.3.1")
-    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.3.1")
 }
 
 tasks.test {
