@@ -1,3 +1,0 @@
-[submodule "src/main/kotlin/androidx"]
-	path = src/main/kotlin/androidx
-	url = https://github.com/purofle/material3

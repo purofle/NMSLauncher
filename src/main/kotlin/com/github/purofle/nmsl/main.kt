@@ -1,9 +1,11 @@
 package com.github.purofle.nmsl
 
-import androidx.compose.desktop.DesktopMaterialTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.github.purofle.nmsl.ui.view.DownloadView
+import com.github.purofle.nmsl.ui.view.MainView
 
 fun main() {
     application {
@@ -11,8 +13,8 @@ fun main() {
             title = "NMSL-Launcher",
             onCloseRequest = ::exitApplication
         ) {
-            DesktopMaterialTheme {
-                DownloadView()
+            MaterialTheme(darkColorScheme()) {
+                MainView()
             }
         }
     }
