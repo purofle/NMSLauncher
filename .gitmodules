@@ -1,0 +1,3 @@
+[submodule "src/main/kotlin/material3"]
+	path = src/main/kotlin/material3
+	url = https://github.com/purofle/material3

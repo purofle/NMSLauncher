@@ -13,17 +13,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.github.purofle.nmsl.game.GameDownload
-import com.github.purofle.nmsl.game.Version
+import com.github.purofle.nmsl.game.download.Downloader
+import com.github.purofle.nmsl.game.download.Version
 import com.github.purofle.nmsl.platforms.OperatingSystem
 import com.github.purofle.nmsl.utils.date
 import com.github.purofle.nmsl.utils.mkdirs
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 //下载view
 @Composable
-fun DownloadView(onButtonPressed: () -> Unit) {
+fun DownloadView() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -31,25 +32,27 @@ fun DownloadView(onButtonPressed: () -> Unit) {
         val scope = rememberCoroutineScope()
         val emptyData = listOf(Version("正在获取中", "", "", "", ""))
         var data by remember { mutableStateOf(emptyData) }
-        val gameDownload = GameDownload(LogLevel.NONE)
         OperatingSystem.getLauncherWorkingDirectory().toFile().mkdirs("assets", "libraries", "versions")
         if (data == emptyData) {
             scope.launch {
-                val manifest = gameDownload.getVersionManifest()
+                println("开始下载")
+                val manifest = Downloader.getReleases()
                 data = manifest.versions
+                println("下载完成")
             }
         }
-        DownloadViewBody(data, onButtonPressed)
+        DownloadViewBody(data)
     }
 }
 
 @Composable
-fun DownloadViewBody(data: List<Version>, onButtonPressed: () -> Unit) {
+fun DownloadViewBody(data: List<Version>) {
     Box(
         modifier = Modifier.fillMaxSize()
             .padding(10.dp)
     ) {
         val state = rememberScrollState(0)
+        val scope = rememberCoroutineScope()
 
         Column(
             modifier = Modifier
@@ -59,7 +62,11 @@ fun DownloadViewBody(data: List<Version>, onButtonPressed: () -> Unit) {
         ) {
             data.forEach {
                 TextBox("${it.id} - 发布时间：${it.releaseTime.date()}") {
-                    onButtonPressed()
+                    scope.launch {
+                        println("下载2")
+                        Downloader.downloadReleasesToFileSystem()
+                        Downloader.downloadClient(Downloader.getReleaseInfo(it.url))
+                    }
                 }
                 Spacer(modifier = Modifier.height(5.dp))
             }

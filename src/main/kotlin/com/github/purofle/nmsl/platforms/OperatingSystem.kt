@@ -59,9 +59,7 @@ enum class OperatingSystem(val checkedName: String) {
             }
         }
 
-        fun getMinecraftWorkingDirectory(): File {
-            return File(getLauncherWorkingDirectory().toFile(), "minecraft")
-        }
+        fun getMinecraftWorkingDirectory() = getLauncherWorkingDirectory().toFile()
 
         init {
             val name = System.getProperty("os.name").lowercase(Locale.US)
