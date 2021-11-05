@@ -19,6 +19,7 @@ import com.github.purofle.nmsl.platforms.OperatingSystem
 import com.github.purofle.nmsl.utils.date
 import com.github.purofle.nmsl.utils.mkdirs
 import io.ktor.client.features.logging.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -34,7 +35,7 @@ fun DownloadView() {
         var data by remember { mutableStateOf(emptyData) }
         OperatingSystem.getLauncherWorkingDirectory().toFile().mkdirs("assets", "libraries", "versions")
         if (data == emptyData) {
-            scope.launch {
+            scope.launch(context = Dispatchers.Default) {
                 println("开始下载")
                 val manifest = Downloader.getReleases()
                 data = manifest.versions
