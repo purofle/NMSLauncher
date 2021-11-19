@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0-beta6-dev462"
+    id("org.jetbrains.compose") version "1.0.0-beta5"
     kotlin("plugin.serialization") version "1.5.31"
 }
 
@@ -17,14 +17,12 @@ repositories {
     google()
 }
 
-@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-parcelize-compiler:1.5.21")
     val ktorVersion = "1.6.4"
     val logbackVersion = "1.2.7"
     testImplementation(kotlin("test"))
     implementation(compose.desktop.currentOs)
-    implementation(compose.material3)
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
