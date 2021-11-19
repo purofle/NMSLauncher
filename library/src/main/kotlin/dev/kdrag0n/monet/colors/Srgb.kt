@@ -10,9 +10,9 @@ data class Srgb(
 ) : Color {
     // Convenient constructors for quantized values
     constructor(r: Int, g: Int, b: Int) : this(
-        r.toDouble() / 255.0,
-        g.toDouble() / 255.0,
-        b.toDouble() / 255.0,
+        r.toDouble(),
+        g.toDouble(),
+        b.toDouble(),
     )
     constructor(color: Int) : this(
         java.awt.Color.red.rgb,
