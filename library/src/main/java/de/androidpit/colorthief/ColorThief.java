@@ -22,7 +22,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.Arrays;
 
-import de.androidpit.colorthief.MMCQ;
 import de.androidpit.colorthief.MMCQ.CMap;
 
 public class ColorThief {
