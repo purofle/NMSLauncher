@@ -26,9 +26,18 @@ object MonetCompat {
     }
 
     private fun getBackgroundColor(): IntArray {
-        val wallpaper = "bash /home/purofle/project/NMSL-Launcher/library/src/test/kotlin/getwallpaper.sh".run()
-        val file = File(URI(wallpaper.trimIndent()))
-        print(file.isFile)
+        val wallpaper = "bash ${this.javaClass.classLoader.getResource("getwallpaper.sh")!!.path}".run()
+        debug(this.javaClass.classLoader.getResource("getwallpaper.sh")!!.toString())
+        debug("get wallpaper: $wallpaper")
+        var file = if (wallpaper.startsWith("file:///")) {
+            File(URI(wallpaper.trimIndent()))
+        } else {
+            File(wallpaper.trimIndent())
+        }
+        if (!file.isFile) {
+            debug("获取壁纸失败，使用默认图片")
+            file = File("/usr/share/wallpapers/Cascade/contents/screenshot.png")
+        }
         return ColorThief.getColor(ImageIO.read(file))!!
     }
 
@@ -39,7 +48,6 @@ object MonetCompat {
             chromaMultiplier,
             accurateShades
         )
-        println(d.accent1)
         return colorSchemeFactory?.getColor(Srgb(primaryColor[0], primaryColor[1], primaryColor[2])) ?: d
     }
 

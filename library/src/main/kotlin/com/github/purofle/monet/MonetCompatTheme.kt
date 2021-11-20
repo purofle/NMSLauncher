@@ -1,12 +1,12 @@
 package com.github.purofle.monet
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import org.jetbrains.skiko.SystemTheme
 import dev.kdrag0n.monet.colors.Color as MonetColor
 
 fun MonetColor.toArgb(): Int {
@@ -37,7 +37,7 @@ private fun MonetCompat.getMonetAccentColor(
 }
 
 /**
- * Any values that are not set will be chosen to best represent default values given by [dynamicLightColorScheme][androidx.compose.material3.dynamicLightColorScheme]
+ * Any values that are not set will be chosen to best represent default values given.
  * on Android 12+ devices
  */
 @Composable
@@ -91,7 +91,7 @@ fun MonetCompat.lightMonetCompatScheme(
     )
 
 /**
- * Any values that are not set will be chosen to best represent default values given by [dynamicDarkColorScheme][androidx.compose.material3.dynamicDarkColorScheme]
+ * Any values that are not set will be chosen to best represent default values given.
  * on Android 12+ devices
  */
 @Composable
@@ -158,10 +158,6 @@ fun MonetCompat.darkMonetCompatScheme(
 @Composable
 fun MonetCompatDynamicTheme(monet: MonetCompat, content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) {
-            monet.darkMonetCompatScheme()
-        } else {
-            monet.lightMonetCompatScheme()
-        }, content = content
+        colorScheme = monet.darkMonetCompatScheme(), content = content
     )
 }

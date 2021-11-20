@@ -1,7 +1,5 @@
 package com.github.purofle.nmsl
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.github.purofle.monet.MonetCompat
@@ -14,9 +12,6 @@ fun main() {
             title = "NMSL-Launcher",
             onCloseRequest = ::exitApplication
         ) {
-//            MaterialTheme(darkColorScheme()) {
-//                MainView()
-//            }
             MonetCompatDynamicTheme(MonetCompat) {
                 MainView()
             }
