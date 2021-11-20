@@ -1,8 +1,6 @@
 package com.github.purofle.nmsl.ui.view
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.NavigationRail
-import androidx.compose.material.NavigationRailItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
