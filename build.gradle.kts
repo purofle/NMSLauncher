@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0-beta5"
+    id("org.jetbrains.compose") version "1.0.0-beta6-dev462"
     kotlin("plugin.serialization") version "1.5.31"
 }
 
@@ -23,6 +23,7 @@ dependencies {
     val logbackVersion = "1.2.7"
     testImplementation(kotlin("test"))
     implementation(compose.desktop.currentOs)
+    implementation(project(":library"))
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
