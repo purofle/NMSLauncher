@@ -5,3 +5,4 @@ pluginManagement {
     }
 }
 rootProject.name = "NMSL-Launcher"
+include(":library")
