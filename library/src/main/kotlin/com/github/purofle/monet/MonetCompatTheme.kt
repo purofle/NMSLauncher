@@ -158,6 +158,6 @@ fun MonetCompat.darkMonetCompatScheme(
 @Composable
 fun MonetCompatDynamicTheme(monet: MonetCompat, content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = monet.darkMonetCompatScheme(), content = content
+        colorScheme = monet.lightMonetCompatScheme(), content = content
     )
 }
