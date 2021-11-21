@@ -27,4 +27,4 @@
 - [JetBrains/compose-jb](https://github.com/JetBrains/compose-jb) 提供的UI方案。
 - [soualid/java-colorthief](https://github.com/soualid/java-colorthief) 提供的取壁纸主题色方案。
 - [KieronQuinn/MonetCompat](https://github.com/KieronQuinn/MonetCompat) 提供的Monet实现。
-- [rasongame/DerpyKt]提供的游戏下载实现。
+- [rasongame/DerpyKt](https://github.com/rasongame/DerpyKt)提供的游戏下载实现。
