@@ -12,9 +12,6 @@ import androidx.compose.runtime.Composable
 @Composable
 fun DownloadView() {
    Scaffold(
-      topBar = {
-         SmallTopAppBar({ Text("游戏下载") })
-      },
       content = {
          Column {
 
