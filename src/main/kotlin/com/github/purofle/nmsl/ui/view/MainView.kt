@@ -3,9 +3,7 @@ package com.github.purofle.nmsl.ui.view
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import com.github.purofle.nmsl.ui.viewmodel.LoginStore
@@ -14,29 +12,39 @@ import com.github.purofle.nmsl.ui.viewmodel.LoginStore
 @Composable
 fun MainView() {
     var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Home", "AccountBox", "Download")
-    val icons = listOf(Icons.Filled.Home, Icons.Filled.AccountBox, Icons.Filled.KeyboardArrowDown)
-    val model = remember { LoginStore() }
-//    val state = model.state
+    val items = listOf("Home", "AccountBox", "Manager", "Settings") // 主页，账号管理，游戏管理，设置
+    val icons = listOf(Icons.Filled.Home, Icons.Filled.AccountBox,Icons.Filled.List, Icons.Filled.Settings)
+    val state = LoginStore.state
 
-    Row {
-        NavigationRail {
-            items.forEachIndexed { index, item ->
-                NavigationRailItem(
-                    icon = { Icon(icons[index], contentDescription = item) },
-                    label = { Text(item) },
-                    selected = selectedItem == index,
-                    onClick = {
-                        selectedItem = index
-                    }
-                )
-            }
+    Scaffold(
+        topBar = {
+            SmallTopAppBar({ Text("NMSLauncher") }, actions = {
+                if (selectedItem == 1) { // 当选择的是账号管理时，显示账号管理的菜单
+                    IconButton({}) { Icon(Icons.Filled.Add, "Add") }
+                }
+            })
         }
-        Crossfade(targetState = selectedItem) { item ->
-            when (item) {
-                0 -> HomeView()
-                1 -> AccountBox()
-                2 -> DownloadView()
+    ) {
+        Row {
+            NavigationRail {
+                items.forEachIndexed { index, item ->
+                    NavigationRailItem(
+                        icon = { Icon(icons[index], contentDescription = item) },
+                        label = { Text(item) },
+                        selected = selectedItem == index,
+                        onClick = {
+                            selectedItem = index
+                        },
+                        alwaysShowLabel = false
+                    )
+                }
+            }
+            Crossfade(targetState = selectedItem) { item ->
+                when (item) {
+                    0 -> HomeView()
+                    1 -> AccountBox(state)
+                    2 -> DownloadView()
+                }
             }
         }
     }
