@@ -16,8 +16,8 @@ import kotlin.io.path.listDirectoryEntries
 
 object Downloader {
     var httpClient = HttpClient(CIO)
-    private val minecraftHome = OperatingSystem.getMinecraftWorkingDirectory()
-    val format = Json { ignoreUnknownKeys = true }
+    private val minecraftHome = OperatingSystem.getWorkingDirectory("minecraft")
+    private val format = Json { ignoreUnknownKeys = true }
 
     private suspend fun getAssetsInfo(url: String): Assets {
         val response: HttpResponse = this.httpClient.get(url)
