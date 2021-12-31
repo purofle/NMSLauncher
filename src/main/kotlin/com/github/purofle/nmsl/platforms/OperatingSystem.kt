@@ -1,9 +1,11 @@
 package com.github.purofle.nmsl.platforms
 
+import com.github.purofle.nmsl.game.account.AccountManager
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
+import kotlin.properties.ReadOnlyProperty
 
 enum class OperatingSystem(val checkedName: String) {
     /**
@@ -27,39 +29,24 @@ enum class OperatingSystem(val checkedName: String) {
     UNKNOWN("universal");
 
     companion object {
+
         /**
          * The current operating system.
          */
         var CURRENT_OS: OperatingSystem
 
-        private fun getWorkingDirectory(vararg folder: String): Path {
+        fun getWorkingDirectory(vararg folder: String): Path {
             val home = System.getProperty("user.home", ".")
             return when (CURRENT_OS) {
-                LINUX -> Paths.get(home, *folder)
+                LINUX -> Paths.get(home, ".local", "share", "NMSL-Launcher", *folder)
                 WINDOWS -> {
                     val appdata = System.getenv("APPDATA")
-                    Paths.get(appdata ?: home, *folder)
+                    Paths.get(appdata ?: home, "NMSL-Launcher", *folder)
                 }
-                OSX -> Paths.get(home, "Library", "Application Support", *folder)
+                OSX -> Paths.get(home, "Library", "Application Support", "NMSL-Launcher", *folder)
                 else -> Paths.get(home, *folder)
             }
         }
-
-        fun getLauncherWorkingDirectory(): Path {
-             return when (CURRENT_OS) {
-                LINUX -> getWorkingDirectory(".local", "share", "NMSL-Launcher")
-                else ->  getWorkingDirectory("NMSL-Launcher")
-            }
-        }
-
-        fun getLauncherWorkingDirectory(vararg folder: String): Path {
-            return when (CURRENT_OS) {
-                LINUX -> getWorkingDirectory(".local", "share", "NMSL-Launcher", *folder)
-                else ->  getWorkingDirectory("NMSL-Launcher", *folder)
-            }
-        }
-
-        fun getMinecraftWorkingDirectory() = getLauncherWorkingDirectory().toFile()
 
         init {
             val name = System.getProperty("os.name").lowercase(Locale.US)

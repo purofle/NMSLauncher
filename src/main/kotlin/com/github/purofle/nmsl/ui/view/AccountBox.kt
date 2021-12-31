@@ -11,11 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.purofle.nmsl.ui.viewmodel.LoginStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountBox(state: LoginStore.LoginState) {
+fun AccountBox() {
 
     var edit by remember { mutableStateOf(false) }
 
@@ -37,7 +36,7 @@ fun AccountBox(state: LoginStore.LoginState) {
                     .padding(end = 12.dp, bottom = 12.dp)
             ) {
                 Column {
-                    AccountList({ edit }, { state })
+                    AccountList({ edit })
                 }
             }
             VerticalScrollbar(
@@ -50,11 +49,8 @@ fun AccountBox(state: LoginStore.LoginState) {
 }
 
 @Composable
-fun AccountList(edit: () -> Boolean, state: () -> LoginStore.LoginState) {
+fun AccountList(edit: () -> Boolean) {
     Column {
-        if (state().accountList == null) {
-            Text("请先添加一个账号")
-        }
     }
 }
 
