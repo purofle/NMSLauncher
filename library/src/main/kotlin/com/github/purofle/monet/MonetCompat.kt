@@ -6,8 +6,6 @@ import dev.kdrag0n.monet.factory.ColorSchemeFactory
 import dev.kdrag0n.monet.theme.ColorScheme
 import dev.kdrag0n.monet.theme.DynamicColorScheme
 import dev.kdrag0n.monet.theme.MaterialYouTargets
-import java.io.File
-import java.net.URI
 import javax.imageio.ImageIO
 
 object MonetCompat {
@@ -19,6 +17,8 @@ object MonetCompat {
     @JvmStatic
     var accurateShades = true
 
+    lateinit var colorThief: IntArray
+
     @JvmStatic
     val colorScheme: ColorScheme
     get() {
@@ -26,9 +26,14 @@ object MonetCompat {
     }
 
     private fun getBackgroundColor(): IntArray {
-        val wallpaper = this::class.java.getResource("/3840x2400.jpg")
-        debug("get wallpaper: $wallpaper")
-        return ColorThief.getColor(ImageIO.read(wallpaper))!!
+        return if (!this::colorThief.isInitialized) {
+            val wallpaper = this::class.java.getResource("/3840x2400.jpg")
+            debug("get wallpaper: $wallpaper")
+            colorThief = ColorThief.getColor(ImageIO.read(wallpaper))
+            colorThief
+        } else {
+            colorThief
+        }
     }
 
     private fun generateColorScheme(primaryColor: IntArray): ColorScheme {
