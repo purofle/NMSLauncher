@@ -3,9 +3,10 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.compose") version "1.0.0"
-    kotlin("plugin.serialization") version "1.5.31"
+    kotlin("jvm") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
+    id("org.jetbrains.compose") version "1.1.0-alpha1-dev550"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "com.github.purofle"
@@ -28,11 +29,13 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains:$decomposeVersion")
+    implementation("com.google.dagger:dagger:2.40.5")
+    kapt("com.google.dagger:dagger-compiler:2.40.5")
 }
 
 tasks.test {

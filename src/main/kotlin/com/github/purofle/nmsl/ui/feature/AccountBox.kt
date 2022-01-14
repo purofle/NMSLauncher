@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.ui.view
+package com.github.purofle.nmsl.ui.feature
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
@@ -36,7 +36,7 @@ fun AccountBox() {
                     .padding(end = 12.dp, bottom = 12.dp)
             ) {
                 Column {
-                    AccountList({ edit })
+                    AccountList { edit }
                 }
             }
             VerticalScrollbar(
