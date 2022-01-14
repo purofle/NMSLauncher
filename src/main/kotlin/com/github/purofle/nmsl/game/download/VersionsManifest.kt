@@ -1,9 +1,8 @@
 package com.github.purofle.nmsl.game.download
 
-import kotlinx.serialization.*
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class Latest(val release: String, val snapshot: String)

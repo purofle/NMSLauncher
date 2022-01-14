@@ -2,9 +2,7 @@ package com.github.purofle.nmsl.game.account
 
 import com.github.purofle.nmsl.game.auth.yggdrasil.AvailableProfile
 import com.github.purofle.nmsl.game.auth.yggdrasil.SelectedProfile
-import com.github.purofle.nmsl.platforms.OperatingSystem
 import org.junit.Test
-import kotlin.io.path.isRegularFile
 
 class AccountManagerTest {
 
@@ -21,6 +19,6 @@ class AccountManagerTest {
             ))
         }
         AccountManager.accountConfig = AccountManager.AccountList(al)
-        check(OperatingSystem.getWorkingDirectory("accountConfig.json").isRegularFile())
+        check(AccountManager.accountConfig == AccountManager.AccountList(al))
     }
 }
