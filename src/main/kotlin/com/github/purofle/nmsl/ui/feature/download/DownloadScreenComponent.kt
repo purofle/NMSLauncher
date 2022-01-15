@@ -6,12 +6,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.ui.navigation.Component
+import javax.inject.Inject
 
 class DownloadScreenComponent(
     appComponent: AppComponent,
     val componentContext: ComponentContext
 ): Component, ComponentContext by componentContext {
 
+    @Inject
     lateinit var viewModel: DownloadViewModel
 
     init {

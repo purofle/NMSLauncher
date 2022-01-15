@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.github.purofle.nmsl.ui.feature.account.AddAccount
 import com.github.purofle.nmsl.ui.navigation.NavHostComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,8 +44,8 @@ fun MainView() {
                     )
                 }
             }
+            val lifecycle = LifecycleRegistry()
+            NavHostComponent(DefaultComponentContext(lifecycle)).render()
         }
-        val lifecycle = LifecycleRegistry()
-        NavHostComponent(DefaultComponentContext(lifecycle))
     }
 }

@@ -2,6 +2,10 @@ package com.github.purofle.nmsl.ui.navigation
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.extensions.compose.jetbrains.Children
+import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
+import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
@@ -26,6 +30,7 @@ class NavHostComponent(
 
     private fun createScreenComponent(config: Config, componentContext: ComponentContext): Component = when (config) {
         is Config.Home -> HomeScreenComponent(
+            appComponent = appComponent,
             componentContext = componentContext
         )
         is Config.Download -> DownloadScreenComponent(
@@ -33,13 +38,15 @@ class NavHostComponent(
             componentContext = componentContext)
     }
 
+    @OptIn(ExperimentalDecomposeApi::class)
     @Composable
     override fun render() {
-//        Children(
-//            router = router.state,
-//            animation = crossfadeScale()
-//        ) { child ->
-//            child.instance.render()
-//        }
+        Children(
+            routerState = router.state,
+            animation = crossfadeScale()
+        ) { child ->
+            println(child)
+            child.instance.render()
+        }
     }
 }
