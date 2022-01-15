@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.ui.feature
+package com.github.purofle.nmsl.ui.feature.account
 
 import androidx.compose.runtime.Composable
 
