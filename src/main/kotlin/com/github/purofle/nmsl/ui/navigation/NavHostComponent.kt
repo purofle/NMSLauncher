@@ -5,6 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
+import com.arkivanov.decompose.router.replaceCurrent
 import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
@@ -13,7 +14,8 @@ import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
 
 class NavHostComponent(
-    private val componentContext: ComponentContext
+    private val componentContext: ComponentContext,
+    private val selectedItem: Int
     ): Component, ComponentContext by componentContext {
 
     private val appComponent: AppComponent = DaggerAppComponent.create()
@@ -45,8 +47,11 @@ class NavHostComponent(
             routerState = router.state,
             animation = crossfadeScale()
         ) { child ->
-            println(child)
             child.instance.render()
+            when (selectedItem) {
+                0 -> { router.replaceCurrent(Config.Home) }
+                1 -> { router.replaceCurrent(Config.Download) }
+            }
         }
     }
 }
