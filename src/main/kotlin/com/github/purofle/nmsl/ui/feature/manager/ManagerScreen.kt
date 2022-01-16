@@ -23,57 +23,60 @@ import com.github.purofle.nmsl.game.download.Version
 //下载游戏view
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ManagerScreen(viewModel: ManagerViewModel) {
+fun ManagerScreen(viewModel: ManagerViewModel,
+                  onVersionSelected: (Version) -> Unit) {
     val versionManifest by viewModel.versions.collectAsState()
     Scaffold(
         floatingActionButton = {
             FloatingActionButton({ //刷新
                 viewModel.refreshData()
             }) { Icon(Icons.Filled.Refresh, "refresh") }
-        },
-        content = {
+        }
+    ) {
 
-            val state = rememberLazyListState()
+        val state = rememberLazyListState()
 
-            Box {
-                VerticalScrollbar(
-                    modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                    adapter = rememberScrollbarAdapter(
-                        scrollState = state
-                    )
+        Box {
+            VerticalScrollbar(
+                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                adapter = rememberScrollbarAdapter(
+                    scrollState = state
                 )
+            )
+        }
+
+        Row {
+            Column(
+                modifier =
+                Modifier.weight(1f)
+                    .fillMaxHeight()
+            ) {
+
             }
-
-                Row {
-                    Column(modifier =
-                    Modifier.weight(1f)
-                        .fillMaxHeight()
-                    ) {
-
-                    }
-                    Column(modifier =
-                    Modifier.weight(0.7f)
-                        .fillMaxHeight()
-                    ) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxHeight(),
-                            state = state
-                        ) {
-                            items(versionManifest) {
-                                VersionItem(version = it)
-                            }
-                        }
+            Column(
+                modifier =
+                Modifier.weight(0.7f)
+                    .fillMaxHeight()
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxHeight(),
+                    state = state
+                ) {
+                    items(versionManifest) {
+                        VersionItem(version = it, onVersionSelected)
                     }
                 }
+            }
         }
-    )
+    }
 }
 
 @Composable
-fun VersionItem(version: Version) {
+fun VersionItem(version: Version, onVersionSelected: (Version) -> Unit) {
     Button(
         {
         // 下载的实现
+         onVersionSelected(version)
         },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(1.dp),
