@@ -5,12 +5,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.di.AppComponent
+import com.github.purofle.nmsl.game.download.Version
 import com.github.purofle.nmsl.ui.navigation.Component
 import javax.inject.Inject
 
 class ManagerScreenComponent(
     appComponent: AppComponent,
-    private val componentContext: ComponentContext
+    private val componentContext: ComponentContext,
+    private val onVersionSelected: (Version) -> Unit,
 ): Component, ComponentContext by componentContext {
 
     @Inject
@@ -26,7 +28,7 @@ class ManagerScreenComponent(
             viewModel.init(scope)
         }
 
-        ManagerScreen(viewModel)
+        ManagerScreen(viewModel, onVersionSelected)
 
     }
 }

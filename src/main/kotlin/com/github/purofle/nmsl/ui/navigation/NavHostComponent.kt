@@ -5,25 +5,31 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
-import com.arkivanov.decompose.router.replaceCurrent
+import com.arkivanov.decompose.router.push
 import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
+import com.github.purofle.nmsl.game.download.Version
+import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
 import com.github.purofle.nmsl.ui.feature.manager.ManagerScreenComponent
+import com.github.purofle.nmsl.utils.Log
 
 
 class NavHostComponent(
     private val componentContext: ComponentContext,
-    private val selectedItem: Int
+    val selectedItem: Int
     ): Component, ComponentContext by componentContext {
 
     private val appComponent: AppComponent = DaggerAppComponent.create()
 
     sealed class Config : Parcelable {
         object Home : Config()
-        object Download : Config()
+        object Manager : Config()
+        data class Download(
+            val version: Version
+        ): Config()
     }
 
     private val router = router<Config, Component>(
@@ -31,14 +37,27 @@ class NavHostComponent(
         childFactory = ::createScreenComponent
     )
 
+    private fun onVersionSelected(version: Version) {
+        Log.logger.debug("切换到下载页面 version: $version")
+        router.push(
+            Config.Download(version)
+        )
+    }
+
     private fun createScreenComponent(config: Config, componentContext: ComponentContext): Component = when (config) {
         is Config.Home -> HomeScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext
         )
-        is Config.Download -> ManagerScreenComponent(
+        is Config.Manager -> ManagerScreenComponent(
             appComponent = appComponent,
-            componentContext = componentContext)
+            componentContext = componentContext,
+            onVersionSelected = ::onVersionSelected
+        )
+        is Config.Download -> DownloadScreenComponent(
+            appComponent = appComponent,
+            componentContext = componentContext
+        )
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -49,10 +68,9 @@ class NavHostComponent(
             animation = crossfadeScale()
         ) { child ->
             child.instance.render()
-            when (selectedItem) {
-                0 -> { router.replaceCurrent(Config.Home) }
-                1 -> { router.replaceCurrent(Config.Download) }
-            }
+        }
+        when (selectedItem) {
+            1 -> router.push(Config.Manager)
         }
     }
 }
