@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.ui.feature.download
+package com.github.purofle.nmsl.ui.feature.manager
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
@@ -23,7 +23,7 @@ import com.github.purofle.nmsl.game.download.Version
 //下载游戏view
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DownloadScreen(viewModel: DownloadViewModel) {
+fun ManagerScreen(viewModel: ManagerViewModel) {
     val versionManifest by viewModel.versions.collectAsState()
     Scaffold(
         floatingActionButton = {

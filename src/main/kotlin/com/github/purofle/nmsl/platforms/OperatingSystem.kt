@@ -1,11 +1,8 @@
 package com.github.purofle.nmsl.platforms
 
-import com.github.purofle.nmsl.game.account.AccountManager
-import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
-import kotlin.properties.ReadOnlyProperty
 
 enum class OperatingSystem(val checkedName: String) {
     /**

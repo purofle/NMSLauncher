@@ -15,7 +15,7 @@ import java.nio.file.FileSystems
 import kotlin.io.path.listDirectoryEntries
 
 object Downloader {
-    var httpClient = HttpClient(CIO)
+    private var httpClient = HttpClient(CIO)
     private val minecraftHome = OperatingSystem.getWorkingDirectory("minecraft")
     private val format = Json { ignoreUnknownKeys = true }
 
@@ -59,7 +59,7 @@ object Downloader {
             println("Libraries downloaded?")
             return
         }
-        m.libraries.forEach { it ->
+        m.libraries.forEach {
 
             when (OperatingSystem.CURRENT_OS) {
                 OperatingSystem.WINDOWS -> {
@@ -115,7 +115,7 @@ object Downloader {
         println("Downloading client ${m.id}")
         downloadLibraries(m)
         downloadAssets(getAssetsInfo(m.assetIndex.url))
-        println(Downloader.getAssetsInfo(m.assetIndex.url).objects["icons/icon_16x16.png"])
+        println(getAssetsInfo(m.assetIndex.url).objects["icons/icon_16x16.png"])
     }
     suspend fun getReleases(): VersionsManifest {
         val releases = if (!File("$minecraftHome/version_manifest.json").exists()) {
@@ -139,7 +139,7 @@ object Downloader {
     }
 
 
-    suspend fun HttpClient.downloadFile(file: File, url: String, callback: suspend (boolean: Boolean) -> Unit) {
+    private suspend fun HttpClient.downloadFile(file: File, url: String, callback: suspend (boolean: Boolean) -> Unit) {
         val call = request<HttpResponse> {
             url(url)
             method = HttpMethod.Get

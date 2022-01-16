@@ -1,7 +1,7 @@
 package com.github.purofle.nmsl.di
 
-import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
+import com.github.purofle.nmsl.ui.feature.manager.ManagerScreenComponent
 import dagger.Component
 import javax.inject.Singleton
 
@@ -9,5 +9,5 @@ import javax.inject.Singleton
 @Component
 interface AppComponent {
     fun inject(homeScreenComponent: HomeScreenComponent)
-    fun inject(downloadScreenComponent: DownloadScreenComponent)
+    fun inject(managerScreenComponent: ManagerScreenComponent)
 }
