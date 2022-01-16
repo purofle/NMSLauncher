@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.ui.feature.download
+package com.github.purofle.nmsl.ui.feature.manager
 
 import com.github.purofle.nmsl.game.download.Downloader
 import com.github.purofle.nmsl.game.download.Version
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class DownloadViewModel @Inject constructor(
+class ManagerViewModel @Inject constructor(
     // 现在应该用不着
 ): ViewModel() {
     private val _versions = MutableStateFlow(arrayListOf<Version>())

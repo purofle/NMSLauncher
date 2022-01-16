@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.ui.feature.download
+package com.github.purofle.nmsl.ui.feature.manager
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -8,13 +8,13 @@ import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.ui.navigation.Component
 import javax.inject.Inject
 
-class DownloadScreenComponent(
+class ManagerScreenComponent(
     appComponent: AppComponent,
-    val componentContext: ComponentContext
+    private val componentContext: ComponentContext
 ): Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var viewModel: DownloadViewModel
+    lateinit var viewModel: ManagerViewModel
 
     init {
         appComponent.inject(this)
@@ -26,7 +26,7 @@ class DownloadScreenComponent(
             viewModel.init(scope)
         }
 
-        DownloadScreen(viewModel)
+        ManagerScreen(viewModel)
 
     }
 }

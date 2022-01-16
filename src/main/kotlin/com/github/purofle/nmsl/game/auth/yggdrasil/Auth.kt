@@ -1,6 +1,5 @@
 package com.github.purofle.nmsl.game.auth.yggdrasil
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable

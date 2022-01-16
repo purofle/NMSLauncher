@@ -10,8 +10,8 @@ import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
-import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
+import com.github.purofle.nmsl.ui.feature.manager.ManagerScreenComponent
 
 
 class NavHostComponent(
@@ -36,7 +36,7 @@ class NavHostComponent(
             appComponent = appComponent,
             componentContext = componentContext
         )
-        is Config.Download -> DownloadScreenComponent(
+        is Config.Download -> ManagerScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext)
     }
