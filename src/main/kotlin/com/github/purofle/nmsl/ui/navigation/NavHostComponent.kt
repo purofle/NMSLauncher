@@ -13,6 +13,7 @@ import com.github.purofle.nmsl.di.DaggerAppComponent
 import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
 
+
 class NavHostComponent(
     private val componentContext: ComponentContext,
     private val selectedItem: Int

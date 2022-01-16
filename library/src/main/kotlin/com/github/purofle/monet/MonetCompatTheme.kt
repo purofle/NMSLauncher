@@ -6,7 +6,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import org.jetbrains.skiko.SystemTheme
 import dev.kdrag0n.monet.colors.Color as MonetColor
 
 fun MonetColor.toArgb(): Int {
@@ -148,7 +147,6 @@ fun MonetCompat.darkMonetCompatScheme(
  * Monet Compat Dynamic Theme aims to recreate dynamic color theme provided by [androidx.compose.material3]
  *
  * This theme will use default values chosen to best recreate values provided
- * by default values of [dynamicDarkColorScheme][androidx.compose.material3.dynamicDarkColorScheme] and [lightColorScheme][androidx.compose.material3.lightColorScheme]
  *
  * If you want to set custom colors to certain values use [MonetCompat.darkMonetCompatScheme] and
  * [MonetCompat.lightMonetCompatScheme] with [androidx.compose.material3.MaterialTheme]
@@ -158,6 +156,6 @@ fun MonetCompat.darkMonetCompatScheme(
 @Composable
 fun MonetCompatDynamicTheme(monet: MonetCompat, content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = monet.lightMonetCompatScheme(), content = content
+        colorScheme = monet.darkMonetCompatScheme(), content = content
     )
 }
