@@ -7,6 +7,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.router.push
 import com.arkivanov.decompose.router.router
+import com.arkivanov.decompose.value.getValue
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
@@ -56,13 +57,15 @@ class NavHostComponent(
         )
         is Config.Download -> DownloadScreenComponent(
             appComponent = appComponent,
-            componentContext = componentContext
+            componentContext = componentContext,
+            version = config.version
         )
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
     @Composable
     override fun render() {
+        println("state: ${router.state.value}")
         Children(
             routerState = router.state,
             animation = crossfadeScale()

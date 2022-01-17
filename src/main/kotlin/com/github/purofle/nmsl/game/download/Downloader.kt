@@ -8,10 +8,12 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.cio.*
 import io.ktor.utils.io.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.file.FileSystems
+import kotlin.io.path.Path
 import kotlin.io.path.listDirectoryEntries
 
 object Downloader {
@@ -24,7 +26,7 @@ object Downloader {
         return format.decodeFromString(response.readText())
     }
     private suspend fun downloadAsset(hash: String) {
-        if (FileSystems.getDefault().getPath("$minecraftHome/assets").listDirectoryEntries().isNotEmpty()) {
+        if (Path("$minecraftHome/assets").listDirectoryEntries().isEmpty()) {
             val f = hash.subSequence(0, 2)
 
             val file = File("$minecraftHome/assets/objects/$f/$hash")
@@ -115,7 +117,7 @@ object Downloader {
         println("Downloading client ${m.id}")
         downloadLibraries(m)
         downloadAssets(getAssetsInfo(m.assetIndex.url))
-        println(getAssetsInfo(m.assetIndex.url).objects["icons/icon_16x16.png"])
+        println(getAssetsInfo(m.assetIndex.url).objects["icons/icon_16x16.png"].toString())
     }
     suspend fun getReleases(): VersionsManifest {
         val releases = if (!File("$minecraftHome/version_manifest.json").exists()) {
