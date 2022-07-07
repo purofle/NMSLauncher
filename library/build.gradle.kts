@@ -22,6 +22,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("ch.qos.logback:logback-classic:1.2.7")
-    implementation(compose.desktop.currentOs)
+    implementation("dev.kdrag0n:colorkt:1.0.5")
     implementation(compose.material3)
+    implementation(compose.desktop.currentOs)
 }

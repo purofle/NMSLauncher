@@ -1,6 +1,5 @@
 package com.github.purofle.nmsl.ui.feature.manager
 
-import com.github.purofle.nmsl.game.download.Downloader
 import com.github.purofle.nmsl.game.download.Version
 import com.github.purofle.nmsl.utils.Log
 import com.github.purofle.nmsl.utils.ViewModel
@@ -20,7 +19,7 @@ class ManagerViewModel @Inject constructor(
     fun refreshData() {
         viewModelScope.launch(context = Dispatchers.Default) {
             Log.logger.debug("刷新数据")
-            _versions.value =  Downloader.getReleases().versions
+//            _versions.value =  Downloader.getReleases().versions
         }
     }
 }
