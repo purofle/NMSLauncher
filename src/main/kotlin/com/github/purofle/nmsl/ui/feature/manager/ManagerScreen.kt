@@ -6,18 +6,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
-import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.tokens.ColorSchemeKey
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.github.purofle.nmsl.game.download.Version
 
 //下载游戏view
@@ -78,15 +74,7 @@ fun VersionItem(version: Version, onVersionSelected: (Version) -> Unit) {
         // 下载的实现
          onVersionSelected(version)
         },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(1.dp),
-        colors = buttonColors(
-            MaterialTheme.colorScheme.fromToken(
-            ColorSchemeKey.Background),
-            MaterialTheme.colorScheme.fromToken(
-                ColorSchemeKey.OnBackground)
-        )
-    ) {
+        modifier = Modifier.fillMaxWidth()) {
         Text(version.id)
     }
 }

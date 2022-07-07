@@ -4,10 +4,8 @@ import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
-import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.router.push
 import com.arkivanov.decompose.router.router
-import com.arkivanov.decompose.value.getValue
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
@@ -20,7 +18,7 @@ import com.github.purofle.nmsl.utils.Log
 
 class NavHostComponent(
     private val componentContext: ComponentContext,
-    val selectedItem: Int
+    private val selectedItem: Int
     ): Component, ComponentContext by componentContext {
 
     private val appComponent: AppComponent = DaggerAppComponent.create()
@@ -67,8 +65,7 @@ class NavHostComponent(
     override fun render() {
         println("state: ${router.state.value}")
         Children(
-            routerState = router.state,
-            animation = crossfadeScale()
+            routerState = router.state
         ) { child ->
             child.instance.render()
         }

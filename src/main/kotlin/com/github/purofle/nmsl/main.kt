@@ -2,9 +2,9 @@ package com.github.purofle.nmsl
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.github.purofle.monet.MonetCompat
-import com.github.purofle.monet.MonetCompatDynamicTheme
 import com.github.purofle.nmsl.ui.feature.MainView
+import com.kieronquinn.monetcompat.compose.MonetCompatDynamicTheme
+import com.kieronquinn.monetcompat.core.MonetCompat
 
 fun main() {
     application {
@@ -12,7 +12,7 @@ fun main() {
             title = "NMSL-Launcher",
             onCloseRequest = ::exitApplication
         ) {
-            MonetCompatDynamicTheme(MonetCompat) {
+            MonetCompatDynamicTheme(MonetCompat(102,104,255)) {
                 MainView()
             }
         }

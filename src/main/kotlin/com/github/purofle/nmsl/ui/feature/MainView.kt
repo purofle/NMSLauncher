@@ -17,14 +17,9 @@ fun MainView() {
     val items = listOf("Home", "Manager") // 主页, 游戏管理
     val icons = listOf(Icons.Filled.Home, Icons.Filled.List)
     val lifecycle = LifecycleRegistry()
-    Scaffold(
-        topBar = {
-            SmallTopAppBar({ Text("NMSLauncher")})
-        }
-    ) {
+    Scaffold {
         Row {
-            NavigationRail(header = {
-            }) {
+            NavigationRail {
                 items.forEachIndexed { index, item ->
                     NavigationRailItem(
                         icon = { Icon(icons[index], contentDescription = item) },
