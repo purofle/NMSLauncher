@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.platforms
+package com.github.purofle.nmsl.utils.os
 
 import java.nio.file.Path
 import java.nio.file.Paths

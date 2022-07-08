@@ -3,6 +3,7 @@ package com.github.purofle.nmsl.platforms
 import com.github.purofle.nmsl.game.account.AccountManager
 import com.github.purofle.nmsl.game.account.AccountManager.AccountList
 import com.github.purofle.nmsl.utils.JsonUtils.toJsonString
+import com.github.purofle.nmsl.utils.os.OperatingSystem
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlin.io.path.isRegularFile
