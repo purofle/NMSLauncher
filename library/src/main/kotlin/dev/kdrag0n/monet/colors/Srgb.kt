@@ -9,16 +9,16 @@ data class Srgb(
     val g: Double,
     val b: Double,
 ) : Color {
-    // Convenient constructors for quantized values
-    constructor(r: Int, g: Int, b: Int) : this(
-        r.toDouble() / 255.0,
-        g.toDouble() / 255.0,
-        b.toDouble() / 255.0,
-    )
     constructor(color: Int) : this(
         androidx.compose.ui.graphics.Color(color).red.toDouble() / 255.0,
         androidx.compose.ui.graphics.Color(color).green.toDouble() / 255.0,
         androidx.compose.ui.graphics.Color(color).blue.toDouble() / 255.0,
+    )
+
+    constructor(color: androidx.compose.ui.graphics.Color) : this(
+        color.red.toDouble() * 255.0,
+        color.green.toDouble() * 255.0,
+        color.blue.toDouble() * 255.0,
     )
 
     override fun toLinearSrgb() = realToLinearSrgb()

@@ -1,5 +1,6 @@
 package com.kieronquinn.monetcompat.core
 
+import androidx.compose.ui.graphics.Color
 import dev.kdrag0n.monet.colors.Srgb
 import dev.kdrag0n.monet.factory.ColorSchemeFactory
 import dev.kdrag0n.monet.theme.ColorScheme
@@ -7,7 +8,7 @@ import dev.kdrag0n.monet.theme.DynamicColorScheme
 import dev.kdrag0n.monet.theme.MaterialYouTargets
 
 
-class MonetCompat(r: Int, g: Int, b: Int) {
+class MonetCompat(color: Color) {
 
     /**
          *  Set the multiplier of the chroma of the generated colors, defaults to `1.0`
@@ -30,7 +31,7 @@ class MonetCompat(r: Int, g: Int, b: Int) {
          */
         var accurateShades = true
 
-        private var monetColors: ColorScheme = generateColorScheme(r,g,b)
+        private var monetColors: ColorScheme = generateColorScheme(color)
 
     /**
      *  Returns the full set of Monet colors produced, or the default if they've not been
@@ -40,11 +41,11 @@ class MonetCompat(r: Int, g: Int, b: Int) {
         return monetColors
     }
 
-    private fun generateColorScheme(r: Int, g: Int, b: Int): ColorScheme {
-        return colorSchemeFactory?.getColor(Srgb(r, g, b)) ?: run {
+    private fun generateColorScheme(color: Color): ColorScheme {
+        return colorSchemeFactory?.getColor(Srgb(color)) ?: run {
                 DynamicColorScheme(
                     MaterialYouTargets(chromaMultiplier),
-                    Srgb(r, g, b),
+                    Srgb(color),
                     chromaMultiplier,
                     accurateShades
                 )
