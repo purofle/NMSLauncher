@@ -43,8 +43,7 @@ public class ColorThief {
         if (palette == null) {
             return null;
         }
-        int[] dominantColor = palette[0];
-        return dominantColor;
+        return palette[0];
     }
 
     /**
@@ -69,8 +68,7 @@ public class ColorThief {
         if (palette == null) {
             return null;
         }
-        int[] dominantColor = palette[0];
-        return dominantColor;
+        return palette[0];
     }
 
     /**
@@ -165,21 +163,14 @@ public class ColorThief {
             throw new IllegalArgumentException("Specified quality should be greater then 0.");
         }
 
-        int[][] pixelArray;
-
-        switch (sourceImage.getType()) {
-        case BufferedImage.TYPE_3BYTE_BGR:
-        case BufferedImage.TYPE_4BYTE_ABGR:
-            pixelArray = getPixelsFast(sourceImage, quality, ignoreWhite);
-            break;
-
-        default:
-            pixelArray = getPixelsSlow(sourceImage, quality, ignoreWhite);
-        }
+        int[][] pixelArray = switch (sourceImage.getType()) {
+            case BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_4BYTE_ABGR ->
+                    getPixelsFast(sourceImage, quality, ignoreWhite);
+            default -> getPixelsSlow(sourceImage, quality, ignoreWhite);
+        };
 
         // Send array to quantize function which clusters values using median cut algorithm
-        CMap cmap = MMCQ.quantize(pixelArray, colorCount);
-        return cmap;
+        return MMCQ.quantize(pixelArray, colorCount);
     }
 
     /**
@@ -207,18 +198,11 @@ public class ColorThief {
 
         int colorDepth;
         int type = sourceImage.getType();
-        switch (type) {
-        case BufferedImage.TYPE_3BYTE_BGR:
-            colorDepth = 3;
-            break;
-
-        case BufferedImage.TYPE_4BYTE_ABGR:
-            colorDepth = 4;
-            break;
-
-        default:
-            throw new IllegalArgumentException("Unhandled type: " + type);
-        }
+        colorDepth = switch (type) {
+            case BufferedImage.TYPE_3BYTE_BGR -> 3;
+            case BufferedImage.TYPE_4BYTE_ABGR -> 4;
+            default -> throw new IllegalArgumentException("Unhandled type: " + type);
+        };
 
         int expectedDataLength = pixelCount * colorDepth;
         if (expectedDataLength != pixels.length) {

@@ -28,7 +28,7 @@ class ManagerScreenComponent(
             viewModel.init(scope)
         }
 
-        ManagerScreen(viewModel, onVersionSelected)
+        ManagerScreen(viewModel)
 
     }
 }

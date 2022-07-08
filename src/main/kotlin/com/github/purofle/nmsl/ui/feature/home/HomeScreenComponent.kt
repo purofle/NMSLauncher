@@ -26,6 +26,6 @@ class HomeScreenComponent(
             viewModel.init(scope)
         }
 
-        HomeScreen(viewModel)
+        HomeScreen()
     }
 }

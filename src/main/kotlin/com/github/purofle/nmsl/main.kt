@@ -5,6 +5,7 @@ import androidx.compose.ui.window.application
 import com.github.purofle.nmsl.ui.feature.MainView
 import com.kieronquinn.monetcompat.compose.MonetCompatDynamicTheme
 import com.kieronquinn.monetcompat.core.MonetCompat
+import org.slf4j.LoggerFactory
 
 fun main() {
     application {
@@ -12,7 +13,10 @@ fun main() {
             title = "NMSL-Launcher",
             onCloseRequest = ::exitApplication
         ) {
-            MonetCompatDynamicTheme(MonetCompat(102,104,255)) {
+            val logger = LoggerFactory.getLogger("NMSL-Launcher")
+            logger.debug("Starting NMSL-Launcher")
+            logger.debug("seedColor: ${seedColor().red * 255}, ${seedColor().green * 255}, ${seedColor().blue * 255}")
+            MonetCompatDynamicTheme(MonetCompat(seedColor())) {
                 MainView()
             }
         }

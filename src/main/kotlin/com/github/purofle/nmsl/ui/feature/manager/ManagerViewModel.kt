@@ -14,12 +14,18 @@ class ManagerViewModel @Inject constructor(
     // 现在应该用不着
 ): ViewModel() {
     private val _versions = MutableStateFlow(arrayListOf<Version>())
+    private val _isLoading = MutableStateFlow(true)
     val versions: StateFlow<ArrayList<Version>> = _versions
+    var isLoading: StateFlow<Boolean> = _isLoading
 
     fun refreshData() {
         viewModelScope.launch(context = Dispatchers.Default) {
             Log.logger.debug("刷新数据")
 //            _versions.value =  Downloader.getReleases().versions
         }
+    }
+
+    fun setLoading(isLoading: Boolean) {
+        _isLoading.value = isLoading
     }
 }
