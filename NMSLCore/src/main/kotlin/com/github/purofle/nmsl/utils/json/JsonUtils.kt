@@ -13,7 +13,7 @@ object JsonUtils {
         return Gson().fromJson(this, T::class.java)
     }
 
-    fun JsonElement.toAssetList(): MutableList<Asset> {
+    fun JsonElement.toAssetList(): List<Asset> {
         val allObject = this.asJsonObject.get("objects").asJsonObject
         val assetList = mutableListOf<Asset>()
 
@@ -21,6 +21,6 @@ object JsonUtils {
             assetList.add(Asset(it.key, Gson().fromJson(it.value, AssetInfo::class.java)))
         }
 
-        return assetList
+        return assetList.toList()
     }
 }

@@ -1,19 +1,39 @@
 package com.github.purofle.nmsl.utils.json
 
+import com.github.purofle.nmsl.download.DownloadProvider
+import com.github.purofle.nmsl.utils.json.JsonUtils.toAssetList
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
-import junit.framework.TestCase.assertEquals
+import com.google.gson.JsonElement
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import java.io.File
+import kotlin.system.measureTimeMillis
 
 class JsonUtilsTest {
+
     @Test
-    fun jsonTest() {
-        data class Dick(val name: String)
-        val jsonString = """
-            {
-                "name": "jb"
+    fun `test JsonElement toAssetList with flow`() {
+        val json = "/home/purofle/projects/nmsl/.idea/httpRequests/2022-07-08T230330.200.json"
+
+        val time = measureTimeMillis {
+            runBlocking {
+                DownloadProvider.readVersionList(json)
+                    .collect()
             }
-        """.trimIndent()
-        val result: Dick = jsonString.toJsonObject()
-        assertEquals(result.name, "jb")
+        }
+
+        println("flow collect on $time ms")
+    }
+
+    @Test
+    fun `test JsonElement toAssetList without flow`() {
+        val json = "/home/purofle/projects/nmsl/.idea/httpRequests/2022-07-08T230330.200.json"
+
+        val time = measureTimeMillis {
+            File(json).readText().toJsonObject<JsonElement>().toAssetList()
+        }
+
+        println("collect on $time ms")
     }
 }
