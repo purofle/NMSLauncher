@@ -30,7 +30,7 @@ fun <T> AsyncImage(
     contentScale: ContentScale = ContentScale.Fit,
 ) {
     val image: T? by produceState<T?>(null) {
-        value = withContext(Dispatchers.IO) {
+        value = withContext(Dispatchers.Default) {
             try {
                 load()
             } catch (e: IOException) {

@@ -42,6 +42,28 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter:5.8.2")
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.2.0")
+    }
+}
+
+tasks.register<proguard.gradle.ProGuardTask>("obfuscate") {
+    val packageUberJarForCurrentOS by tasks.getting
+    dependsOn(packageUberJarForCurrentOS)
+    val files = packageUberJarForCurrentOS.outputs.files
+    injars(files)
+    outjars(files.map { file -> File(file.parentFile, "${file.nameWithoutExtension}.min.jar") })
+
+    val library = if (System.getProperty("java.version").startsWith("1.")) "lib/rt.jar" else "jmods"
+    libraryjars("${System.getProperty("java.home")}/$library")
+
+    configuration("proguard-rules.pro")
+}
+
 tasks.test {
     useJUnit()
 }
@@ -56,7 +78,7 @@ compose.desktop {
         mainClass = "com.github.purofle.nmsl.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "NMSL-Launcher"
+            packageName = "NMSLauncher"
             packageVersion = "1.0.0"
         }
     }

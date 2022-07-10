@@ -52,8 +52,13 @@ fun getWallpaperPath(): File {
 }
 
 fun getSeedColorFromWallpaper(): Color {
-    val image = ImageIO.read(getWallpaperPath())
     val logger = LoggerFactory.getLogger("getSeedColorFromWallpaper")
+    val image = try {
+        ImageIO.read(getWallpaperPath())
+    } catch (e: IllegalStateException) {
+        logger.error(e.toString())
+        return Color(0x66ccff)
+    }
     val (r, g, b) = ColorThief.getColor(image).toList()
     logger.debug("r: $r, g: $g, b: $b")
     return Color(r, g, b)
