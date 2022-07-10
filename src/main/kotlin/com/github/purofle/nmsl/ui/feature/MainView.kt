@@ -3,6 +3,7 @@ package com.github.purofle.nmsl.ui.feature
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,8 +15,8 @@ import com.github.purofle.nmsl.ui.navigation.NavHostComponent
 @Composable
 fun MainView() {
     var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Home", "Manager") // 主页, 游戏管理
-    val icons = listOf(Icons.Filled.Home, Icons.Filled.List)
+    val items = listOf("Home", "Manager", "About") // 主页, 游戏管理
+    val icons = listOf(Icons.Filled.Home, Icons.Filled.List, Icons.Filled.Info)
     val lifecycle = LifecycleRegistry()
     Scaffold {
         Row {
