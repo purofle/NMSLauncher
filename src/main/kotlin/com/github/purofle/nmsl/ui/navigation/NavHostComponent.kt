@@ -10,6 +10,7 @@ import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
 import com.github.purofle.nmsl.game.download.Version
+import com.github.purofle.nmsl.ui.feature.about.AboutScreenComponent
 import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
 import com.github.purofle.nmsl.ui.feature.manager.ManagerScreenComponent
@@ -26,6 +27,8 @@ class NavHostComponent(
     sealed class Config : Parcelable {
         object Home : Config()
         object Manager : Config()
+
+        object About: Config()
         data class Download(
             val version: Version
         ): Config()
@@ -58,6 +61,9 @@ class NavHostComponent(
             componentContext = componentContext,
             version = config.version
         )
+        is Config.About -> AboutScreenComponent(
+            componentContext = componentContext
+        )
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -71,6 +77,7 @@ class NavHostComponent(
         }
         when (selectedItem) {
             1 -> router.push(Config.Manager)
+            2 -> router.push(Config.About)
         }
     }
 }
