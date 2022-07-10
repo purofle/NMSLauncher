@@ -39,10 +39,6 @@ fun AboutScreen() {
                 "bangbang93",
                 "提供 BMCLAPI 下载源，请赞助支持 BMCLAPI"
             )
-            NameCard("https://pic1.afdiancdn.com/user/1abb556e211911e9864c52540025c377/avatar/52f8df537dde157bc442d4749ab9dce6_w800_h600_s80.jpg?imageView2/1/w/240/h/240",
-                "bangbang93",
-                "提供 BMCLAPI 下载源，请赞助支持 BMCLAPI"
-            )
             NameCard("https://bkimg.cdn.bcebos.com/pic/e4dde71190ef76c6a7efaa289344eafaaf51f3dec92c?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UyNzI=,g_7,xp_5,yp_5/format,f_auto",
                 "JetBrains",
                 "提供 IDE 支持",

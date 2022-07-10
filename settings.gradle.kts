@@ -4,6 +4,6 @@ pluginManagement {
         maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
     }
 }
-rootProject.name = "NMSL-Launcher"
+rootProject.name = "NMSLauncher"
 include(":library")
 include("NMSLCore")
