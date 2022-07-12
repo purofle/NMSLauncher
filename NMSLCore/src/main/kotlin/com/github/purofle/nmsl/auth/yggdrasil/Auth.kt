@@ -1,21 +1,16 @@
-package com.github.purofle.nmsl.game.auth.yggdrasil
+package com.github.purofle.nmsl.auth.yggdrasil
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Agent(
     val name: String = "Minecraft",
     val version:Int =  1
 )
 
-@Serializable
 data class Auth(
     val username: String,
     val password: String,
     val agent: Agent = Agent(),
 )
 
-@Serializable
 data class AccessToken(
     val iss: String,
     val sub: String,
@@ -25,7 +20,6 @@ data class AccessToken(
     val spr: String
 )
 
-@Serializable
 data class Validate(
     val accessToken: String
 )

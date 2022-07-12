@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.purofle.nmsl.di.AppComponent
-import com.github.purofle.nmsl.game.download.Version
 import com.github.purofle.nmsl.ui.navigation.Component
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,7 +12,6 @@ import javax.inject.Inject
 class DownloadScreenComponent(
     private val componentContext: ComponentContext,
     appComponent: AppComponent,
-    val version: Version
 ): Component, ComponentContext by componentContext {
 
     @Inject
@@ -28,7 +26,7 @@ class DownloadScreenComponent(
         val scope = rememberCoroutineScope()
         LaunchedEffect(viewModel) {
             scope.launch {
-                viewModel.init(scope, version)
+                viewModel.init(scope)
             }
         }
     }

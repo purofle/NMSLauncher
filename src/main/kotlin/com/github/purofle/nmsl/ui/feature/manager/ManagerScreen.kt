@@ -1,6 +1,8 @@
 package com.github.purofle.nmsl.ui.feature.manager
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -9,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.github.purofle.nmsl.game.download.Version
-import com.github.purofle.nmsl.ui.component.LoadingAnimation
 
 //下载游戏view
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,29 +33,12 @@ fun ManagerScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxHeight(),
             ) {
-                if (versionManifest.isNotEmpty()) {
-                    viewModel.setLoading(false)
-                }
-
                 item {
                     if (versionManifest.isEmpty()) {
-
-                        LoadingAnimation()
+                        Text("暂无游戏, 请前往下载页面下载")
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun VersionItem(version: Version, onVersionSelected: (Version) -> Unit) {
-    Button(
-        {
-        // 下载的实现
-         onVersionSelected(version)
-        },
-        modifier = Modifier.fillMaxWidth()) {
-        Text(version.id)
     }
 }

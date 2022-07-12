@@ -1,10 +1,9 @@
 package com.github.purofle.nmsl.game.account
 
-import com.github.purofle.nmsl.game.auth.yggdrasil.AvailableProfile
-import com.github.purofle.nmsl.game.auth.yggdrasil.SelectedProfile
-import kotlinx.serialization.Serializable
+import com.github.purofle.nmsl.auth.yggdrasil.AvailableProfile
+import com.github.purofle.nmsl.auth.yggdrasil.SelectedProfile
 
-@Serializable
+
 data class Account(
     val accessToken: String,
     val clientToken: String,
