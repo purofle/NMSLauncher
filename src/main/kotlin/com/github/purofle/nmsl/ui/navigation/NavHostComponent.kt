@@ -9,12 +9,10 @@ import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
-import com.github.purofle.nmsl.game.download.Version
 import com.github.purofle.nmsl.ui.feature.about.AboutScreenComponent
 import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
 import com.github.purofle.nmsl.ui.feature.manager.ManagerScreenComponent
-import com.github.purofle.nmsl.utils.Log
 
 
 class NavHostComponent(
@@ -28,23 +26,14 @@ class NavHostComponent(
         object Home : Config()
         object Manager : Config()
 
-        object About: Config()
-        data class Download(
-            val version: Version
-        ): Config()
+        object About : Config()
+        object Download : Config()
     }
 
     private val router = router<Config, Component>(
         initialConfiguration = Config.Home,
         childFactory = ::createScreenComponent
     )
-
-    private fun onVersionSelected(version: Version) {
-        Log.logger.debug("切换到下载页面 version: $version")
-        router.push(
-            Config.Download(version)
-        )
-    }
 
     private fun createScreenComponent(config: Config, componentContext: ComponentContext): Component = when (config) {
         is Config.Home -> HomeScreenComponent(
@@ -54,12 +43,10 @@ class NavHostComponent(
         is Config.Manager -> ManagerScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext,
-            onVersionSelected = ::onVersionSelected
         )
         is Config.Download -> DownloadScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext,
-            version = config.version
         )
         is Config.About -> AboutScreenComponent(
             componentContext = componentContext
@@ -77,7 +64,8 @@ class NavHostComponent(
         }
         when (selectedItem) {
             1 -> router.push(Config.Manager)
-            2 -> router.push(Config.About)
+            2 -> router.push(Config.Download)
+            3 -> router.push(Config.About)
         }
     }
 }

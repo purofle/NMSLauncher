@@ -1,15 +1,11 @@
-package com.github.purofle.nmsl.game.auth.yggdrasil
-
-import kotlinx.serialization.Serializable
+package com.github.purofle.nmsl.auth.yggdrasil
 
 
-@Serializable
 data class Refresh(
     val accessToken: String,
     val clientToken: String,
 )
 
-@Serializable
 data class RefreshResp(
     val accessToken: String,
     val clientToken: String,

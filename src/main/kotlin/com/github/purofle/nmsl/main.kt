@@ -13,8 +13,8 @@ fun main() {
             title = "NMSL-Launcher",
             onCloseRequest = ::exitApplication
         ) {
-            val logger = LoggerFactory.getLogger("NMSL-Launcher")
-            logger.debug("Starting NMSL-Launcher")
+            val logger = LoggerFactory.getLogger("NMSLauncher")
+            logger.debug("Starting NMSLauncher")
             logger.debug("seedColor: ${seedColor().red * 255}, ${seedColor().green * 255}, ${seedColor().blue * 255}")
             MonetCompatDynamicTheme(MonetCompat(seedColor())) {
                 MainView()
