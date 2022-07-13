@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 fun main() {
     application {
         Window(
-            title = "NMSL-Launcher",
+            title = "NMSLauncher",
             onCloseRequest = ::exitApplication
         ) {
             val logger = LoggerFactory.getLogger("NMSLauncher")
