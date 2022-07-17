@@ -55,7 +55,7 @@ fun getSeedColorFromWallpaper(): Color {
     val logger = LoggerFactory.getLogger("getSeedColorFromWallpaper")
     val image = try {
         ImageIO.read(getWallpaperPath())
-    } catch (e: IllegalStateException) {
+    } catch (e: Exception) {
         logger.error(e.toString())
         return Color(0x66ccff)
     }
