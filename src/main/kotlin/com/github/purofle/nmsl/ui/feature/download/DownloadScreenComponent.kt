@@ -29,5 +29,7 @@ class DownloadScreenComponent(
                 viewModel.init(scope)
             }
         }
+
+        DownloadScreen(viewModel)
     }
 }
