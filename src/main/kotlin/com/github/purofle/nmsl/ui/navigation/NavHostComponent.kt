@@ -28,6 +28,8 @@ class NavHostComponent(
 
         object About : Config()
         object Download : Config()
+
+        data class DownloadInfo(val url: String) : Config()
     }
 
     private val router = router<Config, Component>(
@@ -44,13 +46,18 @@ class NavHostComponent(
             appComponent = appComponent,
             componentContext = componentContext,
         )
+
         is Config.Download -> DownloadScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext,
+            router = router
         )
+
         is Config.About -> AboutScreenComponent(
             componentContext = componentContext
         )
+
+        is Config.DownloadInfo -> TODO()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)

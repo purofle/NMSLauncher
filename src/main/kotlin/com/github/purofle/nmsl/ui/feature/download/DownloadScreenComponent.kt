@@ -4,14 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.Router
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.ui.navigation.Component
+import com.github.purofle.nmsl.ui.navigation.NavHostComponent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DownloadScreenComponent(
     private val componentContext: ComponentContext,
     appComponent: AppComponent,
+    val router: Router<NavHostComponent.Config, Component>
 ): Component, ComponentContext by componentContext {
 
     @Inject
@@ -30,6 +33,6 @@ class DownloadScreenComponent(
             }
         }
 
-        DownloadScreen(viewModel)
+        DownloadScreen(viewModel, router)
     }
 }
