@@ -10,7 +10,7 @@ import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.purofle.nmsl.di.AppComponent
 import com.github.purofle.nmsl.di.DaggerAppComponent
 import com.github.purofle.nmsl.ui.feature.about.AboutScreenComponent
-import com.github.purofle.nmsl.ui.feature.download.DownloadScreenComponent
+import com.github.purofle.nmsl.ui.feature.addgame.AddGameScreenComponent
 import com.github.purofle.nmsl.ui.feature.home.HomeScreenComponent
 import com.github.purofle.nmsl.ui.feature.manager.ManagerScreenComponent
 
@@ -25,11 +25,9 @@ class NavHostComponent(
     sealed class Config : Parcelable {
         object Home : Config()
         object Manager : Config()
-
+        object AddGame : Config()
         object About : Config()
-        object Download : Config()
 
-        data class DownloadInfo(val url: String) : Config()
     }
 
     private val router = router<Config, Component>(
@@ -42,22 +40,20 @@ class NavHostComponent(
             appComponent = appComponent,
             componentContext = componentContext
         )
+
         is Config.Manager -> ManagerScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext,
         )
 
-        is Config.Download -> DownloadScreenComponent(
+        is Config.AddGame -> AddGameScreenComponent(
             appComponent = appComponent,
             componentContext = componentContext,
-            router = router
         )
 
         is Config.About -> AboutScreenComponent(
             componentContext = componentContext
         )
-
-        is Config.DownloadInfo -> TODO()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -71,7 +67,7 @@ class NavHostComponent(
         }
         when (selectedItem) {
             1 -> router.push(Config.Manager)
-            2 -> router.push(Config.Download)
+            2 -> router.push(Config.AddGame)
             3 -> router.push(Config.About)
         }
     }

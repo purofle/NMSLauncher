@@ -16,7 +16,7 @@ import com.github.purofle.nmsl.ui.navigation.NavHostComponent
 @Composable
 fun MainView() {
     var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Home", "Manager", "Download", "About") // 主页, 游戏管理
+    val items = listOf("Home", "Manager", "AddGame", "About") // 主页, 游戏管理
     val icons = listOf(Icons.Filled.Home, Icons.Filled.List, Icons.Filled.KeyboardArrowDown, Icons.Filled.Info)
     val lifecycle = LifecycleRegistry()
     Scaffold {
