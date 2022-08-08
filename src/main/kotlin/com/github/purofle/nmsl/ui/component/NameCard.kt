@@ -1,5 +1,6 @@
 package com.github.purofle.nmsl.ui.component
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Preview
 fun NameCard(iconUrl: String, text1: String, text2: String, isSvg: Boolean = false) {
     Column {
         Card(
