@@ -20,19 +20,25 @@ repositories {
 
 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
+
+    implementation("org.apache.logging.log4j:log4j-api:2.18.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.18.0")
+
     implementation("org.jetbrains.kotlin:kotlin-parcelize-compiler:1.5.21")
     val decomposeVersion = "0.6.0"
+
     testImplementation(kotlin("test"))
+
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
+
     implementation(project(":library"))
     implementation(project(":NMSLCore"))
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+
     implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains:$decomposeVersion")
     implementation("com.google.dagger:dagger:2.42")
     kapt("com.google.dagger:dagger-compiler:2.42")
-    implementation("org.junit.jupiter:junit-jupiter:5.8.2")
 }
 
 buildscript {
