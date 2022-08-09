@@ -21,20 +21,13 @@ repositories {
 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-parcelize-compiler:1.5.21")
-    val ktorVersion = "2.0.2"
-    val logbackVersion = "1.2.11"
     val decomposeVersion = "0.6.0"
     testImplementation(kotlin("test"))
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
     implementation(project(":library"))
     implementation(project(":NMSLCore"))
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains:$decomposeVersion")
     implementation("com.google.dagger:dagger:2.42")
