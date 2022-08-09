@@ -35,12 +35,13 @@ enum class OperatingSystem(val checkedName: String) {
         fun getWorkingDirectory(vararg folder: String): Path {
             val home = System.getProperty("user.home", ".")
             return when (CURRENT_OS) {
-                LINUX -> Paths.get(home, ".local", "share", "NMSL-Launcher", *folder)
+                LINUX -> Paths.get(home, ".local", "share", "NMSLauncher", *folder)
                 WINDOWS -> {
                     val appdata = System.getenv("APPDATA")
-                    Paths.get(appdata ?: home, "NMSL-Launcher", *folder)
+                    Paths.get(appdata ?: home, "NMSLauncher", *folder)
                 }
-                OSX -> Paths.get(home, "Library", "Application Support", "NMSL-Launcher", *folder)
+
+                OSX -> Paths.get(home, "Library", "Application Support", "NMSLauncher", *folder)
                 else -> Paths.get(home, *folder)
             }
         }
