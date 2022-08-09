@@ -3,11 +3,16 @@ package com.github.purofle.nmsl.utils.io
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.cache.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
 object HttpRequest {
-    val client = HttpClient(CIO)
+    val client = HttpClient(CIO) {
+        install(HttpCache)
+        install(Logging)
+    }
 
     suspend fun get(url: String) = client.get(url)
 
