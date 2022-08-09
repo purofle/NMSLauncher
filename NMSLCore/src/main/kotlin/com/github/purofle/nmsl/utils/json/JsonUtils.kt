@@ -13,6 +13,10 @@ object JsonUtils {
         return Gson().fromJson(this, T::class.java)
     }
 
+    inline fun <reified T : Any> T.toJsonString(): String {
+        return Gson().toJson(this)
+    }
+
     fun JsonElement.toAssetList(): List<Asset> {
         val allObject = this.asJsonObject.get("objects").asJsonObject
         val assetList = mutableListOf<Asset>()

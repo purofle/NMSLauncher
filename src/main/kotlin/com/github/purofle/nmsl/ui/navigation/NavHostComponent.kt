@@ -59,7 +59,6 @@ class NavHostComponent(
     @OptIn(ExperimentalDecomposeApi::class)
     @Composable
     override fun render() {
-        println("state: ${router.state.value}")
         Children(
             routerState = router.state
         ) { child ->
