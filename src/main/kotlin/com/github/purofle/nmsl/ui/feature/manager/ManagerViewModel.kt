@@ -1,7 +1,6 @@
 package com.github.purofle.nmsl.ui.feature.manager
 
 import com.github.purofle.nmsl.game.GameJson
-import com.github.purofle.nmsl.utils.Log
 import com.github.purofle.nmsl.utils.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,6 @@ class ManagerViewModel @Inject constructor(
 
     fun refreshData() {
         viewModelScope.launch(context = Dispatchers.Default) {
-            Log.logger.debug("刷新数据")
 //            _versions.value =  Downloader.getReleases().versions
         }
     }
