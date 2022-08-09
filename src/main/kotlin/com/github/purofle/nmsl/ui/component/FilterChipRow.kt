@@ -28,7 +28,7 @@ fun <T> FilterChipRow(
     content: @Composable (T) -> Unit = { Text(it.toString()) },
 ) {
     val currentOnClick by rememberUpdatedState(onClick)
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
         items(list, key = key) {
             ElevatedFilterChip(
                 selected = isSelected(it),
