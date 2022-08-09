@@ -1,6 +1,5 @@
 package com.kieronquinn.monetcompat.compose
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -8,6 +7,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.kieronquinn.monetcompat.core.MonetCompat
+import org.jetbrains.skiko.SystemTheme
+import org.jetbrains.skiko.currentSystemTheme
 
 
 fun dev.kdrag0n.monet.colors.Color.toArgb(): Int {
@@ -155,7 +156,7 @@ fun MonetCompat.darkMonetCompatScheme(
 @Composable
 fun MonetCompatDynamicTheme(monet: MonetCompat, content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) {
+        colorScheme = if (currentSystemTheme != SystemTheme.LIGHT) {
             monet.darkMonetCompatScheme()
         } else {
             monet.lightMonetCompatScheme()
