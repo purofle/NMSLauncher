@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ fun VanillaScreen(downloadProvider: DownloadProvider = BMCLAPIDownloadProvider()
     // copy filtered
     var selected by remember { mutableStateOf(filtered.toList()) }
     val versions by downloadProvider.getVersionList().collectAsState(initial = listOf())
+    var searchText by remember { mutableStateOf("") }
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
@@ -39,11 +41,25 @@ fun VanillaScreen(downloadProvider: DownloadProvider = BMCLAPIDownloadProvider()
     }
     Column {
         LazyColumn {
-            items(versions.filter { it.type in selected }, key = { it.id }) {
+            item {
+                OutlinedTextField(
+                    searchText,
+                    { searchText = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("搜索") }
+                )
+            }
+            // 判断是否有空格
+            val currentVersion = versions.filter {
+                it.id.contains(searchText) || it.type in selected
+            }
+            items(currentVersion, key = { it.id }) {
                 VersionCard(
                     it.id,
                     it.time
-                ) {}
+                ) {
+
+                }
             }
         }
     }

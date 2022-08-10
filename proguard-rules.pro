@@ -11,3 +11,8 @@
 }
 -keep class org.jetbrains.skia.** { *; }
 -keep class org.jetbrains.skiko.** { *; }
+
+# log4j2
+-keep class org.apache.logging.log4j.** { *; }
+-keep class kotlin.reflect.** { *; }
+-dontwarn org.apache.logging.log4j.**

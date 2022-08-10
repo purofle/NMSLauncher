@@ -8,6 +8,11 @@ import com.kieronquinn.monetcompat.core.MonetCompat
 import org.apache.logging.log4j.LogManager
 
 fun main() {
+
+    Thread.setDefaultUncaughtExceptionHandler { _, e ->
+        LogManager.getLogger("error").error(e)
+    }
+
     application {
         Window(
             title = "NMSLauncher",
