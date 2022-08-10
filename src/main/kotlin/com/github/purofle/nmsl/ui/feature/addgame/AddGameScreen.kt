@@ -1,6 +1,8 @@
 package com.github.purofle.nmsl.ui.feature.addgame
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,16 +16,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.purofle.nmsl.ui.feature.addgame.gametype.VanillaScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun AddGameScreen(viewModel: AddGameViewModel) {
 
     var selectedItem by remember { mutableStateOf(0) }
     val items = listOf("原版", "CurseForge")
     val icons = listOf(Icons.Filled.Home, Icons.Filled.List)
+    val startDownload by viewModel.startDownload.collectAsState()
+    val version by viewModel.version.collectAsState()
 
-    Scaffold {
-        Column(modifier = Modifier.padding(it)) {
+    Scaffold { pd ->
+        Column(modifier = Modifier.padding(pd)) {
             Row {
                 NavigationRail(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
@@ -45,23 +49,27 @@ fun AddGameScreen(viewModel: AddGameViewModel) {
                         .padding(20.dp)
                         .fillMaxSize()
                 ) {
-                    when (selectedItem) {
-                        0 -> {
-                            VanillaScreen()
-                        }
+                    Crossfade(selectedItem) { screen ->
+                        when (screen) {
+                            0 -> {
+                                AnimatedContent(startDownload) {
+                                    if (it) {
+                                        version?.let {
+                                            Text("正在下载...")
+                                        }
+                                    } else {
+                                        VanillaScreen(viewModel)
+                                    }
+                                }
+                            }
 
-                        1 -> {
-                            Text("CurseForge")
+                            1 -> {
+                                Text("CurseForge")
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun AddGameScreenPreview() {
-    AddGameScreen(AddGameViewModel())
 }
