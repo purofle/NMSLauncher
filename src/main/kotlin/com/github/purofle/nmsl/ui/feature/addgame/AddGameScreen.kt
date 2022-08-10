@@ -1,14 +1,16 @@
 package com.github.purofle.nmsl.ui.feature.addgame
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.purofle.nmsl.ui.feature.addgame.gametype.VanillaScreen
 
@@ -16,25 +18,11 @@ import com.github.purofle.nmsl.ui.feature.addgame.gametype.VanillaScreen
 @Composable
 fun AddGameScreen(viewModel: AddGameViewModel) {
 
-    val gameName by viewModel.gameName.collectAsState()
-
     var selectedItem by remember { mutableStateOf(0) }
     val items = listOf("原版", "CurseForge")
     val icons = listOf(Icons.Filled.Home, Icons.Filled.List)
 
-    Scaffold(
-        topBar = {
-            Row {
-                OutlinedTextField(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    label = { Text("Game Name", textAlign = TextAlign.Center) },
-                    onValueChange = { viewModel.changeGameName(it) },
-                    value = gameName
-                )
-            }
-        }
-    ) {
+    Scaffold {
         Column(modifier = Modifier.padding(it)) {
             Row {
                 NavigationRail(
