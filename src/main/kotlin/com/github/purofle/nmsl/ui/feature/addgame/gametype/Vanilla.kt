@@ -1,5 +1,6 @@
 package com.github.purofle.nmsl.ui.feature.addgame.gametype
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,50 +16,66 @@ import com.github.purofle.nmsl.download.BMCLAPIDownloadProvider
 import com.github.purofle.nmsl.download.DownloadProvider
 import com.github.purofle.nmsl.ui.component.FilterChipRow
 import com.github.purofle.nmsl.ui.component.VersionCard
+import com.github.purofle.nmsl.ui.feature.addgame.AddGameViewModel
+import org.apache.logging.log4j.LogManager.getLogger
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun VanillaScreen(downloadProvider: DownloadProvider = BMCLAPIDownloadProvider()) {
+fun VanillaScreen(
+    viewModel: AddGameViewModel,
+    downloadProvider: DownloadProvider = BMCLAPIDownloadProvider()
+) {
     val filtered = listOf("release", "snapshot")
     // copy filtered
     var selected by remember { mutableStateOf(filtered.toList()) }
     val versions by downloadProvider.getVersionList().collectAsState(initial = listOf())
     var searchText by remember { mutableStateOf("") }
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        FilterChipRow(
-            list = filtered,
-            key = { it },
-            isSelected = { selected.contains(it) },
-            onClick = { selected = if (selected.contains(it)) selected - it else selected + it },
-        )
-        OutlinedButton(
-            onClick = {}
-        ) {
-            Text("刷新")
-        }
-    }
-    Column {
-        LazyColumn {
-            item {
-                OutlinedTextField(
-                    searchText,
-                    { searchText = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("搜索") }
-                )
-            }
-            // 判断是否有空格
-            val currentVersion = versions.filter {
-                it.id.contains(searchText) || it.type in selected
-            }
-            items(currentVersion, key = { it.id }) {
-                VersionCard(
-                    it.id,
-                    it.time
-                ) {
 
+    val currentVersion = versions.filter {
+        it.id.contains(searchText) && (it.type in selected)
+    }
+
+    Column {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            FilterChipRow(
+                list = filtered,
+                key = { it },
+                isSelected = { selected.contains(it) },
+                onClick = { selected = if (selected.contains(it)) selected - it else selected + it },
+            )
+            OutlinedButton(
+                onClick = {}
+            ) {
+                Text("刷新")
+            }
+        }
+
+        Column {
+
+            LazyColumn {
+                item {
+                    OutlinedTextField(
+                        searchText,
+                        { searchText = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("搜索") }
+                    )
+                }
+
+                items(currentVersion, key = { it.id }) {
+                    Column(Modifier.animateItemPlacement()) {
+                        VersionCard(
+                            it.id,
+                            it.time
+                        ) {
+                            getLogger("VanillaScreen").info("start download")
+                            viewModel.changeVersion(it)
+                            viewModel.changeDownload(true)
+                        }
+                    }
                 }
             }
         }
