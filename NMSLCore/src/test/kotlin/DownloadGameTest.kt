@@ -4,12 +4,13 @@ import com.github.purofle.nmsl.game.version.Version
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import kotlin.io.path.Path
 
 internal class DownloadGameTest {
     private val downloadGame = DownloadGame(
         BMCLAPIDownloadProvider(), Version(
             1,
-            "1.12.2",
+            "1.19.2",
             "2022-08-05T11:57:05+00:00",
             "68cded4616fba9fbefb3f895033c261126c5f89c",
             "2022-08-05T12:01:02+00:00",
@@ -48,5 +49,13 @@ internal class DownloadGameTest {
                 library.downloads.artifact?.let { downloadGame.downloadLibrary(it) }
             }
         }
+    }
+
+    @Test
+    fun unpackJarTest() {
+        downloadGame.unpackJar(
+            Path("/home/purofle/.local/share/NMSLauncher/libraries/org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-linux.jar"),
+            Path("/home/purofle/Downloads/a")
+        )
     }
 }
