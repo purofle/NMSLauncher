@@ -1,6 +1,6 @@
-# NMSL-Launcher
+# NMSLauncher
 
-一个简单的 Minecraft 启动器，目前暂不完善，不推荐使用。
+一个简单的 Minecraft 启动器, 目前暂不完善, 不推荐使用
 
 ## 运行
 
