@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Rule(
     @SerializedName("action")
-    val action: String, // allow
+    val action: String = "", // allow
     @SerializedName("os")
-    val os: Os
+    val os: Os? = null
 )

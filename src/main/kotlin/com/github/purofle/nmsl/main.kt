@@ -18,9 +18,8 @@ fun main() {
             title = "NMSLauncher",
             onCloseRequest = ::exitApplication
         ) {
-
             val logger = LogManager.getLogger(this::class.java)
-            logger.debug("Starting NMSLauncher")
+            // My dream starts here.
             logger.debug("seedColor: ${seedColor().red * 255}, ${seedColor().green * 255}, ${seedColor().blue * 255}")
             MonetCompatDynamicTheme(MonetCompat(seedColor())) {
                 MainView()
