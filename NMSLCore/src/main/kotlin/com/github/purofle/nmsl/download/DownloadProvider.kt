@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.flow
 interface DownloadProvider {
     val versionListURL: String
     val assetBaseURL: String
+    val mavenURL: String
 
     fun getVersionList() = flow {
         emit(HttpRequest.getJson<Versions>(versionListURL).versions)

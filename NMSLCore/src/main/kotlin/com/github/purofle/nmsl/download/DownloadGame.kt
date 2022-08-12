@@ -14,6 +14,8 @@ import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getWorkingDire
 import org.apache.logging.log4j.LogManager
 import java.nio.file.Path
 import java.security.MessageDigest
+import java.util.stream.Collectors
+import java.util.zip.ZipFile
 import kotlin.io.path.*
 
 class DownloadGame(
@@ -45,26 +47,26 @@ class DownloadGame(
 
     suspend fun downloadLibrary(artifact: Artifact) {
         val logger = LogManager.getLogger("downloadLibrary")
+        logger.info("check download: ${artifact.url}")
         val lib = getWorkingDirectory("libraries") / artifact.path
         lib.parent.createDirectories()
         if (lib.isRegularFile()) {
             val sha1 = checkSha1(lib)
             if (sha1 == artifact.sha1) {
                 logger.info("${artifact.path}检验通过")
+                checkNatives(lib, artifact)
                 return
             }
         }
 
-        println("start download: ${lib.name}")
+        logger.info("start download: ${lib.name}")
         client.downloadFile(
             lib.toFile(),
-            artifact.url
+            artifact.url.replace("https://libraries.minecraft.net/", downloadProvider.mavenURL)
         ) {
             logger.info("download done: ${lib.name}")
         }
-        if (artifact.url.contains("natives")) {
-            logger.warn("wait extract: ${lib.name}")
-        }
+
     }
 
     private fun checkSha1(lib: Path) = HashUtils.getCheckSumFromFile(
@@ -72,8 +74,49 @@ class DownloadGame(
         lib.toFile()
     )
 
-    fun unpackJar(path: Path) {
+    private fun checkNatives(lib: Path, artifact: Artifact) {
+        val logger = LogManager.getLogger("downloadLibrary")
+        val natives = versionDir / "natives"
+        if (!natives.isDirectory()) {
+            natives.createDirectories()
+        }
 
+        if (artifact.path.contains("natives")) {
+            logger.warn("wait extract: ${lib.name}")
+            unpackJar(lib, natives)
+            logger.info("extract: ${lib.name}")
+        }
+    }
+
+    /**
+     * 把文件中的 jar/so 提取到同一个目录.
+     * @param path 文件目录
+     * @param out 输出目录
+     */
+    fun unpackJar(path: Path, out: Path) {
+        val zip = ZipFile(path.toFile())
+        zip.stream().collect(Collectors.toList()).forEach {
+            val entry = out.resolve(it.name)
+            // get all so or dll files
+            if (entry.extension == "so" || entry.extension == "dll") {
+                var newPath: Path = entry.parent
+                if (entry.parent != out) {
+                    while (true) { // 用来把 lib 放到一个文件夹
+                        newPath = newPath.parent
+                        if (newPath == out) { // 让放置的目录跟输出目录一致
+                            break
+                        }
+                    }
+                }
+                newPath /= entry.name // 给放置的文件加上文件名
+                newPath.parent.createDirectories()
+                zip.getInputStream(it).use { input ->
+                    newPath.toFile().outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+            }
+        }
     }
 
     /**
