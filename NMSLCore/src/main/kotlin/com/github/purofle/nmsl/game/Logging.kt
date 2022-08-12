@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Logging(
     @SerializedName("client")
-    val client: ClientX
+    val client: ClientX = ClientX()
 )

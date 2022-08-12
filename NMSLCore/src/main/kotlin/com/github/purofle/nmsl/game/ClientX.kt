@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class ClientX(
     @SerializedName("argument")
-    val argument: String, // -Dlog4j.configurationFile=${path}
+    val argument: String = "", // -Dlog4j.configurationFile=${path}
     @SerializedName("file")
-    val `file`: File,
+    val `file`: File = File(),
     @SerializedName("type")
-    val type: String // log4j2-xml
+    val type: String = "" // log4j2-xml
 )

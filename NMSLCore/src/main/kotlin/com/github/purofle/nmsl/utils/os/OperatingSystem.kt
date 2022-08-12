@@ -4,6 +4,9 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 
+/**
+ * @author huanghongxun
+ */
 enum class OperatingSystem(val checkedName: String) {
     /**
      * Microsoft Windows.

@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.purofle.nmsl.ui.feature.addgame.gametype.VanillaScreen
+import org.apache.logging.log4j.LogManager
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -52,10 +53,13 @@ fun AddGameScreen(viewModel: AddGameViewModel) {
                     Crossfade(selectedItem) { screen ->
                         when (screen) {
                             0 -> {
-                                AnimatedContent(startDownload) {
-                                    if (it) {
+                                AnimatedContent(startDownload) { show ->
+                                    if (show) {
                                         version?.let {
                                             Text("正在下载...")
+                                            LaunchedEffect(version) {
+                                                LogManager.getLogger().info(it.url)
+                                            }
                                         }
                                     } else {
                                         VanillaScreen(viewModel)

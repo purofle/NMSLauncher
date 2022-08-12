@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Client(
     @SerializedName("sha1")
-    val sha1: String, // c0898ec7c6a5a2eaa317770203a1554260699994
+    val sha1: String = "", // 0f275bc1547d01fa5f56ba34bdc87d981ee12daf
     @SerializedName("size")
-    val size: Int, // 21462385
+    val size: Int = 0, // 10180113
     @SerializedName("url")
-    val url: String // https://launcher.mojang.com/v1/objects/c0898ec7c6a5a2eaa317770203a1554260699994/client.jar
+    val url: String = "" // https://launcher.mojang.com/v1/objects/0f275bc1547d01fa5f56ba34bdc87d981ee12daf/client.jar
 )

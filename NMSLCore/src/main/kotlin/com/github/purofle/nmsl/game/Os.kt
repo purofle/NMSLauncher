@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Os(
     @SerializedName("name")
-    val name: String // linux
+    val name: String = "" // osx
 )

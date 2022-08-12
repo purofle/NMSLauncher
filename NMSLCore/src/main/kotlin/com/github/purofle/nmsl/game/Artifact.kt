@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Artifact(
     @SerializedName("path")
-    val path: String, // com/mojang/logging/1.0.0/logging-1.0.0.jar
+    val path: String = "", // com/mojang/patchy/1.3.9/patchy-1.3.9.jar
     @SerializedName("sha1")
-    val sha1: String, // f6ca3b2eee0b80b384e8ed93d368faecb82dfb9b
+    val sha1: String = "", // eb8bb7b66fa0e2152b1b40b3856e82f7619439ee
     @SerializedName("size")
-    val size: Int, // 15343
+    val size: Int = 0, // 23581
     @SerializedName("url")
-    val url: String // https://libraries.minecraft.net/com/mojang/logging/1.0.0/logging-1.0.0.jar
+    val url: String = "" // https://libraries.minecraft.net/com/mojang/patchy/1.3.9/patchy-1.3.9.jar
 )
