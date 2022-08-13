@@ -35,7 +35,7 @@ enum class OperatingSystem(val checkedName: String) {
          */
         var CURRENT_OS: OperatingSystem
 
-        fun getWorkingDirectory(vararg folder: String): Path {
+        private fun getWorkingDirectory(vararg folder: String): Path {
             val home = System.getProperty("user.home", ".")
             return when (CURRENT_OS) {
                 LINUX -> Paths.get(home, ".local", "share", "NMSLauncher", *folder)
@@ -49,12 +49,17 @@ enum class OperatingSystem(val checkedName: String) {
             }
         }
 
+        fun getMinecraftWorkingDirectory(vararg folder: String): Path = getWorkingDirectory(".minecraft", *folder)
+
         init {
             val name = System.getProperty("os.name").lowercase(Locale.US)
-            CURRENT_OS = if (name.contains("win")) WINDOWS else if (name.contains("mac")) OSX else if (name.contains("solaris") || name.contains("linux") || name.contains("unix") || name.contains(
-                    "sunos"
-                )
-            ) LINUX else UNKNOWN
+            CURRENT_OS =
+                if (name.contains("win")) WINDOWS else if (name.contains("mac")) OSX else if (name.contains("solaris") || name.contains(
+                        "linux"
+                    ) || name.contains("unix") || name.contains(
+                        "sunos"
+                    )
+                ) LINUX else UNKNOWN
         }
     }
 }
