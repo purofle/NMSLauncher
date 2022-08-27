@@ -147,7 +147,7 @@ class DownloadGame(
             } else
                 (library.rules[0].action == "allow") && (library.rules[0].os?.name == OperatingSystem.CURRENT_OS.checkedName)
         } else { // 老版本有多个规则
-            true // 先不适配老版本
+            return library.rules?.any { it.action == "disallow" && it.os?.name == OperatingSystem.CURRENT_OS.name } != true
         }
     }
 
