@@ -16,14 +16,11 @@ import com.github.purofle.nmsl.download.BMCLAPIDownloadProvider
 import com.github.purofle.nmsl.download.DownloadProvider
 import com.github.purofle.nmsl.ui.component.FilterChipRow
 import com.github.purofle.nmsl.ui.component.VersionCard
-import com.github.purofle.nmsl.ui.feature.addgame.AddGameViewModel
-import org.apache.logging.log4j.LogManager.getLogger
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VanillaScreen(
-    viewModel: AddGameViewModel,
-    downloadProvider: DownloadProvider = BMCLAPIDownloadProvider()
+	downloadProvider: DownloadProvider = BMCLAPIDownloadProvider()
 ) {
     val filtered = listOf("release", "snapshot")
     // copy filtered
@@ -71,9 +68,7 @@ fun VanillaScreen(
                             it.id,
                             it.time
                         ) {
-                            getLogger("VanillaScreen").info("start download")
-                            viewModel.changeVersion(it)
-                            viewModel.changeDownload(true)
+
                         }
                     }
                 }

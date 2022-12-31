@@ -1,4 +1,4 @@
-# proguard-rules.pro
+# compose-desktop.pro
 -dontoptimize
 -dontobfuscate
 
