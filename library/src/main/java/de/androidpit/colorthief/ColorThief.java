@@ -1,7 +1,7 @@
 /*
  * Java Color Thief
  * by Sven Woltmann, Fonpit AG
- * 
+ *
  * https://www.androidpit.com
  * https://www.androidpit.de
  *
@@ -73,12 +73,12 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
      *            the size of the palette; the number of colors returned
-     * 
+     *
      * @return the palette as array of RGB arrays
      */
     public static int[][] getPalette(BufferedImage sourceImage, int colorCount) {
@@ -91,7 +91,7 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
@@ -102,7 +102,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return the palette as array of RGB arrays
      * @throws IllegalArgumentException
      *             if quality is &lt; 1
@@ -121,12 +121,12 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
      *            the size of the palette; the number of colors returned (minimum 2, maximum 256)
-     * 
+     *
      * @return the color map
      */
     public static CMap getColorMap(BufferedImage sourceImage, int colorCount) {
@@ -135,7 +135,7 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param colorCount
@@ -146,7 +146,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return the color map
      * @throws IllegalArgumentException
      *             if quality is &lt; 1
@@ -176,7 +176,7 @@ public class ColorThief {
     /**
      * Gets the image's pixels via BufferedImage.getRaster().getDataBuffer(). Fast, but doesn't work
      * for all color models.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param quality
@@ -185,7 +185,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return an array of pixels (each an RGB int array)
      */
     private static int[][] getPixelsFast(
@@ -221,42 +221,39 @@ public class ColorThief {
         int[][] pixelArray = new int[numRegardedPixels][];
         int offset, r, g, b, a;
 
-        // Do the switch outside of the loop, that's much faster
-        switch (type) {
-        case BufferedImage.TYPE_3BYTE_BGR:
-            for (int i = 0; i < pixelCount; i += quality) {
-                offset = i * 3;
-                b = pixels[offset] & 0xFF;
-                g = pixels[offset + 1] & 0xFF;
-                r = pixels[offset + 2] & 0xFF;
+        // Do the switch outside the loop, that's much faster
+		switch (type) {
+			case BufferedImage.TYPE_3BYTE_BGR -> {
+				for (int i = 0; i < pixelCount; i += quality) {
+					offset = i * 3;
+					b = pixels[offset] & 0xFF;
+					g = pixels[offset + 1] & 0xFF;
+					r = pixels[offset + 2] & 0xFF;
 
-                // If pixel is not white
-                if (!(ignoreWhite && r > 250 && g > 250 && b > 250)) {
-                    pixelArray[numUsedPixels] = new int[] {r, g, b};
-                    numUsedPixels++;
-                }
-            }
-            break;
+					// If pixel is not white
+					if (!(ignoreWhite && r > 250 && g > 250 && b > 250)) {
+						pixelArray[numUsedPixels] = new int[]{r, g, b};
+						numUsedPixels++;
+					}
+				}
+			}
+			case BufferedImage.TYPE_4BYTE_ABGR -> {
+				for (int i = 0; i < pixelCount; i += quality) {
+					offset = i * 4;
+					a = pixels[offset] & 0xFF;
+					b = pixels[offset + 1] & 0xFF;
+					g = pixels[offset + 2] & 0xFF;
+					r = pixels[offset + 3] & 0xFF;
 
-        case BufferedImage.TYPE_4BYTE_ABGR:
-            for (int i = 0; i < pixelCount; i += quality) {
-                offset = i * 4;
-                a = pixels[offset] & 0xFF;
-                b = pixels[offset + 1] & 0xFF;
-                g = pixels[offset + 2] & 0xFF;
-                r = pixels[offset + 3] & 0xFF;
-
-                // If pixel is mostly opaque and not white
-                if (a >= 125 && !(ignoreWhite && r > 250 && g > 250 && b > 250)) {
-                    pixelArray[numUsedPixels] = new int[] {r, g, b};
-                    numUsedPixels++;
-                }
-            }
-            break;
-
-        default:
-            throw new IllegalArgumentException("Unhandled type: " + type);
-        }
+					// If pixel is mostly opaque and not white
+					if (a >= 125 && !(ignoreWhite && r > 250 && g > 250 && b > 250)) {
+						pixelArray[numUsedPixels] = new int[]{r, g, b};
+						numUsedPixels++;
+					}
+				}
+			}
+			default -> throw new IllegalArgumentException("Unhandled type: " + type);
+		}
 
         // Remove unused pixels from the array
         return Arrays.copyOfRange(pixelArray, 0, numUsedPixels);
@@ -265,7 +262,7 @@ public class ColorThief {
     /**
      * Gets the image's pixels via BufferedImage.getRGB(..). Slow, but the fast method doesn't work
      * for all color models.
-     * 
+     *
      * @param sourceImage
      *            the source image
      * @param quality
@@ -274,7 +271,7 @@ public class ColorThief {
      *            the greater the likelihood that colors will be missed.
      * @param ignoreWhite
      *            if <code>true</code>, white pixels are ignored
-     * 
+     *
      * @return an array of pixels (each an RGB int array)
      */
     private static int[][] getPixelsSlow(

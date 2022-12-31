@@ -1,12 +1,11 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.0"
-    kotlin("kapt") version "1.7.0"
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev741"
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("jvm") version "1.7.20"
+    kotlin("kapt") version "1.7.20"
+    id("org.jetbrains.compose") version "1.2.2"
+    kotlin("plugin.serialization") version "1.7.20"
 }
 
 group = "com.github.purofle"
@@ -50,19 +49,6 @@ buildscript {
     }
 }
 
-tasks.register<proguard.gradle.ProGuardTask>("obfuscate") {
-    val packageUberJarForCurrentOS by tasks.getting
-    dependsOn(packageUberJarForCurrentOS)
-    val files = packageUberJarForCurrentOS.outputs.files
-    injars(files)
-    outjars(files.map { file -> File(file.parentFile, "${file.nameWithoutExtension}.min.jar") })
-
-    val library = if (System.getProperty("java.version").startsWith("1.")) "lib/rt.jar" else "jmods"
-    libraryjars("${System.getProperty("java.home")}/$library")
-
-    configuration("proguard-rules.pro")
-}
-
 tasks.test {
     useJUnit()
 }
@@ -80,6 +66,7 @@ compose.desktop {
             packageName = "NMSLauncher"
             packageVersion = "1.0.0"
         }
+
     }
 }
 dependencies {
@@ -92,4 +79,12 @@ compileKotlin.kotlinOptions {
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
     jvmTarget = "1.8"
+}
+
+compose.desktop {
+	application {
+		buildTypes.release.proguard {
+			configurationFiles.from(project.file("compose-desktop.pro"))
+		}
+	}
 }

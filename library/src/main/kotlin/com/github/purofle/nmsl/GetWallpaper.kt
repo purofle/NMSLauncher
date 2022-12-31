@@ -5,6 +5,7 @@ import de.androidpit.colorthief.ColorThief
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.net.URI
+import java.sql.Time
 import javax.imageio.ImageIO
 import kotlin.io.path.Path
 import kotlin.io.path.div
@@ -53,17 +54,22 @@ fun getWallpaperPath(): File {
 
 fun getSeedColorFromWallpaper(): Color {
     val logger = LogManager.getLogger("getSeedColorFromWallpaper")
-    val wallpaperFile = try {
-        getWallpaperPath()
-    } catch (e: Exception) {
-        File({}.javaClass.getResource("/3840x2400.jpg")?.file ?: throw IllegalStateException("No wallpaper found"))
-    }
+//    val wallpaperFile = try {
+//        getWallpaperPath()
+//    } catch (e: Exception) {
+//		e.printStackTrace()
+//		logger.error("use default wallpaper")
+//        File({}.javaClass.getResource("/3840x2400.jpg")?.file ?: throw IllegalStateException("No wallpaper found"))
+//    }
+	val wallpaperFile = File({}.javaClass.getResource("/img.png")?.file!!)
     val image = try {
         if (wallpaperFile.isDirectory) {
-            val wallpaper = wallpaperFile.listAllFile().first { it.name.contains(Regex(".[png][jpg]")) }
+            val wallpaper = getWallpaperPath().listAllFile().first { it.name.contains(Regex(".[png][jpg]")) }
+			logger.info("使用系统壁纸")
             logger.info("use wallpaper: $wallpaper")
             ImageIO.read(wallpaper)
         } else {
+			logger.info("使用win11壁纸")
             ImageIO.read(wallpaperFile)
         }
     } catch (e: Exception) {
@@ -76,7 +82,11 @@ fun getSeedColorFromWallpaper(): Color {
 }
 
 fun seedColor(): Color = if (seedColorCache == null) {
+	val logger = LogManager.getLogger("getSeedColorFromWallpaper")
+	val t1 = System.currentTimeMillis()
     val sc = getSeedColorFromWallpaper()
+	val t2 = System.currentTimeMillis()
+	logger.info("时间${t2-t1}")
     seedColorCache = sc
     sc
 } else {
