@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    alias(libs.plugins.ksp.gradle.plugin)
     alias(libs.plugins.compose)
+//    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -26,15 +26,17 @@ buildscript {
      }
 }
 
-@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
     implementation(libs.log4j.api)
     implementation(libs.log4j.core)
+
+//    kapt(libs.dagger)
 
     testImplementation(kotlin("test"))
 
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
+
 
     implementation(project(":library"))
     implementation(project(":NMSLCore"))

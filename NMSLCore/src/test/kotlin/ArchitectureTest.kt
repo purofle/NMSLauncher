@@ -1,4 +1,4 @@
-import org.junit.Test
+import kotlin.test.Test
 
 internal class ArchitectureTest {
     @Test
