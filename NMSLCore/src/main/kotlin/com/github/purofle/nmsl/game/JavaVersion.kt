@@ -1,11 +1,10 @@
 package com.github.purofle.nmsl.game
 
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class JavaVersion(
-    @SerializedName("component")
-    val component: String = "", // jre-legacy
-    @SerializedName("majorVersion")
-    val majorVersion: Int = 0 // 8
+    val component: String, // jre-legacy
+    val majorVersion: Int // 8
 )

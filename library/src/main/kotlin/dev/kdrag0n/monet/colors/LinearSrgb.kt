@@ -32,7 +32,7 @@ data class LinearSrgb(
             x / 12.92
         }
 
-        fun Srgb.toLinearSrgb(): LinearSrgb {
+        fun Srgb.realToLinearSrgb(): LinearSrgb {
             return LinearSrgb(
                 r = fInv(r),
                 g = fInv(g),

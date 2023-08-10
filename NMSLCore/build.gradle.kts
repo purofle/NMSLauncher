@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.github.purofle"
@@ -11,20 +12,22 @@ repositories {
 
 val ktorVersion: String by project
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.code.gson:gson:2.9.0")
 
-    implementation("org.apache.logging.log4j:log4j-api:2.18.0")
-    implementation("org.apache.logging.log4j:log4j-core:2.18.0")
-    implementation("io.ktor:ktor-client-core-jvm:2.1.0")
-    implementation("io.ktor:ktor-client-cio-jvm:2.1.0")
-    implementation("io.ktor:ktor-client-logging-jvm:2.1.0")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-}
+    implementation(libs.kotlinx.serialization.json)
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+    implementation(libs.log4j.core)
+    implementation(libs.log4j.api)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.logging)
+
+    testImplementation(kotlin("test"))
 }

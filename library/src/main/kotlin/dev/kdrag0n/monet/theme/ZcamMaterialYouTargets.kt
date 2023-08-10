@@ -3,6 +3,7 @@ package dev.kdrag0n.monet.theme
 import dev.kdrag0n.monet.colors.CieLab
 import dev.kdrag0n.monet.colors.CieXyz.Companion.toCieXyz
 import dev.kdrag0n.monet.colors.Color
+import dev.kdrag0n.monet.colors.LinearSrgb.Companion.realToLinearSrgb
 import dev.kdrag0n.monet.colors.Srgb
 import dev.kdrag0n.monet.colors.Zcam
 import dev.kdrag0n.monet.colors.Zcam.Companion.toAbs
@@ -103,7 +104,7 @@ class ZcamMaterialYouTargets(
     ).toCieXyz().toAbs(cond).toZcam(cond).lightness
 
     private fun calcAccent1Chroma() = REF_ACCENT1_COLORS
-        .map { Srgb(it).toLinearSrgb().toCieXyz().toAbs(cond).toZcam(cond).chroma }
+        .map { Srgb(it).realToLinearSrgb().toCieXyz().toAbs(cond).toZcam(cond).chroma }
         .average()
 
     private fun shadesWithChroma(

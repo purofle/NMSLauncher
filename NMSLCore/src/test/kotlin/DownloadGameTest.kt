@@ -3,7 +3,7 @@ import com.github.purofle.nmsl.download.MCBBSDownloadProvider
 import com.github.purofle.nmsl.game.version.Version
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import kotlinx.coroutines.runBlocking
-import org.junit.Test
+import kotlin.test.Test
 
 class DownloadGameTest {
     private val downloadGame = DownloadGame(
