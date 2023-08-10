@@ -26,14 +26,6 @@ fun AboutScreen() {
         Column(modifier = Modifier.padding(pd)) {
             Text("关于", fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(10.dp))
-            NameCard("http://q1.qlogo.cn/g?b=qq&nk=3272912942&s=640",
-                "None's Super Minceraft Launcher",
-                "0.0.1"
-            )
-            NameCard("http://q1.qlogo.cn/g?b=qq&nk=3272912942&s=640",
-                "purofle",
-                "主开发者"
-            )
             Text("鸣谢", fontWeight = FontWeight.Bold)
             NameCard("https://pic1.afdiancdn.com/user/1abb556e211911e9864c52540025c377/avatar/52f8df537dde157bc442d4749ab9dce6_w800_h600_s80.jpg?imageView2/1/w/240/h/240",
                 "bangbang93",

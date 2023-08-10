@@ -2,10 +2,10 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    kotlin("kapt") version "1.7.20"
-    id("org.jetbrains.compose") version "1.2.2"
-    kotlin("plugin.serialization") version "1.7.20"
+    kotlin("jvm")
+    alias(libs.plugins.ksp.gradle.plugin)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.github.purofle"
@@ -17,14 +17,19 @@ repositories {
     google()
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+     dependencies {
+         classpath(libs.proguard.plugin)
+     }
+}
+
 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
-
-    implementation("org.apache.logging.log4j:log4j-api:2.18.0")
-    implementation("org.apache.logging.log4j:log4j-core:2.18.0")
-
-    implementation("org.jetbrains.kotlin:kotlin-parcelize-compiler:1.5.21")
-    val decomposeVersion = "0.6.0"
+    implementation(libs.log4j.api)
+    implementation(libs.log4j.core)
 
     testImplementation(kotlin("test"))
 
@@ -33,20 +38,6 @@ dependencies {
 
     implementation(project(":library"))
     implementation(project(":NMSLCore"))
-
-    implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
-    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:$decomposeVersion")
-    implementation("com.google.dagger:dagger:2.42")
-    kapt("com.google.dagger:dagger-compiler:2.42")
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.2.0")
-    }
 }
 
 tasks.test {
@@ -72,12 +63,9 @@ compose.desktop {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 }
+
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
     jvmTarget = "1.8"
 }
 

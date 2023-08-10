@@ -1,0 +1,19 @@
+[versions]
+kotlin = "1.9.0"
+composePlugin = "1.4.3"
+kspVersion = "1.9.0-1.0.11"
+log4jVersion = "2.20.0"
+proguardVersion = "7.3.2"
+
+[libraries]
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+proguard-plugin = { module = "com.guardsquare:proguard-gradle", version.ref = "proguardVersion" }
+log4j-api = { module="org.apache.logging.log4j:log4j-api", version.ref = "log4jVersion" }
+log4j-core = { module="org.apache.logging.log4j:log4j-core", version.ref = "log4jVersion" }
+
+[plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp-gradle-plugin = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
+[bundles]
+
