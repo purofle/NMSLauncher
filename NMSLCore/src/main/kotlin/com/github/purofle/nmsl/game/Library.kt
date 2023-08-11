@@ -6,12 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Library(
     val downloads: DownloadsX,
-    val extract: Extract? = null,
     val name: String, // com.mojang:patchy:1.3.9
-    val natives: Natives? = null,
     val rules: List<Rule>? = null
 ) {
-    fun isNative() = natives != null
     fun checkRules(): Boolean {
         if (rules == null) {
             return true

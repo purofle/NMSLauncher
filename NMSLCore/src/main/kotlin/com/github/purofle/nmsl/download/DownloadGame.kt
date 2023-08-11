@@ -12,6 +12,7 @@ import com.github.purofle.nmsl.utils.io.downloadFile
 import com.github.purofle.nmsl.utils.json.JsonUtils.assetsToAssets
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OperatingSystem
+import com.github.purofle.nmsl.utils.os.OperatingSystem.*
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
 import kotlinx.serialization.json.JsonObject
 import org.apache.logging.log4j.LogManager
@@ -56,15 +57,31 @@ class DownloadGame(
     fun getAllLibrary() = gameJson.libraries.filter { gameLibrariesFilter(it) }
 
     suspend fun downloadAllLibrary() {
-        val nativeLibs = gameJson.libraries.filter { it.isNative() && it.checkRules() }
-        val nonNativeLibs = gameJson.libraries.filterNot { it.isNative() && it.checkRules() }
+        val artifacts = gameJson.libraries.filter { it.checkRules() }
+        val classifiers = artifacts
+            .filter { it.checkRules() }
+            .mapNotNull { it.downloads.classifiers }
 
-        nonNativeLibs.forEach {
+        artifacts.forEach {
             it.downloads.artifact?.let { artifact -> downloadLibrary(artifact) }
+        }
+
+        if (classifiers.isEmpty()) {
+            return
+        }
+
+        classifiers.forEach {
+            val source = when (OperatingSystem.CURRENT_OS) {
+                WINDOWS -> it.nativesWindows!!
+                LINUX -> it.nativesLinux!!
+                OSX -> it.nativesOsx!!
+                UNKNOWN -> throw InternalError("your dick boom")
+            }
+            downloadLibrary(source)
         }
     }
 
-    suspend fun downloadLibrary(artifact: Artifact) {
+    private suspend fun downloadLibrary(artifact: Artifact) {
         val logger = LogManager.getLogger("downloadLibrary")
         logger.info("check download: ${artifact.url}")
         val lib = getMinecraftWorkingDirectory("libraries") / artifact.path
@@ -85,7 +102,6 @@ class DownloadGame(
         ) {
             logger.info("download done: ${lib.name}")
         }
-
     }
 
     private fun checkSha1(lib: Path) = HashUtils.getCheckSumFromFile(

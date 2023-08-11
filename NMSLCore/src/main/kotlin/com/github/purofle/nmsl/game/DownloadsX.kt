@@ -21,11 +21,11 @@ data class Artifact(
 @Serializable
 data class Classifiers(
     @SerialName("natives-linux")
-    val nativesLinux: Sources? = null,
+    val nativesLinux: Artifact? = null,
     @SerialName("natives-osx")
-    val nativesOsx: Sources? = null,
+    val nativesOsx: Artifact? = null,
     @SerialName("natives-windows")
-    val nativesWindows: Sources? = null,
+    val nativesWindows: Artifact? = null,
 )
 
 @Serializable
