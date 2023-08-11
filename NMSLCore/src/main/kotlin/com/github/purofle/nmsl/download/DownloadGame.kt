@@ -13,7 +13,7 @@ import com.github.purofle.nmsl.utils.json.JsonUtils.assetsToAssets
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OperatingSystem
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
-import com.google.gson.JsonObject
+import kotlinx.serialization.json.JsonObject
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.nio.file.Path
@@ -136,19 +136,27 @@ class DownloadGame(
         return if (library.rules.isNullOrEmpty()) {
             true // 非原生库，应为 [true]
         } else {
-            oldVersionFilter(library)
+            versionFilter(library)
         }
     }
 
-    private fun oldVersionFilter(library: Library): Boolean {
-        return if (library.rules?.size == 1) { // 新版本只有一个规则
-            if (library.name.contains("aarch_64")) {
-                false
-            } else
-                (library.rules[0].action == "allow") && (library.rules[0].os?.name == OperatingSystem.CURRENT_OS.checkedName)
-        } else { // 老版本有多个规则
-            return library.rules?.any { it.action == "disallow" && it.os?.name == OperatingSystem.CURRENT_OS.name } != true
+    private fun versionFilter(library: Library): Boolean {
+        if (library.rules?.size == 1) {
+            // 只有 allow 的情况
+            library.rules[0].let {
+                return (it.action == "allow") and (it.os?.name == OperatingSystem.CURRENT_OS.checkedName)
+            }
+        } else {
+            return !library.rules!!.any { (it.action == "disallow") and (it.os?.name == OperatingSystem.CURRENT_OS.checkedName) }
         }
+//        return if (library.rules?.size == 1) { // 新版本只有一个规则
+//            if (library.name.contains("aarch_64")) {
+//                false
+//            } else
+//                (library.rules[0].action == "allow") && (library.rules[0].os?.name == OperatingSystem.CURRENT_OS.checkedName)
+//        } else { // 老版本有多个规则
+//            return library.rules?.any { it.action == "disallow" && it.os?.name == OperatingSystem.CURRENT_OS.name } != true
+//        }
     }
 
     /**

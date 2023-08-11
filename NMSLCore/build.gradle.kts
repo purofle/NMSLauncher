@@ -10,15 +10,12 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion: String by project
-
 tasks.test {
     useJUnitPlatform()
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.google.code.gson:gson:2.9.0")
 
     implementation(libs.kotlinx.serialization.json)
 

@@ -26,7 +26,7 @@ data class Natives(
 @Serializable
 data class Rule(
     val action: String = "", // allow
-    val os: Os?
+    val os: Os? // 傻逼 Mojang
 )
 
 @Serializable
