@@ -5,7 +5,9 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.*
 
 object JsonUtils {
-    val json = Json
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
     /**
      * 将字符串转换为json对象
      */

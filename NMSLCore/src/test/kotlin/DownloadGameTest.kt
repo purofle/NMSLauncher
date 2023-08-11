@@ -39,9 +39,7 @@ class DownloadGameTest {
     fun testDownloadAllLibrary() {
         runBlocking {
             downloadGame.downloadJson()
-            downloadGame.getAllLibrary().forEach { library ->
-                library.downloads.artifact.let { downloadGame.downloadLibrary(it) }
-            }
+            downloadGame.downloadAllLibrary()
         }
     }
 

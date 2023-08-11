@@ -55,6 +55,15 @@ class DownloadGame(
      */
     fun getAllLibrary() = gameJson.libraries.filter { gameLibrariesFilter(it) }
 
+    suspend fun downloadAllLibrary() {
+        val nativeLibs = gameJson.libraries.filter { it.isNative() && it.checkRules() }
+        val nonNativeLibs = gameJson.libraries.filterNot { it.isNative() && it.checkRules() }
+
+        nonNativeLibs.forEach {
+            it.downloads.artifact?.let { artifact -> downloadLibrary(artifact) }
+        }
+    }
+
     suspend fun downloadLibrary(artifact: Artifact) {
         val logger = LogManager.getLogger("downloadLibrary")
         logger.info("check download: ${artifact.url}")
@@ -134,7 +143,7 @@ class DownloadGame(
      */
     private fun gameLibrariesFilter(library: Library): Boolean {
         return if (library.rules.isNullOrEmpty()) {
-            true // 非原生库，应为 [true]
+            true // 非原生库，一律下载
         } else {
             versionFilter(library)
         }
