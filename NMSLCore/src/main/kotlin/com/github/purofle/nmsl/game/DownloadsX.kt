@@ -1,7 +1,6 @@
 package com.github.purofle.nmsl.game
 
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,24 +19,16 @@ data class Artifact(
 
 @Serializable
 data class Classifiers(
-    @SerializedName("natives-linux")
-    val nativesLinux: Sources? = null,
-    @SerializedName("natives-osx")
-    val nativesOsx: Sources? = null,
-    @SerializedName("natives-windows")
-    val nativesWindows: Sources? = null,
-    @SerializedName("sources")
-    val sources: Sources? = null
+    val nativesLinux: Sources?,
+    val nativesOsx: Sources?,
+    val nativesWindows: Sources?,
+    val sources: Sources?
 )
 
 @Serializable
 data class Sources(
-    @SerializedName("path")
-    val path: String = "", // com/mojang/text2speech/1.10.3/text2speech-1.10.3-sources.jar
-    @SerializedName("sha1")
-    val sha1: String = "", // 404339fe43d1011ee046a249b0ec7ae9ce04a834
-    @SerializedName("size")
-    val size: Int = 0, // 4632
-    @SerializedName("url")
-    val url: String = "" // https://libraries.minecraft.net/com/mojang/text2speech/1.10.3/text2speech-1.10.3-sources.jar
+    val path: String, // com/mojang/text2speech/1.10.3/text2speech-1.10.3-sources.jar
+    val sha1: String, // 404339fe43d1011ee046a249b0ec7ae9ce04a834
+    val size: Int, // 4632
+    val url: String // https://libraries.minecraft.net/com/mojang/text2speech/1.10.3/text2speech-1.10.3-sources.jar
 )
