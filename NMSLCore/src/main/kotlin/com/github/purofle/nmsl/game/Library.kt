@@ -41,18 +41,6 @@ data class Library(
     }
 }
 
-@Serializable
-data class Extract(
-    val exclude: List<String>
-)
-
-@Serializable
-data class Natives(
-    val linux: String? = null, // natives-linux
-    val osx: String? = null, // natives-osx
-    val windows: String? = null // natives-windows
-)
-
 
 /**
  * 两种可能, 一种只有 allow, 一种有 allow 跟 disallow

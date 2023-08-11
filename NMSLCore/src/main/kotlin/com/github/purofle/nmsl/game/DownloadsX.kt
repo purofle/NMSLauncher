@@ -27,11 +27,3 @@ data class Classifiers(
     @SerialName("natives-windows")
     val nativesWindows: Artifact? = null,
 )
-
-@Serializable
-data class Sources(
-    val path: String, // com/mojang/text2speech/1.10.3/text2speech-1.10.3-sources.jar
-    val sha1: String, // 404339fe43d1011ee046a249b0ec7ae9ce04a834
-    val size: Int, // 4632
-    val url: String // https://libraries.minecraft.net/com/mojang/text2speech/1.10.3/text2speech-1.10.3-sources.jar
-)
