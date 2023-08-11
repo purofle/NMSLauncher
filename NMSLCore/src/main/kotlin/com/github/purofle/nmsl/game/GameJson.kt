@@ -2,7 +2,7 @@ package com.github.purofle.nmsl.game
 
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonArray
 
 @Serializable
 data class GameJson(
@@ -26,6 +26,6 @@ data class GameJson(
 
 @Serializable
 data class Arguments(
-    val game: List<JsonElement>,
-    val jvm: List<JsonElement>,
+    val game: JsonArray,
+    val jvm: JsonArray,
 )
