@@ -1,12 +1,13 @@
 package com.github.purofle.nmsl.game
 
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class DownloadsX(
-    val artifact: Artifact,
-    val classifiers: Classifiers
+    val artifact: Artifact? = null,
+    val classifiers: Classifiers? = null
 )
 
 @Serializable
@@ -19,10 +20,12 @@ data class Artifact(
 
 @Serializable
 data class Classifiers(
-    val nativesLinux: Sources?,
-    val nativesOsx: Sources?,
-    val nativesWindows: Sources?,
-    val sources: Sources?
+    @SerialName("natives-linux")
+    val nativesLinux: Sources? = null,
+    @SerialName("natives-osx")
+    val nativesOsx: Sources? = null,
+    @SerialName("natives-windows")
+    val nativesWindows: Sources? = null,
 )
 
 @Serializable
