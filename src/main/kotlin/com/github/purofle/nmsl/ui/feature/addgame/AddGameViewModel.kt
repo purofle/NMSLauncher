@@ -1,6 +1,6 @@
 package com.github.purofle.nmsl.ui.feature.addgame
 
-import com.github.purofle.nmsl.game.version.Version
+import com.github.purofle.nmsl.game.Version
 import com.github.purofle.nmsl.utils.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
