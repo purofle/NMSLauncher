@@ -1,4 +1,4 @@
-package com.github.purofle.nmsl.game.version
+package com.github.purofle.nmsl.game
 
 
 import kotlinx.serialization.Serializable

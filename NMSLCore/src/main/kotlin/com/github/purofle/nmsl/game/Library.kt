@@ -1,5 +1,7 @@
 package com.github.purofle.nmsl.game
 
+import com.github.purofle.nmsl.utils.os.Architecture
+import com.github.purofle.nmsl.utils.os.Architecture.X86_64
 import com.github.purofle.nmsl.utils.os.OperatingSystem
 import kotlinx.serialization.Serializable
 
@@ -38,6 +40,32 @@ data class Library(
         }
 
         return allowRules.isNotEmpty()
+    }
+
+    fun checkArch(): Boolean {
+        if (!name.contains("natives-") && !name.contains(OperatingSystem.CURRENT_OS.checkedName)) {
+            return true
+        }
+
+        val names = name.split(":")
+        if (names.size != 4) {
+            return true
+        }
+
+        val natives = names[3].split("-")
+
+        if (Architecture.CURRENT == X86_64 && natives[0] == "natives") {
+            return when (natives.size) {
+                2 -> true
+                else -> false
+            }
+        } else {
+            if (natives[0] == OperatingSystem.CURRENT_OS.checkedName && natives.size == 2) {
+                return natives[1].contains(Architecture.CURRENT.checkedName)
+            }
+        }
+
+        return name.contains(Architecture.CURRENT.name)
     }
 }
 
