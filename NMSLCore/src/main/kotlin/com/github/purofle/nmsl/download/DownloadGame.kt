@@ -22,6 +22,7 @@ class DownloadGame(
 
     private val versionDir = getMinecraftWorkingDirectory() / "versions" / version.id
     private val assetsDir = getMinecraftWorkingDirectory() / "assets"
+    private val logger = LogManager.getLogger(this)
     private lateinit var gameJson: GameJson
     private lateinit var assetsJson: JsonObject
 
@@ -107,61 +108,39 @@ class DownloadGame(
     }
 
     suspend fun downloadAsset(asset: Asset) {
-
-        val logger = LogManager.getLogger("downloadAsset")
         val assetDir = assetsDir / "objects" / asset.hash.substring(0, 2) / asset.hash
         val url = "${downloadProvider.assetBaseURL}${asset.hash.substring(0, 2)}/${asset.hash}"
 
-        assetDir.parent.createDirectories()
-        if (assetDir.isRegularFile()) {
-            val sha1 = checkSha1(assetDir)
-            if (sha1 == asset.hash) {
-                logger.info("${asset.hash}检验通过")
-                return
-            }
-        }
-        logger.info("start download: ${asset.hash}")
-        client.downloadFile(
-            assetDir.toFile(), url
-        ) {
-            logger.info("download done: ${asset.hash}")
-        }
+        downloadFile(assetDir, asset.hash, url)
     }
 
     suspend fun downloadClient() {
-        val logger = LogManager.getLogger("downloadClient")
-        val url = gameJson.downloads.client.url
+        val clientUrl = gameJson.downloads.client.url
         val clientFile = versionDir / "${version.id}.jar"
-        val log4j2File = versionDir / gameJson.logging.client.file.id
 
-        if (log4j2File.isRegularFile()) {
-            val sha1 = checkSha1(log4j2File)
-            if (sha1 == gameJson.logging.client.file.sha1) {
-                logger.info("${gameJson.logging.client.file.id}检验通过")
-            }
-        } else {
-            logger.info("start download: ${gameJson.logging.client.file.id}")
-            client.downloadFile(
-                log4j2File.toFile(), gameJson.logging.client.file.url
-            ) {
-                logger.info("download done: ${gameJson.logging.client.file.id}")
-            }
+        gameJson.logging.client.file.let { file ->
+
+            val log4j2File = versionDir / file.id
+
+            downloadFile(log4j2File, file.sha1, file.url)
         }
 
-        if (clientFile.isRegularFile()) {
-            val sha1 = checkSha1(clientFile)
-            if (sha1 == gameJson.downloads.client.sha1) {
-                logger.info("${version.id}.jar检验通过")
+        downloadFile(clientFile, gameJson.downloads.client.sha1, clientUrl)
+    }
+
+    private suspend fun downloadFile(path: Path, hash: String, url: String) {
+        path.parent.createDirectories()
+        if (path.isRegularFile()) {
+            val sha1 = checkSha1(path)
+            if (sha1 == hash) {
+                logger.info("${hash}检验通过")
                 return
             }
-        } else {
-            logger.info("start download: ${version.id}.jar")
-            client.downloadFile(
-                clientFile.toFile(), url
-            ) {
-                logger.info("download done: ${version.id}.jar")
-            }
         }
+        logger.info("start download: $hash")
+        client.downloadFile(
+            path.toFile(), url = url
+        )
     }
 
     fun generateCommand(): String {
