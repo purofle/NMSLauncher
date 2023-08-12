@@ -1,9 +1,6 @@
 package com.github.purofle.nmsl.download
 
-import com.github.purofle.nmsl.game.Artifact
-import com.github.purofle.nmsl.game.Asset
-import com.github.purofle.nmsl.game.GameJson
-import com.github.purofle.nmsl.game.Version
+import com.github.purofle.nmsl.game.*
 import com.github.purofle.nmsl.utils.HashUtils
 import com.github.purofle.nmsl.utils.io.HttpRequest.client
 import com.github.purofle.nmsl.utils.io.HttpRequest.getJson
@@ -14,7 +11,6 @@ import com.github.purofle.nmsl.utils.os.OperatingSystem
 import com.github.purofle.nmsl.utils.os.OperatingSystem.*
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import org.apache.logging.log4j.LogManager
 import java.nio.file.Path
 import java.security.MessageDigest
@@ -106,7 +102,7 @@ class DownloadGame(
 
     suspend fun downloadAssetJson(): List<Asset> {
         assetsJson = getJson(gameJson.assetIndex.url)
-        (assetsDir / "indexes" / "${version.id}.json").writeText(assetsJson.toJsonString())
+        (assetsDir / "indexes" / "${gameJson.assets}.json").writeText(assetsJson.toJsonString())
         return assetsToAssets(assetsJson)
     }
 
@@ -142,15 +138,14 @@ class DownloadGame(
             val sha1 = checkSha1(log4j2File)
             if (sha1 == gameJson.logging.client.file.sha1) {
                 logger.info("${gameJson.logging.client.file.id}检验通过")
-                return
             }
-        }
-
-        logger.info("start download: ${gameJson.logging.client.file.id}")
-        client.downloadFile(
-            log4j2File.toFile(), gameJson.logging.client.file.url
-        ) {
-            logger.info("download done: ${gameJson.logging.client.file.id}")
+        } else {
+            logger.info("start download: ${gameJson.logging.client.file.id}")
+            client.downloadFile(
+                log4j2File.toFile(), gameJson.logging.client.file.url
+            ) {
+                logger.info("download done: ${gameJson.logging.client.file.id}")
+            }
         }
 
         if (clientFile.isRegularFile()) {
@@ -158,43 +153,32 @@ class DownloadGame(
             if (sha1 == gameJson.downloads.client.sha1) {
                 logger.info("${version.id}.jar检验通过")
                 return
-            } else {
-                logger.info("start download: ${version.id}.jar")
-                client.downloadFile(
-                    clientFile.toFile(), url
-                ) {
-                    logger.info("download done: ${version.id}.jar")
-                }
+            }
+        } else {
+            logger.info("start download: ${version.id}.jar")
+            client.downloadFile(
+                clientFile.toFile(), url
+            ) {
+                logger.info("download done: ${version.id}.jar")
             }
         }
-    }
-
-    private fun argumentParse(): String {
-        if (gameJson.arguments == null) {
-            return gameJson.minecraftArguments!!
-        }
-        val sb = StringBuilder()
-        gameJson.arguments!!.jvm.forEach {
-            val jsonPrimitive = it as? JsonPrimitive
-            jsonPrimitive?.let { primitive ->
-                sb.append(primitive.content)
-                sb.append(" ")
-            }
-        }
-        gameJson.arguments!!.game.forEach {
-            val jsonPrimitive = it as? JsonPrimitive
-            jsonPrimitive?.let { primitive ->
-                sb.append(primitive.content)
-                sb.append(" ")
-            }
-        }
-        return sb.toString()
     }
 
     fun generateCommand(): String {
         val logger = LogManager.getLogger("generateCommand")
-        val gameArgument = argumentParse()
-        logger.debug(gameArgument)
-        return argumentParse()
+        val jvmArgument = Argument.parseJvmArgument(
+            versionDir / "natives",
+            artifacts = getAllLibrary(),
+            clientPath = versionDir / "${version.id}.jar"
+        )
+        val gameArgument = Argument.parseGameArgument(
+            username = "purofle",
+            assetIndex = gameJson.assets,
+            accessToken = "111",
+            clientId = "111",
+            xuid = "111"
+        )
+        logger.debug("java $jvmArgument ${gameJson.mainClass} $gameArgument")
+        return "java $jvmArgument ${gameJson.mainClass} $gameArgument"
     }
 }
