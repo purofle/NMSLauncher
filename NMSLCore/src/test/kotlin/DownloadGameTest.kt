@@ -8,12 +8,12 @@ class DownloadGameTest {
     private val downloadGame = DownloadGame(
         MCBBSDownloadProvider(), Version(
             1,
-            "1.19.2",
+            "1.20.1",
             "2022-08-05T11:57:05+00:00",
             "68cded4616fba9fbefb3f895033c261126c5f89c",
             "2022-08-05T12:01:02+00:00",
             "release",
-            "https://piston-meta.mojang.com/v1/packages/68cded4616fba9fbefb3f895033c261126c5f89c/1.19.2.json"
+            "https://piston-meta.mojang.com/v1/packages/31fc23d93c5baed9cab1a8855fc2086f15584d0e/1.20.1.json"
             // https://piston-meta.mojang.com/v1/packages/68cded4616fba9fbefb3f895033c261126c5f89c/1.19.2.json
             // https://launchermeta.mojang.com/v1/packages/cfd75871c03119093d7c96a6a99f21137d00c855/1.12.2.json
         )
