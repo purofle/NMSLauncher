@@ -4,20 +4,34 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.github.purofle.nmsl.game.GameJson
+import com.github.purofle.nmsl.game.GameManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage() {
+
+    val gameList = remember { mutableStateListOf<GameJson>() }
+
+    SideEffect {
+        gameList.addAll(GameManager.getAllGame())
+    }
+
     Scaffold {
         PermanentNavigationDrawer(
             drawerContent = {
@@ -72,27 +86,19 @@ fun MainPage() {
                             shape = RoundedCornerShape(30.dp),
                             singleLine = true
                         )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { }.fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.onSecondary)
-                        ) {
-                            val primaryContainer = MaterialTheme.colorScheme.primaryContainer
-                            Text("F", modifier = Modifier.drawBehind {
-                                drawCircle(primaryContainer, radius = 20f)
-                            }.padding(30.dp, 15.dp))
-                            Text("Fabric-1.20.1", modifier = Modifier.padding(5.dp, 0.dp))
-                        }
-                        repeat(5) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.clickable { }.fillMaxWidth()
-                            ) {
-                                val primaryContainer = MaterialTheme.colorScheme.primaryContainer
-                                Text("A", modifier = Modifier.drawBehind {
-                                    drawCircle(primaryContainer, radius = 20f)
-                                }.padding(30.dp, 15.dp))
-                                Text("List item", modifier = Modifier.padding(5.dp, 0.dp))
+                        LazyColumn {
+                            items(gameList) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.clickable { }.fillMaxWidth()
+                                        .background(MaterialTheme.colorScheme.onSecondary)
+                                ) {
+                                    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+                                    Text("V", modifier = Modifier.drawBehind {
+                                        drawCircle(primaryContainer, radius = 20f)
+                                    }.padding(30.dp, 15.dp))
+                                    Text(it.id, modifier = Modifier.padding(5.dp, 0.dp))
+                                }
                             }
                         }
                     }
