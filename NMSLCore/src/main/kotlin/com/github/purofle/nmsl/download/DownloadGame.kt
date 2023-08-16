@@ -20,8 +20,8 @@ class DownloadGame(
     private val downloadProvider: DownloadProvider, private val version: Version
 ) {
 
-    private val versionDir = getMinecraftWorkingDirectory() / "versions" / version.id
-    private val assetsDir = getMinecraftWorkingDirectory() / "assets"
+    private val versionDir = getMinecraftWorkingDirectory("versions", version.id)
+    private val assetsDir = getMinecraftWorkingDirectory("assets")
     private val logger = LogManager.getLogger(this)
     private lateinit var gameJson: GameJson
     private lateinit var assetsJson: JsonObject
@@ -155,7 +155,8 @@ class DownloadGame(
             assetIndex = gameJson.assets,
             accessToken = "111",
             clientId = "111",
-            xuid = "111"
+            xuid = "111",
+            gameDir = versionDir
         )
         logger.debug("java $jvmArgument ${gameJson.mainClass} $gameArgument")
         return "java $jvmArgument ${gameJson.mainClass} $gameArgument"

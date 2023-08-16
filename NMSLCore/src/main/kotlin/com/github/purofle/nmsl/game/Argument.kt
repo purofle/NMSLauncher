@@ -37,12 +37,13 @@ object Argument {
         clientId: String,
         xuid: String,
         userType: String = "msa",
-        versionType: String = LAUNCHER_NAME
+        versionType: String = LAUNCHER_NAME,
+        gameDir: Path = OperatingSystem.getMinecraftWorkingDirectory()
     ): String {
         val args = mutableListOf<String>()
         args.add("--username $username")
         args.add("--version $version")
-        args.add("--gameDir ${OperatingSystem.getMinecraftWorkingDirectory()}")
+        args.add("--gameDir $gameDir")
         args.add("--assetsDir ${OperatingSystem.getMinecraftWorkingDirectory("assets")}")
         args.add("--assetIndex $assetIndex")
         args.add("--uuid $uuid")
