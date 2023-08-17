@@ -98,7 +98,7 @@ class ZcamMaterialYouTargets(
     }
 
     private fun cielabL(l: Double) = CieLab(
-        L = l,
+        l = l,
         a = 0.0,
         b = 0.0,
     ).toCieXyz().toAbs(cond).toZcam(cond).lightness

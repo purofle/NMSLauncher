@@ -1,10 +1,8 @@
 package dev.kdrag0n.monet.util
 
-import kotlin.jvm.JvmInline
-
 @JvmInline
 value class Matrix3(
-    val values: DoubleArray,
+    private val values: DoubleArray,
 ) {
     constructor(
         n1: Double, n2: Double, n3: Double,
@@ -47,27 +45,6 @@ value class Matrix3(
             m[0], m[3], m[6],
             m[1], m[4], m[7],
             m[2], m[5], m[8],
-        )
-    }
-
-    fun inv(): Matrix3 {
-        val (a, d, g, b, e, h, c, f, i) = this
-
-        val A = e * i - f * h
-        val B = f * g - d * i
-        val C = d * h - e * g
-        val det = a * A + b * B + c * C
-
-        return Matrix3(
-            A / det,
-            B / det,
-            C / det,
-            (c * h - b * i) / det,
-            (a * i - c * g) / det,
-            (b * g - a * h) / det,
-            (b * f - c * e) / det,
-            (c * d - a * f) / det,
-            (a * e - b * d) / det,
         )
     }
 

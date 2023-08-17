@@ -1,9 +1,10 @@
 package dev.kdrag0n.monet.colors
 
 import dev.kdrag0n.monet.util.cube
+import kotlin.math.cbrt
 
 data class Oklab(
-    override val L: Double,
+    override val l: Double,
     override val a: Double,
     override val b: Double,
 ) : Lab {
@@ -33,21 +34,21 @@ data class Oklab(
 
     companion object {
         private fun lmsToOklab(l: Double, m: Double, s: Double): Oklab {
-            val lp = Math.cbrt(l)
-            val mp = Math.cbrt(m)
-            val sp = Math.cbrt(s)
+            val lp = cbrt(l)
+            val mp = cbrt(m)
+            val sp = cbrt(s)
 
             return Oklab(
-                L = 0.2104542553 * lp + 0.7936177850 * mp - 0.0040720468 * sp,
+                l = 0.2104542553 * lp + 0.7936177850 * mp - 0.0040720468 * sp,
                 a = 1.9779984951 * lp - 2.4285922050 * mp + 0.4505937099 * sp,
                 b = 0.0259040371 * lp + 0.7827717662 * mp - 0.8086757660 * sp,
             )
         }
 
         // Avoid arrays to minimize garbage
-        private fun oklabToL(lab: Oklab) = cube(lab.L + 0.3963377774 * lab.a + 0.2158037573 * lab.b)
-        private fun oklabToM(lab: Oklab) = cube(lab.L - 0.1055613458 * lab.a - 0.0638541728 * lab.b)
-        private fun oklabToS(lab: Oklab) = cube(lab.L - 0.0894841775 * lab.a - 1.2914855480 * lab.b)
+        private fun oklabToL(lab: Oklab) = cube(lab.l + 0.3963377774 * lab.a + 0.2158037573 * lab.b)
+        private fun oklabToM(lab: Oklab) = cube(lab.l - 0.1055613458 * lab.a - 0.0638541728 * lab.b)
+        private fun oklabToS(lab: Oklab) = cube(lab.l - 0.0894841775 * lab.a - 1.2914855480 * lab.b)
 
         fun LinearSrgb.toOklab() = lmsToOklab(
             l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b,

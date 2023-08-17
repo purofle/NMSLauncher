@@ -1,10 +1,13 @@
 package dev.kdrag0n.monet.colors
 
-import kotlin.math.*
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 interface Lch : Color {
-    val L: Double
-    val C: Double
+    val l: Double
+    val c: Double
     val h: Double
 
     companion object {
@@ -14,7 +17,7 @@ interface Lch : Color {
             return if (hDeg < 0) hDeg + 360 else hDeg
         }
 
-        internal fun Lch.calcLabA() = C * cos(Math.toRadians(h))
-        internal fun Lch.calcLabB() = C * sin(Math.toRadians(h))
+        internal fun Lch.calcLabA() = c * cos(Math.toRadians(h))
+        internal fun Lch.calcLabB() = c * sin(Math.toRadians(h))
     }
 }

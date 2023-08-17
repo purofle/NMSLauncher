@@ -58,7 +58,7 @@ interface ColorSchemeFactory {
             L_a = 0.4 * whiteLuminance,
             // Gray world
             Y_b = CieLab(
-                L = 50.0,
+                l = 50.0,
                 a = 0.0,
                 b = 0.0,
             ).toCieXyz().y * whiteLuminance,
