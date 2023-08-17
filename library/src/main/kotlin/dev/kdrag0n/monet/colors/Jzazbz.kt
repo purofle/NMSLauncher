@@ -3,14 +3,14 @@ package dev.kdrag0n.monet.colors
 import kotlin.math.pow
 
 data class Jzazbz(
-    override val L: Double,
+    override val l: Double,
     override val a: Double,
     override val b: Double,
 ) : Lab {
     override fun toLinearSrgb() = toCieXyz().toLinearSrgb()
 
-    fun toCieXyz(): CieXyz {
-        val jz = L + 1.6295499532821566e-11
+    private fun toCieXyz(): CieXyz {
+        val jz = l + 1.6295499532821565E-11
         val iz = jz / (0.44 + 0.56*jz)
 
         val l = pqInv(iz + 1.386050432715393e-1*a + 5.804731615611869e-2*b)
@@ -49,10 +49,10 @@ data class Jzazbz(
             val iz = 0.5 * (lp + mp)
             val az = 3.524000*lp - 4.066708*mp + 0.542708*sp
             val bz = 0.199076*lp + 1.096799*mp - 1.295875*sp
-            val jz = (0.44 * iz) / (1 - 0.56*iz) - 1.6295499532821566e-11
+            val jz = (0.44 * iz) / (1 - 0.56 * iz) - 1.6295499532821565E-11
 
             return Jzazbz(
-                L = jz,
+                l = jz,
                 a = az,
                 b = bz,
             )

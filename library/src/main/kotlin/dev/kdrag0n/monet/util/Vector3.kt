@@ -1,10 +1,8 @@
 package dev.kdrag0n.monet.util
 
-import kotlin.jvm.JvmInline
-
 @JvmInline
 value class Vector3(
-    val values: DoubleArray,
+    private val values: DoubleArray,
 ) {
     constructor(
         n1: Double, n2: Double, n3: Double,

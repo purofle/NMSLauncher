@@ -27,15 +27,15 @@ data class Zcam(
     override fun toLinearSrgb() = LinearSrgb(Double.NaN, Double.NaN, Double.NaN)
 
     // Aliases to match the paper
-    val Qz: Double get() = brightness
-    val Jz: Double get() = lightness
-    val Mz: Double get() = colorfulness
-    val Cz: Double get() = chroma
-    val hz: Double get() = hueAngle
-    val Sz: Double get() = saturation
-    val Vz: Double get() = vividness
-    val Kz: Double get() = blackness
-    val Wz: Double get() = whiteness
+    private val qz: Double get() = brightness
+    private val jz: Double get() = lightness
+    private val mz: Double get() = colorfulness
+    private val cz: Double get() = chroma
+    private val hz: Double get() = hueAngle
+    private val sz: Double get() = saturation
+    private val vz: Double get() = vividness
+    private val kz: Double get() = blackness
+    private val wz: Double get() = whiteness
 
     fun toCieXyz(
         luminanceSource: LuminanceSource,
@@ -48,19 +48,19 @@ data class Zcam(
         /* Step 1 */
         // Achromatic response
         val Iz = when (luminanceSource) {
-            LuminanceSource.BRIGHTNESS -> Qz / cond.Iz_coeff
-            LuminanceSource.LIGHTNESS -> (Jz * Qz_w) / (cond.Iz_coeff * 100.0)
+            LuminanceSource.BRIGHTNESS -> qz / cond.Iz_coeff
+            LuminanceSource.LIGHTNESS -> (jz * Qz_w) / (cond.Iz_coeff * 100.0)
         }.pow(cond.Qz_denom / (1.6 * cond.F_s))
 
         /* Step 2 */
         // Chroma
         val Cz = when (chromaSource) {
-            ChromaSource.CHROMA -> Cz
+            ChromaSource.CHROMA -> cz
             ChromaSource.COLORFULNESS -> Double.NaN // not used
-            ChromaSource.SATURATION -> (Qz * square(Sz)) / (100.0 * Qz_w * cond.Qz_denom)
-            ChromaSource.VIVIDNESS -> sqrt((square(Vz) - square(Jz - 58)) / 3.4)
-            ChromaSource.BLACKNESS -> sqrt((square((100 - Kz) / 0.8) - square(Jz)) / 8)
-            ChromaSource.WHITENESS -> sqrt(square(100.0 - Wz) - square(100.0 - Jz))
+            ChromaSource.SATURATION -> (qz * square(sz)) / (100.0 * Qz_w * cond.Qz_denom)
+            ChromaSource.VIVIDNESS -> sqrt((square(vz) - square(jz - 58)) / 3.4)
+            ChromaSource.BLACKNESS -> sqrt((square((100 - kz) / 0.8) - square(jz)) / 8)
+            ChromaSource.WHITENESS -> sqrt(square(100.0 - wz) - square(100.0 - jz))
         }
 
         /* Step 3 is missing because hue composition is not supported */
@@ -68,7 +68,7 @@ data class Zcam(
         /* Step 4 */
         // ... and back to colorfulness
         val Mz = when (chromaSource) {
-            ChromaSource.COLORFULNESS -> Mz
+            ChromaSource.COLORFULNESS -> mz
             else -> (Cz * Qz_w) / 100
         }
         val ez = hpToEz(hz)
@@ -125,16 +125,16 @@ data class Zcam(
         //private val L_a = whiteLuminance *1 //TODO
 
         //val F_b = sqrt(backgroundLuminance / whiteLuminance) // F_b
-        val F_b = sqrt(Y_b / referenceWhite.y)
-        val F_l = 0.171 * Math.cbrt(L_a) * (1.0 - exp(-48.0/9.0 * L_a)) // F_L
+        private val fb = sqrt(Y_b / referenceWhite.y)
+        private val fl = 0.171 * cbrt(L_a) * (1.0 - exp(-48.0 / 9.0 * L_a)) // F_L
 
         internal val Iz_w = referenceWhite.xyzToIzazbz()[0]
 
-        internal val Iz_coeff = 2700.0 * F_s.pow(2.2) * F_b.pow(0.5) * F_l.pow(0.2)
-        internal val Mz_denom = Iz_w.pow(0.78) * F_b.pow(0.1)
-        internal val ez_coeff = F_l.pow(0.2)
-        internal val Qz_denom = F_b.pow(0.12)
-        internal val Sz_coeff = F_l.pow(0.6)
+        internal val Iz_coeff = 2700.0 * F_s.pow(2.2) * fb.pow(0.5) * fl.pow(0.2)
+        internal val Mz_denom = Iz_w.pow(0.78) * fb.pow(0.1)
+        internal val ez_coeff = fl.pow(0.2)
+        internal val Qz_denom = fb.pow(0.12)
+        internal val Sz_coeff = fl.pow(0.6)
 
         // Depends on precomputed coefficients above
         internal val Qz_w = izToQz(Iz_w, this)

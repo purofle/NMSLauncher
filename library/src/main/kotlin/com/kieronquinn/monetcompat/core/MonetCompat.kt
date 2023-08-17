@@ -13,7 +13,7 @@ class MonetCompat(color: Color) {
     /**
          *  Set the multiplier of the chroma of the generated colors, defaults to `1.0`
          */
-        var chromaMultiplier = 1.0
+    private var chromaMultiplier = 1.0
 
     /**
          *  Use a custom [ColorSchemeFactory] to create colors. Use [ColorSchemeFactory.getFactory]
@@ -29,7 +29,7 @@ class MonetCompat(color: Color) {
          *  See [DynamicColorScheme.transformColor]
          *
          */
-        var accurateShades = true
+        private var accurateShades = true
 
         private var monetColors: ColorScheme = generateColorScheme(color)
 

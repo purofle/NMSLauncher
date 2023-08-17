@@ -18,11 +18,11 @@
 
 package de.androidpit.colorthief;
 
+import de.androidpit.colorthief.MMCQ.CMap;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.Arrays;
-
-import de.androidpit.colorthief.MMCQ.CMap;
 
 public class ColorThief {
 
@@ -47,31 +47,6 @@ public class ColorThief {
     }
 
     /**
-     * Use the median cut algorithm to cluster similar colors and return the base color from the
-     * largest cluster.
-     *
-     * @param sourceImage
-     *            the source image
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster a color will be returned but
-     *            the greater the likelihood that it will not be the visually most dominant color.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     *
-     * @return the dominant color as RGB array
-     * @throws IllegalArgumentException
-     *             if quality is &lt; 1
-     */
-    public static int[] getColor(BufferedImage sourceImage, int quality, boolean ignoreWhite) {
-        int[][] palette = getPalette(sourceImage, 5, quality, ignoreWhite);
-        if (palette == null) {
-            return null;
-        }
-        return palette[0];
-    }
-
-    /**
      * Use the median cut algorithm to cluster similar colors.
      *
      * @param sourceImage
@@ -83,36 +58,6 @@ public class ColorThief {
      */
     public static int[][] getPalette(BufferedImage sourceImage, int colorCount) {
         CMap cmap = getColorMap(sourceImage, colorCount);
-        if (cmap == null) {
-            return null;
-        }
-        return cmap.palette();
-    }
-
-    /**
-     * Use the median cut algorithm to cluster similar colors.
-     *
-     * @param sourceImage
-     *            the source image
-     * @param colorCount
-     *            the size of the palette; the number of colors returned
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster the palette generation but
-     *            the greater the likelihood that colors will be missed.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     *
-     * @return the palette as array of RGB arrays
-     * @throws IllegalArgumentException
-     *             if quality is &lt; 1
-     */
-    public static int[][] getPalette(
-            BufferedImage sourceImage,
-            int colorCount,
-            int quality,
-            boolean ignoreWhite) {
-        CMap cmap = getColorMap(sourceImage, colorCount, quality, ignoreWhite);
         if (cmap == null) {
             return null;
         }

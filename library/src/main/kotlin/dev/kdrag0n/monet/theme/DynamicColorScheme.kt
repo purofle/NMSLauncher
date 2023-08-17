@@ -1,10 +1,10 @@
 package dev.kdrag0n.monet.theme
 
-import dev.kdrag0n.monet.colors.OklabGamut.clipToLinearSrgb
 import dev.kdrag0n.monet.colors.Color
 import dev.kdrag0n.monet.colors.Lch
 import dev.kdrag0n.monet.colors.Oklab.Companion.toOklab
 import dev.kdrag0n.monet.colors.OklabGamut
+import dev.kdrag0n.monet.colors.OklabGamut.clipToLinearSrgb
 import dev.kdrag0n.monet.colors.Oklch
 import dev.kdrag0n.monet.colors.Oklch.Companion.toOklch
 
@@ -15,7 +15,7 @@ class DynamicColorScheme(
     private val accurateShades: Boolean = true,
 ) : ColorScheme() {
     private val seedNeutral = seedColor.toLinearSrgb().toOklab().toOklch().let { lch ->
-        lch.copy(C = lch.C * chromaFactor)
+        lch.copy(c = lch.c * chromaFactor)
     }
     private val seedAccent = seedNeutral
 
@@ -64,21 +64,21 @@ class DynamicColorScheme(
 
     private fun transformColor(target: Lch, seed: Lch, reference: Lch): Color {
         // Keep target lightness.
-        val L = target.L
+        val l = target.l
         // Allow colorless gray and low-chroma colors by clamping.
         // To preserve chroma ratios, scale chroma by the reference (A-1 / N-1).
-        val scaleC = if (reference.C == 0.0) {
+        val scaleC = if (reference.c == 0.0) {
             // Zero reference C won't have chroma anyway, so use 0 to avoid a divide-by-zero
             0.0
         } else {
             // Non-zero reference C = possible chroma scale
-            (seed.C.coerceIn(0.0, reference.C) / reference.C)
+            (seed.c.coerceIn(0.0, reference.c) / reference.c)
         }
-        val C = target.C * scaleC
+        val c = target.c * scaleC
         // Use the seed color's hue, since it's the most prominent feature of the theme.
         val h = seed.h
 
-        return Oklch(L, C, h).toOklab().clipToLinearSrgb(
+        return Oklch(l, c, h).toOklab().clipToLinearSrgb(
             method = if (accurateShades) {
                 // Prefer lightness
                 OklabGamut.ClipMethod.PRESERVE_LIGHTNESS

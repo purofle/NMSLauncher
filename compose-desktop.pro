@@ -6,6 +6,7 @@
 
 -ignorewarnings
 
+#noinspection ShrinkerUnresolvedReference
 -keepclasseswithmembers public class com.github.purofle.nmsl.MainKt {
     public static void main(java.lang.String[]);
 }

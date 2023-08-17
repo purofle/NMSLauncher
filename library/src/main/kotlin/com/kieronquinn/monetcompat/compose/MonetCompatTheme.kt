@@ -39,7 +39,7 @@ private fun MonetCompat.getMonetAccentColor(
 }
 
 /**
- * Any values that are not set will be chosen to best represent default values given by [dynamicLightColorScheme][androidx.compose.material3.dynamicLightColorScheme]
+ * Any values that are not set will be chosen to best represent default values given by dynamicLightColorScheme
  * on Android 12+ devices
  */
 @Composable
@@ -146,7 +146,7 @@ fun MonetCompat.darkMonetCompatScheme(
  * Monet Compat Dynamic Theme aims to recreate dynamic color theme provided by [androidx.compose.material3]
  *
  * This theme will use default values chosen to best recreate values provided
- * by default values of [dynamicDarkColorScheme][androidx.compose.material3.dynamicDarkColorScheme] and [lightColorScheme][androidx.compose.material3.lightColorScheme]
+ * by default values of dynamicDarkColorScheme and [lightColorScheme][androidx.compose.material3.lightColorScheme]
  *
  * If you want to set custom colors to certain values use [MonetCompat.darkMonetCompatScheme] and
  * [MonetCompat.lightMonetCompatScheme] with [androidx.compose.material3.MaterialTheme]

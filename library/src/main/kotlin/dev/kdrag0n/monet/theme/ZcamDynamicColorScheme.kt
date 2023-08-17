@@ -126,9 +126,7 @@ class ZcamDynamicColorScheme(
             // Clip with gamut intersection
             else -> {
                 // Create a line - x=C, y=L - intersecting a hue plane
-                val l1 = lightness
-                val c1 = chroma
-                val slope = (l1 - l0) / (c1 - c0)
+                val slope = (lightness - l0) / (chroma - c0)
                 val intercept = l0 - slope * c0
 
                 var lo = 0.0
@@ -174,12 +172,12 @@ class ZcamDynamicColorScheme(
         alpha: Double,
     ): LinearSrgb {
         // Scale values for adaptive L
-        val L = lightness / 100.0
-        val C = chroma / 100.0
+        val l = lightness / 100.0
+        val c = chroma / 100.0
 
-        val Ld = L - 0.5
-        val e1 = 0.5 + abs(Ld) + alpha * C
-        val l0 = 0.5*(1.0 + sign(Ld) *(e1 - sqrt(e1*e1 - 2.0 *abs(Ld))))
+        val ld = l - 0.5
+        val e1 = 0.5 + abs(ld) + alpha * c
+        val l0 = 0.5 * (1.0 + sign(ld) * (e1 - sqrt(e1 * e1 - 2.0 * abs(ld))))
 
         val adaptiveL0 = l0 * 100.0
         return clipZcamJchToLinearSrgb(lightness, chroma, hue, adaptiveL0, 0.0)

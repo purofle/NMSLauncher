@@ -1,14 +1,16 @@
 package dev.kdrag0n.monet.colors
 
+import kotlin.math.cbrt
+
 data class CieLab(
-    override val L: Double,
+    override val l: Double,
     override val a: Double,
     override val b: Double,
 ) : Lab {
     override fun toLinearSrgb() = toCieXyz().toLinearSrgb()
 
     fun toCieXyz(): CieXyz {
-        val lp = (L + 16.0) / 116.0
+        val lp = (l + 16.0) / 116.0
 
         return CieXyz(
             x = Illuminants.D65.x * fInv(lp + (a / 500.0)),
@@ -19,7 +21,7 @@ data class CieLab(
 
     companion object {
         private fun f(x: Double) = if (x > 216.0/24389.0) {
-            Math.cbrt(x)
+            cbrt(x)
         } else {
             x / (108.0/841.0) + 4.0/29.0
         }
@@ -32,7 +34,7 @@ data class CieLab(
 
         fun CieXyz.toCieLab(): CieLab {
             return CieLab(
-                L = 116.0 * f(y / Illuminants.D65.y) - 16.0,
+                l = 116.0 * f(y / Illuminants.D65.y) - 16.0,
                 a = 500.0 * (f(x / Illuminants.D65.x) - f(y / Illuminants.D65.y)),
                 b = 200.0 * (f(y / Illuminants.D65.y) - f(z / Illuminants.D65.z)),
             )
