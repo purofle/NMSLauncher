@@ -1,19 +1,11 @@
 package com.github.purofle.nmsl.auth.microsoft
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlin.test.Test
 
-
-class DeviceCodeFlowTest {
-
-    @Test
-    fun acquireTokenDeviceCode() {
-        runBlocking {
-            DeviceCodeFlow().acquireTokenDeviceCode {
-                delay(1000)
-                println(it)
-            }
-        }
+fun main() {
+    runBlocking {
+        val deviceFlow = DeviceCodeFlow.getDeviceAuthorization()
+        println(deviceFlow)
+        DeviceCodeFlow.authorizationFlow(deviceFlow.deviceCode).collect(::println)
     }
 }

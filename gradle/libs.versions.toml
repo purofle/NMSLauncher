@@ -15,9 +15,15 @@ proguard-plugin = { module = "com.guardsquare:proguard-gradle", version.ref = "p
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jVersion" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4jVersion" }
 
+slf4j-api = { module = "org.slf4j:slf4j-api", version = "2.0.7" }
+slf4j-log4j2 = { module = "org.slf4j:slf4j-log4j12", version = "2.0.7" }
+
 ktor-client-core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktorVersion" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktorVersion" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging-jvm", version.ref = "ktorVersion" }
+ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
+ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationJsonVersion" }
 
 [plugins]
