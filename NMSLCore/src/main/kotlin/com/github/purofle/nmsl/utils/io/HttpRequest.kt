@@ -14,8 +14,6 @@ object HttpRequest {
         install(Logging)
     }
 
-    suspend fun get(url: String) = client.get(url)
-
     /**
      * 使用 [HttpClient.get] 发送请求并且获取相应内容解析后的 json
      * @param url url
