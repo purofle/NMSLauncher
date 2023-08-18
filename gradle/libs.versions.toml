@@ -7,6 +7,7 @@ proguardVersion = "7.3.2"
 ktorVersion = "2.3.3"
 serializationJsonVersion = "1.6.0-RC"
 composeIcons = "1.1.0"
+microsoft4jVersion = "1.13.10"
 
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -18,17 +19,6 @@ ktor-client-core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "kto
 ktor-client-cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktorVersion" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging-jvm", version.ref = "ktorVersion" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationJsonVersion" }
-
-composeIcons-cssGg = { module = "br.com.devsrsouza.compose.icons:css-gg", version.ref = "composeIcons" }
-composeIcons-weatherIcons = { module = "br.com.devsrsouza.compose.icons:erikflowers-weather-icons", version.ref = "composeIcons" }
-composeIcons-evaIcons = { module = "br.com.devsrsouza.compose.icons:eva-icons", version.ref = "composeIcons" }
-composeIcons-feather = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
-composeIcons-fontAwesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "composeIcons" }
-composeIcons-lineAwesome = { module = "br.com.devsrsouza.compose.icons:line-awesome", version.ref = "composeIcons" }
-composeIcons-linea = { module = "br.com.devsrsouza.compose.icons:linea", version.ref = "composeIcons" }
-composeIcons-octicons = { module = "br.com.devsrsouza.compose.icons:octicons", version.ref = "composeIcons" }
-composeIcons-simpleIcons = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "composeIcons" }
-composeIcons-tablerIcons = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version.ref = "composeIcons" }
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
