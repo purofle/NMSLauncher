@@ -16,10 +16,7 @@ object DeviceCodeFlow {
     suspend fun getDeviceAuthorization(): DeviceAuthorization {
         return client.post("${AUTHORITY}/oauth2/v2.0/devicecode") {
             contentType(ContentType.Application.FormUrlEncoded)
-            setBody(FormDataContent(Parameters.build {
-                append("client_id", CLIENT_ID)
-                append("scope", SCOPE.joinToString(" "))
-            }))
+            setBody("client_id=$CLIENT_ID&scope=${SCOPE.joinToString("%20")}")
         }.body()
     }
 
@@ -58,5 +55,5 @@ object DeviceCodeFlow {
 
     private const val CLIENT_ID = "8eaa9578-7a05-48c6-8aeb-41211fd20b31"
     private const val AUTHORITY = "https://login.microsoftonline.com/consumers"
-    private val SCOPE = setOf("XboxLive.signin", "User.Read.All")
+    private val SCOPE = setOf("XboxLive.signin")
 }
