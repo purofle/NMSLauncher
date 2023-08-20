@@ -4,10 +4,10 @@ import com.github.purofle.nmsl.game.Versions
 import com.github.purofle.nmsl.utils.io.HttpRequest
 import kotlinx.coroutines.flow.flow
 
-interface DownloadProvider {
-    val versionListURL: String
-    val assetBaseURL: String
-    val mavenURL: String
+abstract class DownloadProvider {
+    abstract val versionListURL: String
+    abstract val assetBaseURL: String
+    abstract val mavenURL: String
 
     fun getVersionList() = flow {
         emit(HttpRequest.getJson<Versions>(versionListURL).versions)
