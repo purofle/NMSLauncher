@@ -53,7 +53,6 @@ data class MinecraftProfile(
     val id: String,
     val name: String,
     val skins: List<Skin>,
-    val capes: List<String>,
 )
 
 @Serializable
@@ -62,7 +61,6 @@ data class Skin(
     val state: String,
     val url: String,
     val variant: String,
-    val alias: String
 )
 
 @Serializable
