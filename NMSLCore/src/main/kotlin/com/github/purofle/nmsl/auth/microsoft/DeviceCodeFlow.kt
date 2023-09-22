@@ -36,7 +36,7 @@ object DeviceCodeFlow {
 
     fun authorizationFlow(deviceCode: String): Flow<SuccessAuthentication> = flow {
         var getToken = true
-        tokenLoop@ while (getToken) {
+        while (getToken) {
             val result = authorizationUser(deviceCode)
             runCatching {
                 val authError = result.toJsonObject<AuthorizationError>()
@@ -55,5 +55,5 @@ object DeviceCodeFlow {
 
     private const val CLIENT_ID = "8eaa9578-7a05-48c6-8aeb-41211fd20b31"
     private const val AUTHORITY = "https://login.microsoftonline.com/consumers"
-    private val SCOPE = setOf("XboxLive.signin")
+    private val SCOPE = setOf("XboxLive.signin", "offline_access")
 }
