@@ -50,6 +50,7 @@ enum class OperatingSystem(val checkedName: String) {
         }
 
         fun getMinecraftWorkingDirectory(vararg folder: String): Path = getWorkingDirectory(".minecraft", *folder)
+        fun getConfigPath(): Path = getWorkingDirectory("nmsl.json")
 
         init {
             val name = System.getProperty("os.name").lowercase(Locale.US)

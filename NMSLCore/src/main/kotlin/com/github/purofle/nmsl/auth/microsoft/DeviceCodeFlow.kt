@@ -20,7 +20,7 @@ object DeviceCodeFlow {
         }.body()
     }
 
-    private suspend fun authorizationUser(deviceCode: String): String {
+    private suspend fun authorizationDeviceCode(deviceCode: String): String {
         return client.post("${AUTHORITY}/oauth2/v2.0/token") {
             contentType(ContentType.Application.FormUrlEncoded)
             setBody(
@@ -34,10 +34,25 @@ object DeviceCodeFlow {
         }.body()
     }
 
+    suspend fun authorizationRefreshToken(refreshToken: String): SuccessAuthentication {
+        return client.post("${AUTHORITY}/oauth2/v2.0/token") {
+            contentType(ContentType.Application.FormUrlEncoded)
+            setBody(
+                FormDataContent(
+                    Parameters.build {
+                        append("grant_type", "refresh_token")
+                        append("client_id", CLIENT_ID)
+                        append("refresh_token", refreshToken)
+                        append("scope", SCOPE.joinToString(" "))
+                    })
+            )
+        }.body()
+    }
+
     fun authorizationFlow(deviceCode: String): Flow<SuccessAuthentication> = flow {
         var getToken = true
         while (getToken) {
-            val result = authorizationUser(deviceCode)
+            val result = authorizationDeviceCode(deviceCode)
             runCatching {
                 val authError = result.toJsonObject<AuthorizationError>()
                 if (authError.error != PENDING) {
