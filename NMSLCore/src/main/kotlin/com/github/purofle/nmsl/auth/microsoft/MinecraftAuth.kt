@@ -7,19 +7,23 @@ import io.ktor.http.*
 
 object MinecraftAuth {
     suspend fun authenticate(accessToken: String): MinecraftProfile {
+
         val userAuthenticate: XboxUserAuthorityResponse = client.post(AUTHORITY) {
             contentType(ContentType.Application.Json)
             setBody(XboxUserAuthority(Properties(rpsTicket = "d=$accessToken")))
         }.body()
+
         val xstsAuthenticate: XboxUserAuthorityResponse = client.post(AUTHORITY_XSTS) {
             contentType(ContentType.Application.Json)
             setBody(XsTsAuthorizeRequest(PropertiesX(userTokens = listOf(userAuthenticate.token))))
         }.body()
+
         val xstsToken = xstsAuthenticate.token
         val minecraftAuth: MinecraftAuthenticateResponse = client.post(MINECRAFT_AUTHENTICATION) {
             contentType(ContentType.Application.Json)
             setBody(MinecraftAuthenticate("XBL3.0 x=${xstsAuthenticate.displayClaims.xui[0].uhs};$xstsToken"))
         }.body()
+
         // checking game ownership
         val profile: MinecraftProfile = client.get(MINECRAFT_MC_PROFILE) {
             headers {
