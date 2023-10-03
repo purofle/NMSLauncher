@@ -10,6 +10,8 @@ import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OperatingSystem
 import com.github.purofle.nmsl.utils.os.OperatingSystem.*
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
 import org.apache.logging.log4j.LogManager
 import java.nio.file.Path
@@ -17,7 +19,7 @@ import java.security.MessageDigest
 import kotlin.io.path.*
 
 class DownloadGame(
-    private val downloadProvider: DownloadProvider, private val version: Version
+    private val downloadProvider: DownloadProvider, private val version: Version,
 ) {
 
     private val versionDir = getMinecraftWorkingDirectory("versions", version.id)
@@ -60,6 +62,12 @@ class DownloadGame(
             it
         }
         return sources + artifacts
+    }
+
+    suspend fun downloadAllAssets() {
+        downloadAssetJson().forEach {
+            downloadAsset(it)
+        }
     }
 
     suspend fun downloadAllLibrary() {
