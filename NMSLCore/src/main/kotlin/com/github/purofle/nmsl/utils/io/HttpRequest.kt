@@ -16,7 +16,7 @@ object HttpRequest {
         install(HttpCache)
         install(Logging) {
             logger = Logger.DEFAULT
-            level = LogLevel.ALL
+            level = LogLevel.INFO
         }
         install(ContentNegotiation) {
             json(JsonUtils.json)

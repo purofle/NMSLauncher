@@ -17,12 +17,15 @@ object Argument {
     ): String {
         val cpPaths = artifacts.map {
             val lib = OperatingSystem.getMinecraftWorkingDirectory("libraries", it.path)
-            lib.pathString
-        } + clientPath.pathString
+            "'${lib.pathString}'"
+        } + "'${clientPath.pathString}'"
         val args = mutableListOf<String>()
-        args.add("-Djava.library.path=${nativesPath.pathString}")
+        args.add("-Djava.library.path='${nativesPath.pathString}'")
         args.add("-Dminecraft.launcher.brand=${launcherName}")
         args.add("-Dminecraft.launcher.version=${launcherVersion}")
+        if (OperatingSystem.CURRENT_OS == OperatingSystem.OSX) {
+            args.add("-XstartOnFirstThread")
+        }
         args.add("-cp ${cpPaths.joinToString(":")}")
 
         return args.joinToString(" ")
@@ -43,8 +46,8 @@ object Argument {
         val args = mutableListOf<String>()
         args.add("--username $username")
         args.add("--version $version")
-        args.add("--gameDir $gameDir")
-        args.add("--assetsDir ${OperatingSystem.getMinecraftWorkingDirectory("assets")}")
+        args.add("--gameDir '$gameDir'")
+        args.add("--assetsDir '${OperatingSystem.getMinecraftWorkingDirectory("assets")}'")
         args.add("--assetIndex $assetIndex")
         args.add("--uuid $uuid")
         args.add("--accessToken $accessToken")
