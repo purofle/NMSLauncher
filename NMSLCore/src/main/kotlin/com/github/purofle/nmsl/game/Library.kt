@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 data class Library(
     val downloads: DownloadsX,
     val name: String, // com.mojang:patchy:1.3.9
-    val rules: List<Rule>? = null
+    val rules: List<Rule>? = null,
 ) {
     fun checkRules(): Boolean {
         if (rules == null) {
@@ -47,25 +47,11 @@ data class Library(
             return true
         }
 
-        val names = name.split(":")
-        if (names.size != 4) {
-            return true
-        }
+        val os = OperatingSystem.CURRENT_OS
 
-        val natives = names[3].split("-")
-
-        if (Architecture.CURRENT == X86_64 && natives[0] == "natives") {
-            return when (natives.size) {
-                2 -> true
-                else -> false
-            }
-        } else {
-            if (natives[0] == OperatingSystem.CURRENT_OS.checkedName && natives.size == 2) {
-                return natives[1].contains(Architecture.CURRENT.checkedName)
-            }
-        }
-
-        return name.contains(Architecture.CURRENT.name)
+        val natives =
+            "natives-${if (os == OperatingSystem.OSX) "macos" else os.checkedName}-${Architecture.CURRENT.checkedName}"
+        return name.contains(natives)
     }
 }
 
@@ -80,10 +66,10 @@ data class Library(
 @Serializable
 data class Rule(
     val action: String, // allow
-    val os: Os? = null // 傻逼 Mojang
+    val os: Os? = null, // 傻逼 Mojang
 )
 
 @Serializable
 data class Os(
-    val name: String // osx
+    val name: String, // osx
 )
