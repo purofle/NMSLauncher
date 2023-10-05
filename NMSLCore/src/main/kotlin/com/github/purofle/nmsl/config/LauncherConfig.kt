@@ -8,7 +8,7 @@ import kotlin.io.path.writeText
 
 object LauncherConfig {
     private val configPath by lazy { OperatingSystem.getConfigPath() }
-    private val config by lazy { readConfig() }
+    val config by lazy { readConfig() }
 
     fun createConfig(config: NmslConfig) {
         configPath.writeText(config.toJsonString())

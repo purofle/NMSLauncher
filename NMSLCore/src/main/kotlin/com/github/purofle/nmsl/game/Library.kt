@@ -1,7 +1,6 @@
 package com.github.purofle.nmsl.game
 
 import com.github.purofle.nmsl.utils.os.Architecture
-import com.github.purofle.nmsl.utils.os.Architecture.X86_64
 import com.github.purofle.nmsl.utils.os.OperatingSystem
 import kotlinx.serialization.Serializable
 
@@ -49,8 +48,12 @@ data class Library(
 
         val os = OperatingSystem.CURRENT_OS
 
+        if (os == OperatingSystem.LINUX) {
+            return name.contains("natives-linux")
+        }
+
         val natives =
-            "natives-${if (os == OperatingSystem.OSX) "macos" else os.checkedName}-${Architecture.CURRENT.checkedName}"
+            "${if (os == OperatingSystem.OSX) "macos" else os.checkedName}-${Architecture.CURRENT.checkedName}"
         return name.contains(natives)
     }
 }
