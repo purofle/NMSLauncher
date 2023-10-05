@@ -3,15 +3,16 @@ package com.github.purofle.nmsl.auth.microsoft
 import com.github.purofle.nmsl.config.LauncherConfig
 import com.github.purofle.nmsl.config.Msa
 import com.github.purofle.nmsl.config.NmslConfig
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 fun main() {
     runBlocking {
-//        val deviceFlow = DeviceCodeFlow.getDeviceAuthorization()
-//        println(deviceFlow)
-//        val auth = DeviceCodeFlow.authorizationFlow(deviceFlow.deviceCode).first()
+        val deviceFlow = DeviceCodeFlow.getDeviceAuthorization()
+        println(deviceFlow)
+        val auth = DeviceCodeFlow.authorizationFlow(deviceFlow.deviceCode).first()
 
-        val auth = DeviceCodeFlow.authorizationRefreshToken(LauncherConfig.config.msa.refreshToken)
+//        val auth = DeviceCodeFlow.authorizationRefreshToken(LauncherConfig.config.msa.refreshToken)
 
         LauncherConfig.createConfig(
             NmslConfig(
