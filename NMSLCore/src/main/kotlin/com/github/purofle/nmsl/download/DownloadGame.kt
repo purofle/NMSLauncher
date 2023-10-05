@@ -12,6 +12,7 @@ import com.github.purofle.nmsl.utils.os.OperatingSystem.*
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
 import kotlinx.serialization.json.JsonObject
 import org.apache.logging.log4j.LogManager
+import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.security.MessageDigest
 import kotlin.io.path.*
@@ -22,7 +23,7 @@ class DownloadGame(
 
     private val versionDir = getMinecraftWorkingDirectory("versions", version.id)
     private val assetsDir = getMinecraftWorkingDirectory("assets")
-    private val logger = LogManager.getLogger(this)
+    private val logger = LoggerFactory.getLogger(this::class.java)
     private lateinit var gameJson: GameJson
     private lateinit var assetsJson: JsonObject
 
@@ -113,7 +114,7 @@ class DownloadGame(
         return assetsToAssets(assetsJson)
     }
 
-    suspend fun downloadAsset(asset: Asset) {
+    private suspend fun downloadAsset(asset: Asset) {
         val assetDir = assetsDir / "objects" / asset.hash.substring(0, 2) / asset.hash
         val url = "${downloadProvider.assetBaseURL}${asset.hash.substring(0, 2)}/${asset.hash}"
 
