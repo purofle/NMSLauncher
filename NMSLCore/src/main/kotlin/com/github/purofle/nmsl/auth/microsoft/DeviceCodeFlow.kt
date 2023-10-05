@@ -68,7 +68,7 @@ object DeviceCodeFlow {
         }
     }
 
-    private const val CLIENT_ID = "8eaa9578-7a05-48c6-8aeb-41211fd20b31"
+    const val CLIENT_ID = "8eaa9578-7a05-48c6-8aeb-41211fd20b31"
     private const val AUTHORITY = "https://login.microsoftonline.com/consumers"
     private val SCOPE = setOf("XboxLive.signin", "offline_access")
 }

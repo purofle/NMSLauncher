@@ -10,8 +10,6 @@ import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OperatingSystem
 import com.github.purofle.nmsl.utils.os.OperatingSystem.*
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
 import org.apache.logging.log4j.LogManager
 import java.nio.file.Path
@@ -151,21 +149,28 @@ class DownloadGame(
         )
     }
 
-    fun generateCommand(): String {
+    fun generateCommand(
+        clientId: String,
+        username: String,
+        uuid: String,
+        accessToken: String,
+        xuid: String,
+    ): String {
         val logger = LogManager.getLogger("generateCommand")
         val jvmArgument = Argument.parseJvmArgument(
             versionDir / "natives",
             artifacts = getAllLibrary(),
             clientPath = versionDir / "${version.id}.jar"
         )
-        val gameArgument = Argument.parseGameArgument(
-            username = "purofle",
+        val gameArgument = Argument.GameArgument(
+            username = username,
             assetIndex = gameJson.assets,
-            accessToken = "111",
-            clientId = "111",
-            xuid = "111",
+            accessToken = accessToken,
+            clientId = clientId,
+            uuid = uuid,
+            xuid = xuid,
             gameDir = versionDir
-        )
+        ).parseGameArgument()
         logger.debug("java $jvmArgument ${gameJson.mainClass} $gameArgument")
         return "java $jvmArgument ${gameJson.mainClass} $gameArgument"
     }

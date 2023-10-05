@@ -7,13 +7,11 @@ import kotlinx.coroutines.runBlocking
 
 fun main() {
     runBlocking {
-        val deviceFlow = DeviceCodeFlow.getDeviceAuthorization()
-        println(deviceFlow)
+//        val deviceFlow = DeviceCodeFlow.getDeviceAuthorization()
+//        println(deviceFlow)
 //        val auth = DeviceCodeFlow.authorizationFlow(deviceFlow.deviceCode).first()
 
-        val auth = DeviceCodeFlow.authorizationRefreshToken("refreshToken")
-
-        MinecraftAuth.authenticate(auth.accessToken)
+        val auth = DeviceCodeFlow.authorizationRefreshToken(LauncherConfig.config.msa.refreshToken)
 
         LauncherConfig.createConfig(
             NmslConfig(
@@ -21,7 +19,8 @@ fun main() {
                     accessToken = auth.accessToken,
                     refreshToken = auth.refreshToken,
                     expiresIn = auth.expiresIn
-                ), MinecraftAuth.authenticate(auth.accessToken)
+                ),
+                MinecraftAuth.authenticate(auth.accessToken)
             )
         )
     }

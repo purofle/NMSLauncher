@@ -6,7 +6,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 
 object MinecraftAuth {
-    suspend fun authenticate(accessToken: String): MinecraftProfile {
+    suspend fun authenticate(accessToken: String): AuthData {
 
         val userAuthenticate: XboxUserAuthorityResponse = client.post(AUTHORITY) {
             contentType(ContentType.Application.Json)
@@ -31,18 +31,16 @@ object MinecraftAuth {
             }
         }.body()
 
-        val checkGame = client.get(MINECRAFT_MCSTORE) {
-            headers {
-                append("Authorization", "Bearer ${minecraftAuth.accessToken}")
-            }
-        }
-
-        return profile
+        return AuthData(
+            minecraftAccessToken = minecraftAuth.accessToken,
+            xstsToken = xstsToken,
+            minecraftProfile = profile
+        )
     }
 
     private const val AUTHORITY = "https://user.auth.xboxlive.com/user/authenticate"
     private const val AUTHORITY_XSTS = "https://xsts.auth.xboxlive.com/xsts/authorize"
     private const val MINECRAFT_AUTHENTICATION = "https://api.minecraftservices.com/authentication/login_with_xbox"
     private const val MINECRAFT_MC_PROFILE = "https://api.minecraftservices.com/minecraft/profile"
-    private const val MINECRAFT_MCSTORE = "https://api.minecraftservices.com/entitlements/mcstore"
+//    private const val MINECRAFT_MCSTORE = "https://api.minecraftservices.com/entitlements/mcstore"
 }
