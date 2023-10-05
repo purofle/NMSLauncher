@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 fun main() {
+
     runBlocking {
         val provider = MCBBSDownloadProvider()
         val versionList = provider.getVersionList().first()
