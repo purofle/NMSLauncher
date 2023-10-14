@@ -14,6 +14,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
 
