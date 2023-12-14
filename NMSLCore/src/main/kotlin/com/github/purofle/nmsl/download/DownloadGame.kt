@@ -12,7 +12,6 @@ import com.github.purofle.nmsl.utils.os.OperatingSystem.*
 import com.github.purofle.nmsl.utils.os.OperatingSystem.Companion.getMinecraftWorkingDirectory
 import kotlinx.serialization.json.JsonObject
 import org.apache.logging.log4j.LogManager
-import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.security.MessageDigest
 import kotlin.io.path.*
@@ -23,7 +22,7 @@ class DownloadGame(
 
     private val versionDir = getMinecraftWorkingDirectory("versions", version.id)
     private val assetsDir = getMinecraftWorkingDirectory("assets")
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val logger = LogManager.getLogger(this::class)
     private lateinit var gameJson: GameJson
     private lateinit var assetsJson: JsonObject
 
@@ -76,7 +75,6 @@ class DownloadGame(
     }
 
     private suspend fun downloadLibrary(artifact: Artifact) {
-        val logger = LogManager.getLogger("downloadLibrary")
         logger.info("check download: ${artifact.url}")
         val lib = getMinecraftWorkingDirectory("libraries") / artifact.path
         lib.parent.createDirectories()
@@ -157,7 +155,6 @@ class DownloadGame(
         accessToken: String,
         xuid: String,
     ): String {
-        val logger = LogManager.getLogger("generateCommand")
         val jvmArgument = Argument.parseJvmArgument(
             versionDir / "natives",
             artifacts = getAllLibrary(),
