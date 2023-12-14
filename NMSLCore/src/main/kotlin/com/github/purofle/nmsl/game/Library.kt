@@ -52,8 +52,8 @@ data class Library(
             return name.contains("natives-linux")
         }
 
-        val natives =
-            "${if (os == OperatingSystem.OSX) "macos" else os.checkedName}-${Architecture.CURRENT.checkedName}"
+        var natives = if (os == OperatingSystem.OSX) "macos" else os.checkedName
+        if (Architecture.CURRENT != Architecture.X86_64) natives += "-${Architecture.CURRENT.checkedName}"
         return name.contains(natives)
     }
 }
