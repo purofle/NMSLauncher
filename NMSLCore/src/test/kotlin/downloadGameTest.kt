@@ -10,9 +10,8 @@ fun main() {
     runBlocking {
         val provider = MCBBSDownloadProvider()
         val versionList = provider.getVersionList().first()
-        val least = versionList.first()
 
-        val downloader = DownloadGame(provider, least)
+        val downloader = DownloadGame(provider, versionList.find { it.id == "1.19.4" }!!)
 
         LauncherConfig.config.profile.let {
             downloader.apply {

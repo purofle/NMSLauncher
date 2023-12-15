@@ -42,6 +42,9 @@ data class Library(
     }
 
     fun checkArch(): Boolean {
+
+        val name = name.split(":").last()
+
         if (!name.contains("natives-") && !name.contains(OperatingSystem.CURRENT_OS.checkedName)) {
             return true
         }
@@ -54,7 +57,8 @@ data class Library(
 
         var natives = if (os == OperatingSystem.OSX) "macos" else os.checkedName
         if (Architecture.CURRENT != Architecture.X86_64) natives += "-${Architecture.CURRENT.checkedName}"
-        return name.contains(natives)
+        natives = "natives-$natives"
+        return name == natives
     }
 }
 
