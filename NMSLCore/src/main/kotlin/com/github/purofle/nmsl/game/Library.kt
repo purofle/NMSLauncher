@@ -9,6 +9,8 @@ data class Library(
     val downloads: DownloadsX,
     val name: String, // com.mojang:patchy:1.3.9
     val rules: List<Rule>? = null,
+    val natives: Map<String, String>? = null, // 仅存在于旧版本
+    val extract: Map<String, List<String>>? = null,
 ) {
     fun checkRules(): Boolean {
         if (rules == null) {
@@ -24,21 +26,10 @@ data class Library(
             return false
         }
 
-        if (allowRules.isNotEmpty()) {
-            val allow = allowRules.any { it.os == null || it.os.name == os }
-            if (!allow) {
-                return false
-            }
-        }
+        val allow = allowRules.any { it.os == null || it.os.name == os }
+        val disallow = disallowRules.any { it.os == null || it.os.name == os }
 
-        if (disallowRules.isNotEmpty()) {
-            val disallow = allowRules.any { it.os == null || it.os.name == os }
-            if (disallow) {
-                return true
-            }
-        }
-
-        return allowRules.isNotEmpty()
+        return allow && !disallow
     }
 
     fun checkArch(): Boolean {

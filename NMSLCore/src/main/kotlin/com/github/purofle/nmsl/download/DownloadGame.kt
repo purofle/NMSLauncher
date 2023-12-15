@@ -48,18 +48,18 @@ class DownloadGame(
         val library = gameJson.libraries.filter { it.checkRules() }.filter { it.checkArch() }
         val artifacts = library.mapNotNull { it.downloads.artifact }
         val classifiers = library.mapNotNull { it.downloads.classifiers }
-
         val sources = classifiers.map {
+            logger.debug("{}", it)
             when (OperatingSystem.CURRENT_OS) {
                 WINDOWS -> it.nativesWindows!!
                 LINUX -> it.nativesLinux!!
-                OSX -> it.nativesOsx!!
+                OSX -> it.nativesMacOS ?: it.nativesOsx
                 UNKNOWN -> throw InternalError("your dick boom")
             }
         }.map {
             it
         }
-        return sources + artifacts
+        return sources.filterNotNull() + artifacts
     }
 
     suspend fun downloadAllAssets() {

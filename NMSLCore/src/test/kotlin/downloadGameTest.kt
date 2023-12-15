@@ -11,7 +11,7 @@ fun main() {
         val provider = MCBBSDownloadProvider()
         val versionList = provider.getVersionList().first()
 
-        val downloader = DownloadGame(provider, versionList.find { it.id == "1.19.4" }!!)
+        val downloader = DownloadGame(provider, versionList.find { it.id == "1.18.2" }!!)
 
         LauncherConfig.config.profile.let {
             downloader.apply {

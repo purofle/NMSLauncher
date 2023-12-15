@@ -24,6 +24,8 @@ data class Classifiers(
     val nativesLinux: Artifact? = null,
     @SerialName("natives-osx")
     val nativesOsx: Artifact? = null,
+    @SerialName("natives-macos")
+    val nativesMacOS: Artifact? = null,
     @SerialName("natives-windows")
     val nativesWindows: Artifact? = null,
 )
