@@ -22,7 +22,7 @@ class DownloadGame(
 
     private val versionDir = getMinecraftWorkingDirectory("versions", version.id)
     private val assetsDir = getMinecraftWorkingDirectory("assets")
-    private val logger = LogManager.getLogger(this::class)
+    private val logger = LogManager.getLogger(this::class.java)
     private lateinit var gameJson: GameJson
     private lateinit var assetsJson: JsonObject
 
