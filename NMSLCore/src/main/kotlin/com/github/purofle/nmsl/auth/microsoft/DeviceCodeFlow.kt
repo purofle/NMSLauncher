@@ -59,7 +59,6 @@ object DeviceCodeFlow {
                     throw Exception(authError.error.toString())
                 }
             }.onFailure {
-                println(result)
                 emit(result.toJsonObject<SuccessAuthentication>())
                 getToken = false
             }.onSuccess {
