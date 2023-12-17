@@ -2,12 +2,12 @@ package com.github.purofle.nmsl.config
 
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
-import com.github.purofle.nmsl.utils.os.OperatingSystem
+import com.github.purofle.nmsl.utils.os.OS
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
 object LauncherConfig {
-    private val configPath by lazy { OperatingSystem.getConfigPath() }
+    private val configPath by lazy { OS.getConfigPath() }
     val config by lazy { readConfig() }
 
     fun createConfig(config: NmslConfig) {

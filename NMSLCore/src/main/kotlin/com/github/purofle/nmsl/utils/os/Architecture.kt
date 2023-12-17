@@ -12,7 +12,7 @@ enum class Architecture(val checkedName: String) {
             return when (System.getProperty("os.arch")) {
                 "amd64" -> X86_64
                 "x86_64" -> X86_64
-                "aarch64" -> if (OperatingSystem.CURRENT_OS == OperatingSystem.LINUX) AARCH64 else ARM64 // macOS 的 aarch64 依赖叫 arm64
+                "aarch64" -> if (OS.CURRENT_OS == OS.LINUX) AARCH64 else ARM64
                 "i386" -> X86
                 else -> throw IllegalStateException("Unknown architecture: ${System.getProperty("os.arch")}")
             }
