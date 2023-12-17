@@ -1,5 +1,6 @@
 package com.github.purofle.nmsl.game
 
+import com.github.purofle.nmsl.utils.os.Architecture
 import com.github.purofle.nmsl.utils.os.OS
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -26,6 +27,18 @@ data class Library(
     fun checkRule(): Boolean {
         if (rules == null) return true
         return rules.all { it.check() }
+    }
+
+    fun checkArchitecture(): Boolean {
+        if (!name.contains("-natives-")) return true
+        val systemAndArch = name.split(":") // ["org.lwjgl.lwjgl", "lwjgl-openal", "3.3.2", "natives-windows-arm64"]
+            .last() // "natives-windows-arm64"
+            .split("-") // ["natives", "windows", "arm64"]
+            .drop(1) // ["windows", "arm64"]
+        if (systemAndArch.size == 2) {
+            return systemAndArch.last() == Architecture.CURRENT.checkedName
+        }
+        return true
     }
 }
 
