@@ -50,6 +50,7 @@ data class GameJson(
     private fun serializerLibrary(): List<Artifact> {
         return libraries.mapNotNull { library ->
             if (!library.checkRule()) return@mapNotNull null
+            if (!library.checkArchitecture()) return@mapNotNull null
             listOfNotNull(
                 library.downloads.artifact,
                 library.natives?.let { library.serializerNativeLibrary() }
