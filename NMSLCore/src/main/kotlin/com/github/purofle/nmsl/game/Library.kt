@@ -25,12 +25,18 @@ data class Library(
     }
 
     fun checkRule(): Boolean {
-        if (rules == null) return true
+        if (rules.isNullOrEmpty()) return true
+        if (rules.size == 1) {
+            when (rules.first().action) {
+                "allow" -> return rules.first().checkRule()
+                "disallow" -> return !rules.first().checkRule()
+            }
+        }
         return rules.all { it.check() }
     }
 
     fun checkArchitecture(): Boolean {
-        if (!name.contains("-natives-")) return true
+        if (!name.contains("natives-")) return true
         val systemAndArch = name.split(":") // ["org.lwjgl.lwjgl", "lwjgl-openal", "3.3.2", "natives-windows-arm64"]
             .last() // "natives-windows-arm64"
             .split("-") // ["natives", "windows", "arm64"]
@@ -76,7 +82,7 @@ data class Rule(
         }
     }
 
-    private fun checkRule(): Boolean {
+    fun checkRule(): Boolean {
         if (os == null) return true
         if (os.name == OS.CURRENT_OS.checkedName) return true
         return false
