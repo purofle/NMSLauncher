@@ -7,7 +7,7 @@ import java.util.*
 /**
  * @author huanghongxun
  */
-enum class OperatingSystem(val checkedName: String) {
+enum class OS(val checkedName: String) {
     /**
      * Microsoft Windows.
      */
@@ -33,7 +33,7 @@ enum class OperatingSystem(val checkedName: String) {
         /**
          * The current operating system.
          */
-        var CURRENT_OS: OperatingSystem
+        var CURRENT_OS: OS
 
         private fun getWorkingDirectory(vararg folder: String): Path {
             val home = System.getProperty("user.home", ".")
@@ -49,18 +49,18 @@ enum class OperatingSystem(val checkedName: String) {
             }
         }
 
-        fun getMinecraftWorkingDirectory(vararg folder: String): Path = getWorkingDirectory(".minecraft", *folder)
+        fun minecraftWorkingDirectory(vararg folder: String): Path = getWorkingDirectory(".minecraft", *folder)
         fun getConfigPath(): Path = getWorkingDirectory("nmsl.json")
 
         init {
             val name = System.getProperty("os.name").lowercase(Locale.US)
             CURRENT_OS =
-                if (name.contains("win")) WINDOWS else if (name.contains("mac")) OSX else if (name.contains("solaris") || name.contains(
-                        "linux"
-                    ) || name.contains("unix") || name.contains(
-                        "sunos"
-                    )
-                ) LINUX else UNKNOWN
+                when {
+                    name.contains("win") -> WINDOWS
+                    name.contains("mac") -> OSX
+                    name.contains("linux") -> LINUX
+                    else -> UNKNOWN
+                }
         }
     }
 }
