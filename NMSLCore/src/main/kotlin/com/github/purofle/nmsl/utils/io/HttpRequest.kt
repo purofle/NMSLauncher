@@ -49,9 +49,9 @@ object HttpRequest {
 
     data class DownloadInfo(val url: String, val saveFile: File, val sha1: String? = null)
 
-    private suspend fun downloadFile(
+    suspend fun downloadFile(
         download: DownloadInfo,
-        progress: (Long, Long) -> Unit
+        progress: (Long, Long) -> Unit = { _, _ -> }
     ) {
         logger.debug("Downloading ${download.url}")
 
