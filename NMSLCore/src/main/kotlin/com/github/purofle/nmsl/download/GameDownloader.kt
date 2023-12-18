@@ -1,11 +1,12 @@
 package com.github.purofle.nmsl.download
 
-import com.github.purofle.nmsl.game.Artifact
 import com.github.purofle.nmsl.game.GameJson
 import com.github.purofle.nmsl.game.Version
 import com.github.purofle.nmsl.utils.io.HttpRequest
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OS
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import kotlin.io.path.createDirectories
 import kotlin.io.path.div
 import kotlin.io.path.isWritable
@@ -19,11 +20,10 @@ class GameDownloader(
     private val version: Version,
 ) {
     private val versionDir = OS.minecraftWorkingDirectory() / "versions" / version.id
+    private val librariesDir = OS.minecraftWorkingDirectory() / "libraries"
     private lateinit var gameJson: GameJson
 
-    fun getSerializerGameJson(): List<Artifact> {
-        return gameJson.serializer()
-    }
+    private val logger: Logger = LogManager.getLogger(this::class.java)
 
     /**
      * Download game json
@@ -47,5 +47,18 @@ class GameDownloader(
             }
         }
         return json
+    }
+
+    suspend fun downloadLibrary() {
+        val libraries = gameJson.serializerLibrary().map {
+            val file = librariesDir.resolve(it.path).toFile()
+            if (!file.canWrite()) {
+                file.parentFile.mkdirs()
+            }
+            HttpRequest.DownloadInfo(it.url, file, it.sha1)
+        }
+        HttpRequest.downloadFiles(libraries) { url, bytesSentTotal, contentLength ->
+            logger.debug("Downloaded $url: $bytesSentTotal/$contentLength")
+        }
     }
 }

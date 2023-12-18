@@ -43,14 +43,12 @@ data class GameJson(
     val time: String,
     val type: String
 ) {
-    fun serializer(): List<Artifact> {
-        return serializerLibrary()
-    }
 
-    private fun serializerLibrary(): List<Artifact> {
-        return libraries.mapNotNull { library ->
-            if (!library.checkRule()) return@mapNotNull null
-            if (!library.checkArchitecture()) return@mapNotNull null
+    fun serializerLibrary(): List<Artifact> {
+        return libraries
+            .filter { it.checkRule() }
+            .filter { it.checkArchitecture() }
+            .map { library ->
             listOfNotNull(
                 library.downloads.artifact,
                 library.natives?.let { library.serializerNativeLibrary() }
