@@ -37,7 +37,7 @@ class SerializerJsonTest {
         gameJsonList.forEach { version ->
             measureTime {
                 runCatching {
-                    JsonUtils.json.decodeFromJsonElement<GameJson>(version.value).serializer()
+                    JsonUtils.json.decodeFromJsonElement<GameJson>(version.value).serializerLibrary()
                 }.onFailure {
                     println("Error: ${version.key}")
                     throw it

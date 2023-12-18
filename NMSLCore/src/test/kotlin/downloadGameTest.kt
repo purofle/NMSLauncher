@@ -10,6 +10,9 @@ fun main() {
         GameDownloader(provider, manifest.versions.last { it.id == "1.20.2" }).apply {
             downloadGameJson()
             downloadLibrary()
+            downloadAssets()
+            downloadClientJar()
+            extraNatives()
         }
     }
 }

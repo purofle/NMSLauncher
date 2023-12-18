@@ -17,6 +17,12 @@ data class AssetIndex(
 )
 
 @Serializable
+data class Asset(
+    val hash: String,
+    val size: Int,
+)
+
+@Serializable
 data class GameDownloads(
     val client: GameDownload,
     @SerialName("client_mappings") val clientMappings: GameDownload? = null,
@@ -49,10 +55,10 @@ data class GameJson(
             .filter { it.checkRule() }
             .filter { it.checkArchitecture() }
             .map { library ->
-            listOfNotNull(
-                library.downloads.artifact,
-                library.natives?.let { library.serializerNativeLibrary() }
-            )
-        }.flatten()
+                listOfNotNull(
+                    library.downloads.artifact,
+                    library.natives?.let { library.serializerNativeLibrary() }
+                )
+            }.flatten()
     }
 }
