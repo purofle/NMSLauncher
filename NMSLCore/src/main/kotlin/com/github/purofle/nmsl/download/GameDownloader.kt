@@ -1,5 +1,8 @@
 package com.github.purofle.nmsl.download
 
+import com.github.purofle.nmsl.auth.microsoft.DeviceCodeFlow.CLIENT_ID
+import com.github.purofle.nmsl.config.LauncherConfig
+import com.github.purofle.nmsl.game.Argument
 import com.github.purofle.nmsl.game.Asset
 import com.github.purofle.nmsl.game.GameJson
 import com.github.purofle.nmsl.game.Version
@@ -19,7 +22,7 @@ import kotlin.io.path.*
  * Download Game for [provider]
  */
 class GameDownloader(
-    private val provider: DownloadProvider,
+    private val provider: DownloadProvider = MCBBSDownloadProvider(),
     private val version: Version,
 ) {
     private val versionDir = OS.minecraftWorkingDirectory() / "versions" / version.id
@@ -110,7 +113,8 @@ class GameDownloader(
         logger.info("Downloading client jar")
 
         val clientJar = versionDir.resolve("${version.id}.jar")
-        val downloadInfo = HttpRequest.DownloadInfo(version.url, clientJar.toFile(), version.sha1)
+        val downloadInfo =
+            HttpRequest.DownloadInfo(gameJson.downloads.client.url, clientJar.toFile(), gameJson.downloads.client.sha1)
 
         HttpRequest.downloadFile(downloadInfo) { bytesSentTotal, contentLength ->
             logger.debug("Downloaded: $bytesSentTotal/$contentLength")
@@ -141,5 +145,26 @@ class GameDownloader(
                     }
             }
         }
+    }
+
+    fun getLauncherArgument(): List<String> {
+
+        val config = LauncherConfig.config
+
+        val jvmArgument = Argument.parseJvmArgument(
+            nativesDir,
+            artifacts = gameJson.serializerLibrary(),
+            clientPath = versionDir.resolve("${version.id}.jar")
+        )
+        val gameArgument = Argument.GameArgument(
+            username = config.profile.minecraftProfile.name,
+            assetIndex = gameJson.assetIndex.id,
+            accessToken = config.profile.minecraftAccessToken,
+            uuid = config.profile.minecraftProfile.id,
+            clientId = CLIENT_ID,
+            xuid = config.profile.xstsToken
+        )
+
+        return jvmArgument + gameJson.mainClass + gameArgument.parseGameArgument()
     }
 }

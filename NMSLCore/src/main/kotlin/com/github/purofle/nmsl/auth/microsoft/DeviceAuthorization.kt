@@ -31,6 +31,8 @@ data class SuccessAuthentication(
     val accessToken: String,
     @SerialName("refresh_token")
     val refreshToken: String,
+    @SerialName("ext_expires_in")
+    val extExpiresIn: Int
 )
 
 enum class AuthorizationErrorType {
@@ -49,5 +51,17 @@ enum class AuthorizationErrorType {
 
 @Serializable
 data class AuthorizationError(
-    val error: AuthorizationErrorType
+    val error: AuthorizationErrorType,
+    @SerialName("error_description")
+    val errorDescription: String,
+    @SerialName("error_codes")
+    val errorCodes: List<Int>,
+    @SerialName("timestamp")
+    val timestamp: String,
+    @SerialName("trace_id")
+    val traceId: String,
+    @SerialName("correlation_id")
+    val correlationId: String,
+    @SerialName("error_uri")
+    val errorUri: String
 )

@@ -7,7 +7,7 @@ fun main() {
     runBlocking {
         val provider = MCBBSDownloadProvider()
         val manifest = provider.getManifest().first()
-        GameDownloader(provider, manifest.versions.last { it.id == "1.20.2" }).apply {
+        GameDownloader(provider, manifest.versions.first()).apply {
             downloadGameJson()
             downloadLibrary()
             downloadAssets()
