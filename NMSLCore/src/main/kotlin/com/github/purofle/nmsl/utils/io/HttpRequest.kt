@@ -9,6 +9,7 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.cache.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
@@ -26,10 +27,10 @@ object HttpRequest {
     private val logger = LogManager.getLogger("HttpRequest")
     val client = HttpClient(CIO) {
         install(HttpCache)
-//        install(Logging) {
-//            logger = Logger.DEFAULT
-//            level = LogLevel.NONE
-//        }
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.INFO
+        }
         install(ContentNegotiation) {
             json(JsonUtils.json)
         }
@@ -37,6 +38,10 @@ object HttpRequest {
         install(HttpRequestRetry) {
             maxRetries = 5
             constantDelay(500)
+
+            retryOnExceptionIf { _, cause ->
+                cause is HttpRequestTimeoutException
+            }
         }
     }
 

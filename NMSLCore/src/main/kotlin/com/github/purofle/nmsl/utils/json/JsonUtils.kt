@@ -9,6 +9,7 @@ object JsonUtils {
     val json = Json {
         encodeDefaults = true
         prettyPrint = true
+        ignoreUnknownKeys = true
     }
     /**
      * 将字符串转换为json对象
