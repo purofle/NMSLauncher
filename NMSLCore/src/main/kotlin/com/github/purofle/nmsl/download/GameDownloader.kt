@@ -106,7 +106,7 @@ class GameDownloader(
         }
 
         HttpRequest.downloadFiles(assetsDownloadInfo) { url, bytesSentTotal, contentLength ->
-            logger.debug("downloading $url: $bytesSentTotal/$contentLength")
+//            logger.debug("downloading $url: $bytesSentTotal/$contentLength")
         }
 
         logger.info("Downloaded assets")

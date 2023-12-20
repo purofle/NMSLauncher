@@ -20,8 +20,6 @@ import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.LogManager
 import java.io.File
-import java.io.FileOutputStream
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.CoroutineContext
 
 object HttpRequest {
@@ -73,7 +71,6 @@ object HttpRequest {
      */
     suspend fun downloadFile(init: DownloadFileBuilder.() -> Unit) = withContext(Dispatchers.IO) {
         val download = DownloadFileBuilder().apply(init)
-        val retryCount = AtomicInteger(0)
 
         logger.info("Downloading ${download.url}")
 
@@ -82,36 +79,23 @@ object HttpRequest {
                 logger.debug("File ${download.saveFile.name} already exists, skip download")
                 return@withContext
             }
+            download.saveFile.delete()
         }
 
-        do {
-            val request = client.prepareGet(download.url) {
-                download.onProgress?.let {
-                    onDownload { bytesSentTotal, contentLength ->
-                        it(bytesSentTotal, contentLength)
-                    }
+        val request = client.get(download.url) {
+            download.onProgress?.let {
+                onDownload { bytesSentTotal, contentLength ->
+                    it(bytesSentTotal, contentLength)
                 }
             }
-            val channel = request.execute().bodyAsChannel()
-            while (!channel.isClosedForRead) {
-                val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
-                FileOutputStream(download.saveFile).use {
-                    while (!packet.isEmpty) {
-                        val bytes = packet.readBytes()
-                        it.write(bytes)
-                    }
-                }
-            }
+        }
 
-            // check sha1
-            if (download.sha1 != null && download.saveFile.sha1String() == download.sha1) {
-                logger.error("sha1 check failed: ${download.saveFile.name}, sha1: ${download.sha1}, file sha1: ${download.saveFile.sha1String()}, retry...")
-                download.saveFile.delete()
-                retryCount.incrementAndGet()
-            } else {
-                break
-            }
-        } while (retryCount.incrementAndGet() < 5)
+        download.saveFile.writeBytes(request.readBytes())
+
+        // check sha1
+        require(download.sha1 != null && download.saveFile.sha1String() == download.sha1) {
+            logger.error("sha1 check failed: ${download.saveFile.name}, sha1: ${download.sha1}, file sha1: ${download.saveFile.sha1String()}")
+        }
 
         logger.info("Downloaded ${download.url}")
     }
