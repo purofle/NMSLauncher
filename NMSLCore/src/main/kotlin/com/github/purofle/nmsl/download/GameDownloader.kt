@@ -7,6 +7,7 @@ import com.github.purofle.nmsl.game.Asset
 import com.github.purofle.nmsl.game.GameJson
 import com.github.purofle.nmsl.game.Version
 import com.github.purofle.nmsl.utils.io.HttpRequest
+import com.github.purofle.nmsl.utils.io.HttpRequest.downloadFile
 import com.github.purofle.nmsl.utils.json.JsonUtils.decode
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
@@ -53,6 +54,7 @@ class GameDownloader(
      * Download game json
      */
     suspend fun downloadGameJson(save: Boolean = true): GameJson {
+        logger.info("Downloading game json")
         val json: GameJson = version.url.let { HttpRequest.getJson(it) }
         assetIndex = HttpRequest.getJson(json.assetIndex.url)
 
@@ -69,6 +71,7 @@ class GameDownloader(
     }
 
     suspend fun downloadLibrary() {
+        logger.info("Downloading libraries")
         val libraries = gameJson.serializerLibrary().map {
             val file = librariesDir.resolve(it.path).toFile()
             if (!file.canWrite()) {
@@ -79,6 +82,7 @@ class GameDownloader(
         HttpRequest.downloadFiles(libraries) { url, bytesSentTotal, contentLength ->
             logger.debug("Downloaded $url: $bytesSentTotal/$contentLength")
         }
+        logger.info("Downloaded libraries")
     }
 
     suspend fun downloadAssets() {
@@ -102,7 +106,7 @@ class GameDownloader(
         }
 
         HttpRequest.downloadFiles(assetsDownloadInfo) { url, bytesSentTotal, contentLength ->
-            logger.debug("Downloaded $url: $bytesSentTotal/$contentLength")
+            logger.debug("downloading $url: $bytesSentTotal/$contentLength")
         }
 
         logger.info("Downloaded assets")
@@ -113,11 +117,17 @@ class GameDownloader(
         logger.info("Downloading client jar")
 
         val clientJar = versionDir.resolve("${version.id}.jar")
-        val downloadInfo =
-            HttpRequest.DownloadInfo(gameJson.downloads.client.url, clientJar.toFile(), gameJson.downloads.client.sha1)
 
-        HttpRequest.downloadFile(downloadInfo) { bytesSentTotal, contentLength ->
-            logger.debug("Downloaded: $bytesSentTotal/$contentLength")
+        downloadFile {
+            gameJson.downloads.let {
+                url = it.client.url
+                sha1 = it.client.sha1
+            }
+            saveFile = clientJar.toFile()
+
+            onProgress { bytesSentTotal, contentLength ->
+                logger.debug("Downloaded: $bytesSentTotal/$contentLength")
+            }
         }
 
         logger.info("Downloaded client jar")
