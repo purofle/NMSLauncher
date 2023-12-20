@@ -1,5 +1,5 @@
 import com.github.purofle.nmsl.download.GameDownloader
-import com.github.purofle.nmsl.download.MojangDownloadProvider
+import com.github.purofle.nmsl.download.MCBBSDownloadProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlin.time.measureTime
@@ -7,7 +7,7 @@ import kotlin.time.measureTime
 fun main() {
     runBlocking {
 
-        val provider = MojangDownloadProvider()
+        val provider = MCBBSDownloadProvider()
         val manifest = provider.getManifest().first()
         val time = measureTime {
             GameDownloader(provider, manifest.versions.first()).apply {
