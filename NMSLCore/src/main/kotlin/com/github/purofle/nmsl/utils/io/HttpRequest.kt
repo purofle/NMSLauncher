@@ -1,47 +1,45 @@
 package com.github.purofle.nmsl.utils.io
 
 import com.github.purofle.nmsl.utils.StringUtils.sha1String
+import com.github.purofle.nmsl.utils.io.KtorUtils.DownloadFileBuilder
 import com.github.purofle.nmsl.utils.json.JsonUtils
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.cache.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.utils.io.core.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.LogManager
 import java.io.File
+import java.io.FileOutputStream
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.CoroutineContext
 
 object HttpRequest {
     private val logger = LogManager.getLogger("HttpRequest")
     val client = HttpClient(CIO) {
-        install(HttpCache)
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.INFO
+        engine {
+            requestTimeout = 0 // 0 to disable
         }
         install(ContentNegotiation) {
             json(JsonUtils.json)
         }
 
         install(HttpRequestRetry) {
-            maxRetries = 5
-            constantDelay(500)
-
-            retryOnExceptionIf { _, cause ->
-                cause is HttpRequestTimeoutException
+            retryOnServerErrors(5)
+            retryOnExceptionIf(5) { _, cause ->
+                cause is ClosedReceiveChannelException
             }
+            exponentialDelay()
         }
     }
 
@@ -52,55 +50,101 @@ object HttpRequest {
      */
     suspend inline fun <reified T : Any> getJson(url: String) = client.get(url).bodyAsText().toJsonObject<T>()
 
+    /**
+     * 使用 [HttpClient.get] 发送请求并且获取相应内容
+     * @param url url
+     * @return [String]
+     */
     data class DownloadInfo(val url: String, val saveFile: File, val sha1: String? = null)
 
-    suspend fun downloadFile(
-        download: DownloadInfo,
-        progress: (Long, Long) -> Unit = { _, _ -> }
-    ) {
-        logger.debug("Downloading ${download.url}")
+    /**
+     * 下载文件 DSL
+     *
+     * [DownloadFileBuilder.sha1] 可为 null，为空时不进行 sha1 检查.
+     * ```kotlin
+     * downloadFile {
+     *    url = "https://example.com"
+     *    saveFile = File("example")
+     *    sha1 = "file sha1"
+     *
+     *    onProgress { bytesSentTotal, contentLength ->
+     *      // Your code
+     *    }
+     */
+    suspend fun downloadFile(init: DownloadFileBuilder.() -> Unit) = withContext(Dispatchers.IO) {
+        val download = DownloadFileBuilder().apply(init)
+        val retryCount = AtomicInteger(0)
+
+        logger.info("Downloading ${download.url}")
 
         if (download.saveFile.exists() && download.sha1 != null) {
             if (download.saveFile.sha1String() == download.sha1) {
                 logger.debug("File ${download.saveFile.name} already exists, skip download")
-                return
+                return@withContext
             }
         }
 
-        val request = client.get(download.url) {
-            onDownload { bytesSentTotal, contentLength ->
-                progress(bytesSentTotal, contentLength)
+        do {
+            val request = client.prepareGet(download.url) {
+                download.onProgress?.let {
+                    onDownload { bytesSentTotal, contentLength ->
+                        it(bytesSentTotal, contentLength)
+                    }
+                }
             }
-        }
-        val responseBody: ByteArray = request.body()
-        download.saveFile.writeBytes(responseBody)
+            val channel = request.execute().bodyAsChannel()
+            while (!channel.isClosedForRead) {
+                val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
+                FileOutputStream(download.saveFile).use {
+                    while (!packet.isEmpty) {
+                        val bytes = packet.readBytes()
+                        it.write(bytes)
+                    }
+                }
+            }
+
+            // check sha1
+            if (download.sha1 != null && download.saveFile.sha1String() == download.sha1) {
+                logger.error("sha1 check failed: ${download.saveFile.name}, sha1: ${download.sha1}, file sha1: ${download.saveFile.sha1String()}, retry...")
+                download.saveFile.delete()
+                retryCount.incrementAndGet()
+            } else {
+                break
+            }
+        } while (retryCount.incrementAndGet() < 5)
+
+        logger.info("Downloaded ${download.url}")
     }
 
 
-    // Concurrent downloads multiple files
+    /**
+     * 并行下载文件
+     * @param files 下载信息
+     * @param parallel 并行数
+     * @param context 协程上下文
+     * @param progress 下载进度回调
+     */
     suspend fun downloadFiles(
         files: List<DownloadInfo>,
-        parallel: Int = 16,
+        parallel: Int = 32,
         context: CoroutineContext = Dispatchers.IO,
         progress: (String, Long, Long) -> Unit,
-    ) {
-        withContext(context) {
-            val semaphore = Semaphore(parallel)
-            files.map {
-                async {
-                    semaphore.withPermit {
+    ) = withContext(context) {
 
-                        downloadFile(it) { bytesSentTotal, contentLength ->
-                            progress(it.url, bytesSentTotal, contentLength)
-                        }
+        val semaphore = Semaphore(parallel)
 
-                        if (it.sha1 == null) return@withPermit
-                        require(it.saveFile.sha1String() == it.sha1) {
-                            "sha1 check failed: ${it.saveFile.name}, sha1: ${it.sha1}}"
+        files.map { downloadInfo ->
+            launch {
+                semaphore.withPermit {
+                    downloadFile {
+                        downloadInfo(downloadInfo)
+
+                        onProgress { bytesSentTotal, contentLength ->
+                            progress(downloadInfo.url, bytesSentTotal, contentLength)
                         }
                     }
                 }
-            }.awaitAll()
+            }
         }
     }
 }
