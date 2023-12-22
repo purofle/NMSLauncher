@@ -1,13 +1,12 @@
 [versions]
 kotlin = "1.9.0"
-composePlugin = "1.4.3"
+composePlugin = "1.5.11"
 kspVersion = "1.9.0-1.0.11"
 log4jVersion = "2.20.0"
 proguardVersion = "7.3.2"
 ktorVersion = "2.3.3"
 serializationJsonVersion = "1.6.0-RC"
 composeIcons = "1.1.0"
-microsoft4jVersion = "1.13.10"
 
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -23,6 +22,7 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktorV
 ktor-client-logging = { module = "io.ktor:ktor-client-logging-jvm", version.ref = "ktorVersion" }
 ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorVersion" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationJsonVersion" }
 

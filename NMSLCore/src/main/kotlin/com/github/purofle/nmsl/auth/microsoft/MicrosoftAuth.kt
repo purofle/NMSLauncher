@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-object DeviceCodeFlow {
+object MicrosoftAuth {
     suspend fun getDeviceAuthorization(): DeviceAuthorization {
         return client.post("${AUTHORITY}/oauth2/v2.0/devicecode") {
             contentType(ContentType.Application.FormUrlEncoded)
@@ -29,12 +29,13 @@ object DeviceCodeFlow {
                         append("grant_type", "urn:ietf:params:oauth:grant-type:device_code")
                         append("client_id", CLIENT_ID)
                         append("device_code", deviceCode)
+                        append("scope", SCOPE.joinToString("%20"))
                     })
             )
         }.body()
     }
 
-    suspend fun authorizationRefreshToken(refreshToken: String): SuccessAuthentication {
+    suspend fun authorizationRefreshToken(refreshToken: String, scope: String? = null): SuccessAuthentication {
         return client.post("${AUTHORITY}/oauth2/v2.0/token") {
             contentType(ContentType.Application.FormUrlEncoded)
             setBody(
@@ -43,7 +44,7 @@ object DeviceCodeFlow {
                         append("grant_type", "refresh_token")
                         append("client_id", CLIENT_ID)
                         append("refresh_token", refreshToken)
-                        append("scope", SCOPE.joinToString(" "))
+                        append("scope", scope ?: SCOPE.joinToString("%20"))
                     })
             )
         }.body()

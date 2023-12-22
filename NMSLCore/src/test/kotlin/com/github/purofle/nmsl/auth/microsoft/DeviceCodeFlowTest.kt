@@ -8,9 +8,9 @@ import kotlinx.coroutines.runBlocking
 
 fun main() {
     runBlocking {
-        val deviceFlow = DeviceCodeFlow.getDeviceAuthorization()
+        val deviceFlow = MicrosoftAuth.getDeviceAuthorization()
         println(deviceFlow.message)
-        val auth = DeviceCodeFlow.authorizationFlow(deviceFlow.deviceCode).first()
+        val auth = MicrosoftAuth.authorizationFlow(deviceFlow.deviceCode).first()
 
 //        val auth = DeviceCodeFlow.authorizationRefreshToken(LauncherConfig.config.msa.refreshToken)
 

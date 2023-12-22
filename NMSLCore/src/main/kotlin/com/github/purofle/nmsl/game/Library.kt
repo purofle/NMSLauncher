@@ -13,6 +13,9 @@ data class Library(
     val natives: Natives? = null,
     val extract: JsonElement? = null,
 ) {
+    /**
+     * 解析 classifiers
+     */
     fun serializerNativeLibrary(): Artifact? {
         if (natives == null) throw Exception("natives is null")
         val nativeName = when (OS.CURRENT_OS) {
