@@ -1,7 +1,10 @@
 package com.github.purofle.nmsl.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -26,7 +29,6 @@ data class DrawerItem(
     val page: Page
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage() {
 
@@ -95,13 +97,11 @@ fun MainPage() {
                 }
             },
             content = {
-                Row {
-                    Column(
-                        modifier = Modifier.width(250.dp).fillMaxHeight()
-                            .background(MaterialTheme.colorScheme.background)
-                    ) {
-                        (mainPageList+launcherPageList).first { it.text == selected }.page.render()
-                    }
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
+                    (mainPageList + launcherPageList).first { it.text == selected }.page.render()
                 }
             }
         )

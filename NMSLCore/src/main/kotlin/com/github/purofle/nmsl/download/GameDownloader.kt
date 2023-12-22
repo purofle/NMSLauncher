@@ -1,6 +1,6 @@
 package com.github.purofle.nmsl.download
 
-import com.github.purofle.nmsl.auth.microsoft.DeviceCodeFlow.CLIENT_ID
+import com.github.purofle.nmsl.auth.microsoft.MicrosoftAuth.CLIENT_ID
 import com.github.purofle.nmsl.config.LauncherConfig
 import com.github.purofle.nmsl.game.Argument
 import com.github.purofle.nmsl.game.Asset
