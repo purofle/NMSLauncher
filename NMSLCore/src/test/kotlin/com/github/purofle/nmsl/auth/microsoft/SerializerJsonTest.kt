@@ -7,7 +7,6 @@ import com.github.purofle.nmsl.utils.io.HttpRequest
 import com.github.purofle.nmsl.utils.json.JsonUtils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -22,7 +21,7 @@ class SerializerJsonTest {
     @BeforeTest
     fun beforeTest() = runBlocking {
         val provider = MCBBSDownloadProvider()
-        manifest = provider.getManifest().first()
+        manifest = provider.getManifest()
     }
 
     @Test

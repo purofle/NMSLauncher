@@ -2,7 +2,6 @@ package com.github.purofle.nmsl.utils.io
 
 import com.github.purofle.nmsl.download.MCBBSDownloadProvider
 import com.github.purofle.nmsl.game.Manifest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -15,7 +14,7 @@ class HttpRequestTest {
     @BeforeTest
     fun beforeTest() = runBlocking {
         val provider = MCBBSDownloadProvider()
-        manifest = provider.getManifest().first()
+        manifest = provider.getManifest()
     }
 
     @Test

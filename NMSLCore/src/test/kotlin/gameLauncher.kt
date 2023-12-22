@@ -1,13 +1,12 @@
 import com.github.purofle.nmsl.download.GameDownloader
 import com.github.purofle.nmsl.download.MojangDownloadProvider
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
 fun main() {
     runBlocking {
         val provider = MojangDownloadProvider()
-        val manifest = provider.getManifest().first()
+        val manifest = provider.getManifest()
         val command = listOf("/usr/bin/java") + GameDownloader(provider,
             manifest.versions.first { it.id == "1.12.2" }).getLauncherArgument()
 

@@ -6,20 +6,26 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NmslConfig(
-    val msa: Msa,
+    val msa: Msa = Msa(),
 //    val xbox: Xbox,
-    val profile: AuthData,
+    val profile: AuthData = AuthData(),
+    val launcherConfig: LauncherConfig = LauncherConfig()
 )
 
 @Serializable
 data class Xbox(
-    val xuid: String
+    val xuid: String = ""
 )
 
 @Serializable
 data class Msa(
-    val accessToken: String,
-    val refreshToken: String,
+    val accessToken: String = "",
+    val refreshToken: String = "",
     @SerialName("expires_in")
-    val expiresIn: Int,
+    val expiresIn: Int = 0,
+)
+
+@Serializable
+data class LauncherConfig(
+    val provider: String = "mcbbs",
 )
