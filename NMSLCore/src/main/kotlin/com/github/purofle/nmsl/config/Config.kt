@@ -6,7 +6,7 @@ import com.github.purofle.nmsl.utils.os.OS
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
-object LauncherConfig {
+object Config {
     private val configPath by lazy { OS.getConfigPath() }
     val config by lazy { readConfig() }
 

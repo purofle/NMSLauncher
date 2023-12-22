@@ -16,12 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.unit.dp
 import com.github.purofle.nmsl.game.GameManager
+import com.github.purofle.nmsl.utils.getGameDownloader
+import com.github.purofle.nmsl.utils.startGame
 
 class GamePage : Page {
     @Composable
     override fun render() {
 
         var searchGameText by remember { mutableStateOf("") }
+        var selectedGame by remember { mutableStateOf("") }
         val gameList = remember { mutableStateListOf<String>() }
 
         LaunchedEffect(Unit) {
@@ -41,41 +44,58 @@ class GamePage : Page {
                         singleLine = true
                     )
 
-                    GameList(gameList) { it.contains(searchGameText) }
+                    GameList(gameList, { it.contains(searchGameText) }) {
+                        selectedGame = it
+                    }
                 }
             }
             Box(Modifier.fillMaxSize()) {
                 Column(Modifier.fillMaxWidth()) {
                     MicrosoftAccount()
                 }
-                ExtendedFloatingActionButton(
-                    {},
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp)
-                ) { Text("启动游戏") }
+
+                if (selectedGame.isEmpty()) {
+                    Text("请选择游戏版本", modifier = Modifier.align(Alignment.Center))
+                } else {
+
+                    ExtendedFloatingActionButton(
+                        {
+
+                            val gameDownloader = getGameDownloader(selectedGame)
+                            startGame(gameDownloader.getLauncherArgument())
+
+                        },
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp)
+                    ) {
+                        Text("启动游戏")
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun GameList(gameList: List<String>, predicate: (String) -> Boolean) {
+fun GameList(gameList: List<String>, predicate: (String) -> Boolean, onClick: (String) -> Unit) {
     LazyColumn {
         items(gameList.filter(predicate)) {
             AnimatedContent(targetState = it) { _ ->
-                GameItem(it)
+                GameItem(it) {
+                    onClick(it)
+                }
             }
         }
     }
 }
 
 @Composable
-fun GameItem(text: String) {
+fun GameItem(text: String, onClick: () -> Unit) {
 
     val primaryContainer = MaterialTheme.colorScheme.primaryContainer
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable { }.fillMaxWidth()
+        modifier = Modifier.clickable { onClick() }.fillMaxWidth()
             .background(MaterialTheme.colorScheme.onSecondary)
     ) {
 
@@ -89,5 +109,19 @@ fun GameItem(text: String) {
 
 @Composable
 fun MicrosoftAccount() {
+    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+    val secondaryContainer = MaterialTheme.colorScheme.secondaryContainer
 
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable { }.fillMaxWidth()
+            .background(MaterialTheme.colorScheme.onSecondary)
+    ) {
+
+        Text("M", modifier = Modifier.drawBehind {
+            drawCircle(primaryContainer, radius = 20f)
+        }.padding(30.dp, 15.dp))
+
+        Text("Microsoft Account", modifier = Modifier.padding(5.dp, 0.dp))
+    }
 }

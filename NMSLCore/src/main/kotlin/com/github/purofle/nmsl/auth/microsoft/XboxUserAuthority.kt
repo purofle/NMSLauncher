@@ -50,16 +50,16 @@ data class MinecraftAuthenticateResponse(
 
 @Serializable
 data class AuthData(
-    val xstsToken: String,
-    val minecraftAccessToken: String,
-    val minecraftProfile: MinecraftProfile,
+    val xstsToken: String = "",
+    val minecraftAccessToken: String = "",
+    val minecraftProfile: MinecraftProfile = MinecraftProfile(),
 )
 
 @Serializable
 data class MinecraftProfile(
-    val id: String,
-    val name: String,
-    val skins: List<Skin>,
+    val id: String = "",
+    val name: String = "",
+    val skins: List<Skin> = listOf(),
 )
 
 @Serializable

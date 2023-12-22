@@ -1,7 +1,7 @@
 package com.github.purofle.nmsl.download
 
 import com.github.purofle.nmsl.auth.microsoft.MicrosoftAuth.CLIENT_ID
-import com.github.purofle.nmsl.config.LauncherConfig
+import com.github.purofle.nmsl.config.Config
 import com.github.purofle.nmsl.game.Argument
 import com.github.purofle.nmsl.game.Asset
 import com.github.purofle.nmsl.game.GameJson
@@ -159,7 +159,7 @@ class GameDownloader(
 
     fun getLauncherArgument(): List<String> {
 
-        val config = LauncherConfig.config
+        val config = Config.config
 
         val jvmArgument = Argument.parseJvmArgument(
             nativesDir,
