@@ -4,15 +4,13 @@ import com.github.purofle.nmsl.download.DownloadProvider
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OS
-import kotlin.io.path.div
-import kotlin.io.path.listDirectoryEntries
-import kotlin.io.path.readText
-import kotlin.io.path.writeText
+import kotlin.io.path.*
 
 object GameManager {
     private val versionDir = OS.minecraftWorkingDirectory() / "versions"
     val versions: List<String> by lazy {
         versionDir.listDirectoryEntries()
+            .filter { it.isDirectory() }
             .map { it.fileName.toString() }
     }
 
@@ -24,5 +22,5 @@ object GameManager {
         }
     }
 
-    fun getManifest(): Manifest = (versionDir / "version_manifest_v2.json").readText().toJsonObject()
+    fun getLocalManifest(): Manifest = (versionDir / "version_manifest_v2.json").readText().toJsonObject()
 }
