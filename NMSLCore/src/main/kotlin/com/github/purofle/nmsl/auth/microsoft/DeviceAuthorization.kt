@@ -35,6 +35,7 @@ data class SuccessAuthentication(
     val extExpiresIn: Int
 )
 
+@Suppress("unused")
 enum class AuthorizationErrorType {
     @SerialName("authorization_pending")
     PENDING,

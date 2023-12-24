@@ -1,5 +1,4 @@
 # compose-desktop.pro
--dontoptimize
 -dontobfuscate
 
 -dontwarn kotlinx.**
@@ -14,7 +13,5 @@
 -keep class org.jetbrains.skiko.** { *; }
 
 # log4j2
--keep class org.apache.logging.log4j.** { *; }
--keep class org.slf4j.** { *; }
--keep class kotlin.reflect.** { *; }
--dontwarn org.apache.logging.log4j.**
+-keep class org.apache.logging.** { *; }
+-dontwarn org.apache.logging.**

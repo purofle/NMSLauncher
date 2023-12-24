@@ -32,12 +32,5 @@ data class CieLab(
             (108.0/841.0) * (x - 4.0/29.0)
         }
 
-        fun CieXyz.toCieLab(): CieLab {
-            return CieLab(
-                l = 116.0 * f(y / Illuminants.D65.y) - 16.0,
-                a = 500.0 * (f(x / Illuminants.D65.x) - f(y / Illuminants.D65.y)),
-                b = 200.0 * (f(y / Illuminants.D65.y) - f(z / Illuminants.D65.z)),
-            )
-        }
     }
 }

@@ -21,16 +21,6 @@ value class Vector3(
         )
     }
 
-    fun toDiagMatrix(): Matrix3 {
-        val (n1, n2, n3) = this
-
-        return Matrix3(
-            n1, 0.0, 0.0,
-            0.0, n2, 0.0,
-            0.0, 0.0, n3,
-        )
-    }
-
     operator fun component1() = values[0]
     operator fun component2() = values[1]
     operator fun component3() = values[2]

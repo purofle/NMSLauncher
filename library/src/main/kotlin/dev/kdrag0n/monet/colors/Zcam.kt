@@ -109,6 +109,7 @@ data class Zcam(
         WHITENESS,
     }
 
+    @Suppress("unused")
     data class ViewingConditions(
         val F_s: Double,
 

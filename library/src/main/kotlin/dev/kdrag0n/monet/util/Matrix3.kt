@@ -40,14 +40,6 @@ value class Matrix3(
         }
     }
 
-    fun transpose() = values.let { m ->
-        Matrix3(
-            m[0], m[3], m[6],
-            m[1], m[4], m[7],
-            m[2], m[5], m[8],
-        )
-    }
-
     operator fun component1() = values[0]
     operator fun component2() = values[1]
     operator fun component3() = values[2]

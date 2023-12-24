@@ -59,6 +59,8 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "NMSLauncher"
             packageVersion = "1.0.0"
+
+            copyright = "Copyright (C) Purofle 2023-2023"
         }
         buildTypes.release.proguard {
             configurationFiles.from(project.file("compose-desktop.pro"))
