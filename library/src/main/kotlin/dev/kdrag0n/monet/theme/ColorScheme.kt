@@ -4,6 +4,7 @@ import dev.kdrag0n.monet.colors.Color
 
 typealias ColorSwatch = Map<Int, Color>
 
+@Suppress("unused")
 abstract class ColorScheme {
     abstract val neutral1: ColorSwatch
     abstract val neutral2: ColorSwatch

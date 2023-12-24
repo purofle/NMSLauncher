@@ -153,6 +153,7 @@ fun MonetCompat.darkMonetCompatScheme(
  *
  * @param monet A monet object passed from your activity
  */
+@Suppress("unused")
 @Composable
 fun MonetCompatDynamicTheme(monet: MonetCompat, content: @Composable () -> Unit) {
     MaterialTheme(

@@ -13,11 +13,6 @@ data class NmslConfig(
 )
 
 @Serializable
-data class Xbox(
-    val xuid: String = ""
-)
-
-@Serializable
 data class Msa(
     val accessToken: String = "",
     val refreshToken: String = "",

@@ -142,8 +142,8 @@ class GameDownloader(
             ZipFile(it.toFile()).use { zip ->
                 // 解压除了 sha1 跟 git 后缀的文件
                 zip.entries().asSequence()
-                    .filterNot { it.isDirectory }
-                    .filterNot { it.name.contains("META-INF") }
+                    .filterNot { entry -> entry.isDirectory }
+                    .filterNot { entry -> entry.name.contains("META-INF") }
                     .filterNot { entry ->
                         entry.name.endsWith(".sha1") && entry.name.endsWith(".git")
                     }

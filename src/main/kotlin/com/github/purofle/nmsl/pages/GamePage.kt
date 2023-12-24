@@ -74,22 +74,24 @@ class GamePage : Page {
                     }
                 },
                 floatingActionButton = {
-                    ExtendedFloatingActionButton(
-                        {
-                            val gameDownloader = getGameDownloader(selectedGame)
-                            gameDownloader.extraNatives()
-                            startGame(gameDownloader.getLauncherArgument())
+                    if (selectedGame.isNotBlank()) {
+                        ExtendedFloatingActionButton(
+                            {
+                                val gameDownloader = getGameDownloader(selectedGame)
+                                gameDownloader.extraNatives()
+                                startGame(gameDownloader.getLauncherArgument())
 
-                        },
-                        Modifier.padding(20.dp)
-                    ) {
-                        Text("启动游戏")
+                            },
+                            Modifier.padding(20.dp)
+                        ) {
+                            Text("启动游戏")
+                        }
                     }
                 }
             ) { pd ->
-                Column(modifier = Modifier.padding(pd)) {
+                Box(modifier = Modifier.padding(pd).fillMaxSize()) {
                     if (selectedGame.isEmpty()) {
-                        Text("请选择游戏版本")
+                        Text("Tips：点击左侧浏览游戏详细信息喵", modifier = Modifier.align(Alignment.Center))
                     } else {
                         Text("已选择 $selectedGame")
                     }

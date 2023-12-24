@@ -49,7 +49,7 @@ object OklabGamut {
         // Approximate max saturation using a polynomial:
         val S = coeff.k0 + coeff.k1 * a + coeff.k2 * b + coeff.k3 * a * a + coeff.k4 * a * b
 
-        // Do one step Halley's method to get closer
+        // Do one-step Halley's method to get closer
         // this gives an error less than 10e6, except for some blue hues where the dS/dh is close to infinite
         // this should be sufficient for most applications, otherwise do two/three steps
 
