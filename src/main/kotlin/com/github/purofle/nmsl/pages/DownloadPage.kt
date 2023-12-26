@@ -37,7 +37,7 @@ class DownloadPage : Page {
         null
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun render() {
 
@@ -55,10 +55,27 @@ class DownloadPage : Page {
             AlertDialog(
                 onDismissRequest = {
                     showDownloadDialog = false
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            showDownloadDialog = false
+                        }
+                    ) {
+                        Text("取消下载")
+                    }
+                },
+                title = { Text("下载游戏") },
+                text = {
+                    Column {
+                        Text("下载中...喝杯 java 先")
+                        LinearProgressIndicator(
+                            modifier = Modifier.padding(10.dp).fillMaxWidth(),
+                            progress = 0.5f
+                        )
+                    }
                 }
-            ) {
-                Text("downloading")
-            }
+            )
         }
 
 
