@@ -9,6 +9,7 @@ import kotlin.io.path.*
 object GameManager {
     private val versionDir = OS.minecraftWorkingDirectory() / "versions"
     val versions: List<String> by lazy {
+        versionDir.createDirectories()
         versionDir.listDirectoryEntries()
             .filter { it.isDirectory() }
             .map { it.fileName.toString() }
@@ -16,9 +17,10 @@ object GameManager {
 
     fun getVersionJson(version: String): GameJson = (versionDir / version / "$version.json").readText().toJsonObject()
 
-    suspend fun downloadManifest(provider: DownloadProvider) {
+    suspend fun downloadManifest(provider: DownloadProvider): Manifest {
         provider.getManifest().also {
             (versionDir / "version_manifest_v2.json").writeText(it.toJsonString())
+            return it
         }
     }
 
