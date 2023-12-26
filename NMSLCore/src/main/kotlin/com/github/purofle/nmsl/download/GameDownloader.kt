@@ -70,7 +70,7 @@ class GameDownloader(
         return json
     }
 
-    suspend fun downloadLibrary() {
+    suspend fun downloadLibrary(onFileDownloadComplete: (file: HttpRequest.DownloadInfo) -> Unit = {}) {
         logger.info("Downloading libraries")
         val libraries = gameJson.serializerLibrary().map {
             val file = librariesDir.resolve(it.path).toFile()
@@ -79,9 +79,7 @@ class GameDownloader(
             }
             HttpRequest.DownloadInfo(it.url, file, it.sha1)
         }
-        HttpRequest.downloadFiles(libraries) { url, bytesSentTotal, contentLength ->
-            logger.debug("Downloaded $url: $bytesSentTotal/$contentLength")
-        }
+        HttpRequest.downloadFiles(libraries, onDownloadComplete = onFileDownloadComplete)
         logger.info("Downloaded libraries")
     }
 
@@ -105,9 +103,7 @@ class GameDownloader(
             )
         }
 
-        HttpRequest.downloadFiles(assetsDownloadInfo) { url, bytesSentTotal, contentLength ->
-//            logger.debug("downloading $url: $bytesSentTotal/$contentLength")
-        }
+        HttpRequest.downloadFiles(assetsDownloadInfo)
 
         logger.info("Downloaded assets")
     }
@@ -124,10 +120,6 @@ class GameDownloader(
                 sha1 = it.client.sha1
             }
             saveFile = clientJar.toFile()
-
-            onProgress { bytesSentTotal, contentLength ->
-                logger.debug("Downloaded: $bytesSentTotal/$contentLength")
-            }
         }
 
         logger.info("Downloaded client jar")
@@ -159,6 +151,8 @@ class GameDownloader(
 
     fun getLauncherArgument(): List<String> {
 
+        extraNatives()
+
         val config = Config.config
 
         val jvmArgument = Argument.parseJvmArgument(
@@ -172,7 +166,8 @@ class GameDownloader(
             accessToken = config.profile.minecraftAccessToken,
             uuid = config.profile.minecraftProfile.id,
             clientId = CLIENT_ID,
-            xuid = config.profile.xstsToken
+            xuid = config.profile.xstsToken,
+            gameDir = OS.minecraftWorkingDirectory() / "versions" / version.id
         )
 
         return jvmArgument + gameJson.mainClass + gameArgument.parseGameArgument()

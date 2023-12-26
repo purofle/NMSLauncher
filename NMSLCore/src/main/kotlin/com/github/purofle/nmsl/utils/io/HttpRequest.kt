@@ -86,13 +86,7 @@ object HttpRequest {
             download.saveFile.delete()
         }
 
-        val request = client.get(download.url) {
-            download.onProgress?.let {
-                onDownload { bytesSentTotal, contentLength ->
-                    it(bytesSentTotal, contentLength)
-                }
-            }
-        }
+        val request = client.get(download.url)
 
         download.saveFile.writeBytes(request.readBytes())
 
@@ -116,7 +110,7 @@ object HttpRequest {
         files: List<DownloadInfo>,
         parallel: Int = 32,
         context: CoroutineContext = Dispatchers.IO,
-        progress: (String, Long, Long) -> Unit,
+        onDownloadComplete: (file: DownloadInfo) -> Unit = {}
     ) = withContext(context) {
 
         val semaphore = Semaphore(parallel)
@@ -126,11 +120,8 @@ object HttpRequest {
                 semaphore.withPermit {
                     downloadFile {
                         downloadInfo(downloadInfo)
-
-                        onProgress { bytesSentTotal, contentLength ->
-                            progress(downloadInfo.url, bytesSentTotal, contentLength)
-                        }
                     }
+                    onDownloadComplete(downloadInfo)
                 }
             }
         }
