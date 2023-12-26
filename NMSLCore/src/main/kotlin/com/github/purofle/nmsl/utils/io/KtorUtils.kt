@@ -13,10 +13,6 @@ object KtorUtils {
         var url: String = ""
         var saveFile: File = File("")
         var sha1: String? = null
-        var onProgress: ((bytesSentTotal: Long, contentLength: Long) -> Unit)? = null
-
-        fun onProgress(onProgress: (Long, Long) -> Unit) =
-            apply { this.onProgress = onProgress }
 
         fun downloadInfo(info: HttpRequest.DownloadInfo) = apply {
             url = info.url
