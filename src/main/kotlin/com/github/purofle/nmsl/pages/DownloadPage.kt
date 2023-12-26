@@ -25,12 +25,14 @@ import com.github.purofle.nmsl.game.GameManager
 import com.github.purofle.nmsl.game.Manifest
 import com.github.purofle.nmsl.game.VersionType
 import com.github.purofle.nmsl.utils.getDefaultProvider
+import com.github.purofle.nmsl.utils.getGameDownloader
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 class DownloadPage : Page {
+
     private val localManifest = try {
         GameManager.getLocalManifest()
     } catch (_: Exception) {
@@ -41,25 +43,47 @@ class DownloadPage : Page {
     @Composable
     override fun render() {
 
+        var remoteManifest: Manifest? by rememberSaveable { mutableStateOf(null) }
+
         LaunchedEffect(Unit) {
-            GameManager.downloadManifest(DownloadProvider.getDefaultProvider())
+            remoteManifest = GameManager.downloadManifest(DownloadProvider.getDefaultProvider())
         }
 
-        val remoteManifest: Manifest? by rememberSaveable { mutableStateOf(null) }
+        val scope = rememberCoroutineScope()
+
         val manifest by lazy { remoteManifest ?: localManifest ?: error("manifest is null") }
 
         var searchGame by remember { mutableStateOf("") }
         var showDownloadDialog by remember { mutableStateOf(false) }
 
+        var downloadGame by remember { mutableStateOf("") }
+
         if (showDownloadDialog) {
+
+            var downloadProcess by remember { mutableStateOf(0f) }
+            val downloadJob = scope.launch {
+                with(getGameDownloader(downloadGame)) {
+                    downloadGameJson()
+                    downloadProcess = 0.3f
+                    downloadLibrary()
+                    downloadProcess = 0.5f
+                    downloadAssets()
+                    downloadProcess = 0.7f
+                    downloadClientJar()
+                    downloadProcess = 1f
+                }
+            }
+
             AlertDialog(
                 onDismissRequest = {
                     showDownloadDialog = false
+                    downloadJob.cancel()
                 },
                 confirmButton = {
                     Button(
                         onClick = {
                             showDownloadDialog = false
+                            downloadJob.cancel()
                         }
                     ) {
                         Text("取消下载")
@@ -68,10 +92,20 @@ class DownloadPage : Page {
                 title = { Text("下载游戏") },
                 text = {
                     Column {
-                        Text("下载中...喝杯 java 先")
+                        Text("下载中...")
+                        when (downloadProcess) {
+                            0f -> Text("下载游戏数据喵")
+                            0.3f -> Text("下载游戏库喵")
+                            0.5f -> Text("下载游戏资源喵")
+                            0.7f -> Text("正在下载mojang的大屎山")
+                            1f -> {
+                                Text("下载完了喵")
+                                showDownloadDialog = false
+                            }
+                        }
                         LinearProgressIndicator(
                             modifier = Modifier.padding(10.dp).fillMaxWidth(),
-                            progress = 0.5f
+                            progress = downloadProcess
                         )
                     }
                 }
@@ -82,7 +116,6 @@ class DownloadPage : Page {
         if (localManifest == null && remoteManifest == null) {
             Text("loading")
         } else {
-
             OutlinedTextField(
                 searchGame,
                 { searchGame = it },
@@ -94,7 +127,6 @@ class DownloadPage : Page {
             )
 
             val state = rememberLazyListState()
-            val scope = rememberCoroutineScope()
 
             Box(
                 modifier = Modifier
@@ -114,6 +146,7 @@ class DownloadPage : Page {
                         Column(Modifier.animateItemPlacement()) {
                             VersionCard(version.id, version.releaseTime, version.type) {
                                 showDownloadDialog = true
+                                downloadGame = version.id
                             }
                         }
                     }
