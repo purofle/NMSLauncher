@@ -36,6 +36,8 @@ class GamePage : Page {
         val gameList = remember { mutableStateListOf<String>() }
         var showMicrosoftLoginDialog by remember { mutableStateOf(false) }
 
+        val scope = rememberCoroutineScope()
+
         LaunchedEffect(Unit) {
             gameList.addAll(GameManager.versions)
         }
@@ -78,8 +80,9 @@ class GamePage : Page {
                         ExtendedFloatingActionButton(
                             {
                                 val gameDownloader = getGameDownloader(selectedGame)
-                                gameDownloader.extraNatives()
-                                startGame(gameDownloader.getLauncherArgument())
+                                scope.launch {
+                                    startGame(selectedGame, gameDownloader.getLauncherArgument())
+                                }
 
                             },
                             Modifier.padding(20.dp)
