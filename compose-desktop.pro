@@ -9,6 +9,11 @@
 -keepclasseswithmembers public class com.github.purofle.nmsl.MainKt {
     public static void main(java.lang.String[]);
 }
+
+-keepattributes InnerClasses
+
+-keep @kotlinx.serialization.Serializable class * {*;}
+
 -keep class org.jetbrains.skia.** { *; }
 -keep class org.jetbrains.skiko.** { *; }
 

@@ -36,6 +36,13 @@ class GamePage : Page {
         val gameList = remember { mutableStateListOf<String>() }
         var showMicrosoftLoginDialog by remember { mutableStateOf(false) }
 
+        val snackbarHostState = remember { SnackbarHostState() }
+
+        var config = Config.readConfig().profile.minecraftProfile.name
+        if (config.isEmpty()) {
+            config = "Microsoft Account"
+        }
+
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
@@ -43,8 +50,16 @@ class GamePage : Page {
         }
 
         if (showMicrosoftLoginDialog) {
-            MicrosoftLoginDialog {
+            MicrosoftLoginDialog({
                 showMicrosoftLoginDialog = false
+                scope.launch {
+                    snackbarHostState.showSnackbar("Login cancel")
+                }
+            }) {
+                showMicrosoftLoginDialog = false
+                scope.launch {
+                    snackbarHostState.showSnackbar("Login success")
+                }
             }
         }
 
@@ -70,7 +85,7 @@ class GamePage : Page {
             Scaffold(
                 topBar = {
                     Column(Modifier.fillMaxWidth()) {
-                        MicrosoftAccount {
+                        MicrosoftAccount(config) {
                             showMicrosoftLoginDialog = true
                         }
                     }
@@ -90,7 +105,10 @@ class GamePage : Page {
                             Text("启动游戏")
                         }
                     }
-                }
+                },
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
+                },
             ) { pd ->
                 Box(modifier = Modifier.padding(pd).fillMaxSize()) {
                     if (selectedGame.isEmpty()) {
@@ -137,13 +155,8 @@ fun GameItem(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun MicrosoftAccount(onClick: () -> Unit) {
+fun MicrosoftAccount(name: String, onClick: () -> Unit) {
     val primaryContainer = MaterialTheme.colorScheme.primaryContainer
-
-    var config = Config.config.profile.minecraftProfile.name
-    if (config.isEmpty()) {
-        config = "Microsoft Account"
-    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -153,16 +166,16 @@ fun MicrosoftAccount(onClick: () -> Unit) {
             .background(MaterialTheme.colorScheme.onSecondary)
     ) {
 
-        Text(config.first().uppercase(), modifier = Modifier.drawBehind {
+        Text(name.first().uppercase(), modifier = Modifier.drawBehind {
             drawCircle(primaryContainer, radius = 20f)
         }.padding(30.dp, 15.dp))
 
-        Text(config, modifier = Modifier.padding(5.dp, 0.dp))
+        Text(name, modifier = Modifier.padding(5.dp, 0.dp))
     }
 }
 
 @Composable
-fun MicrosoftLoginDialog(callback: () -> Unit) {
+fun MicrosoftLoginDialog(onDismissCallback: () -> Unit, callback: () -> Unit) {
 
     var deviceCode by remember { mutableStateOf("") }
 
@@ -170,7 +183,6 @@ fun MicrosoftLoginDialog(callback: () -> Unit) {
         val deviceFlow = MicrosoftAuth.getDeviceAuthorization()
         deviceCode = deviceFlow.userCode
 
-        launch {
             MicrosoftAuth.authorizationFlow(deviceFlow.deviceCode).collect { auth ->
                 Config.createConfig(
                     NmslConfig(
@@ -183,19 +195,19 @@ fun MicrosoftLoginDialog(callback: () -> Unit) {
                     )
                 )
                 callback()
-            }
-
         }
     }
+
+    val text = if (deviceCode.isNotEmpty()) "复制 $deviceCode 并打开 https://www.microsoft.com/link 来登录" else "请稍等..."
     AlertDialog(
-        onDismissRequest = { callback() },
+        onDismissRequest = { onDismissCallback() },
         title = { Text("Microsoft Login") },
-        text = { Text("复制 $deviceCode 并打开 https://www.microsoft.com/link 来登录") },
+        text = { Text(text) },
         confirmButton = {
             Button(onClick = {
                 ClipboardManager().setText(deviceCode)
                 URIManager().openUri("https://www.microsoft.com/link")
-            }) {
+            }, enabled = deviceCode.isNotEmpty()) {
                 Text("复制并打开浏览器")
             }
         },
