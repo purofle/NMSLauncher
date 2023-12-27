@@ -10,6 +10,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.util.concurrent.CancellationException
 
 
 object MicrosoftAuth {
@@ -60,6 +61,9 @@ object MicrosoftAuth {
                     throw Exception(authError.error.toString())
                 }
             }.onFailure {
+                if (it is CancellationException) {
+                    throw it
+                }
                 emit(result.toJsonObject<SuccessAuthentication>())
                 getToken = false
             }.onSuccess {
