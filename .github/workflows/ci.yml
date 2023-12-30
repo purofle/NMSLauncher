@@ -7,10 +7,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-  windows-build:
-    name: windows build
-    runs-on: windows-latest
+  build:
+    strategy:
+      max-parallel: 3
+      fail-fast: true
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
+    runs-on: ${{ matrix.os }}
+    name: "${{ matrix.os }} build"
+    
     steps:
     - uses: actions/checkout@v3
     
@@ -20,11 +26,16 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
         cache: gradle
-        
-    - name: Build with Gradle
-      run: ./gradlew.bat packageReleaseMsi
+
+    - name: Build with Gradle(Windows)
+      if: matrix.platform == 'windows-latest'
+      run: ./gradlew.bat packageDistributionForCurrentOS
+    - name: Build with Gradle(macOS and Linux)
+      if: matrix.platform != 'windows-latest'
+      run: ./gradlew packageDistributionForCurrentOS
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4.0.0
       with:
-        path: build/compose
+        name: "${{ matrix.os }} artifact"
+        path: build/compose/binaries
