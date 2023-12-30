@@ -29,10 +29,10 @@ jobs:
 
     - name: Build with Gradle(Windows)
       if: matrix.platform == 'windows-latest'
-      run: ./gradlew.bat packageDistributionForCurrentOS
+      run: ./gradlew.bat packageReleaseDistributionForCurrentOS
     - name: Build with Gradle(macOS and Linux)
       if: matrix.platform != 'windows-latest'
-      run: ./gradlew packageDistributionForCurrentOS
+      run: ./gradlew packageReleaseDistributionForCurrentOS
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4.0.0
