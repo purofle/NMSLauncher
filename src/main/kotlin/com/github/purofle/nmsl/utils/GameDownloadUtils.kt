@@ -1,5 +1,6 @@
 package com.github.purofle.nmsl.utils
 
+import com.github.purofle.nmsl.auth.microsoft.MicrosoftAuth
 import com.github.purofle.nmsl.config.Config
 import com.github.purofle.nmsl.download.DownloadProvider
 import com.github.purofle.nmsl.download.GameDownloader
@@ -27,6 +28,17 @@ suspend fun startGame(version: String, launcherArgument: List<String>) {
         downloadAssets()
         downloadClientJar()
     }
+
+    val auth = MicrosoftAuth.authorizationRefreshToken(Config.config.msa.refreshToken)
+    Config.createConfig(
+        Config.config.copy(
+            msa = Config.config.msa.copy(
+                accessToken = auth.accessToken,
+                refreshToken = auth.refreshToken,
+                expiresIn = auth.expiresIn
+            )
+        )
+    )
 
     if (OS.CURRENT_OS != OS.WINDOWS) {
         startGameUnix(launcherArgument)
