@@ -6,6 +6,7 @@ import com.github.purofle.nmsl.utils.os.OS
 import kotlin.io.path.createDirectories
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
+import kotlin.reflect.KProperty
 
 object Config {
     private val configPath by lazy {
@@ -18,4 +19,12 @@ object Config {
     }
 
     fun readConfig(): NmslConfig = configPath.readText().toJsonObject()
+
+    operator fun getValue(nothing: Nothing?, property: KProperty<*>): NmslConfig {
+        return readConfig()
+    }
+
+    operator fun setValue(nothing: Nothing?, property: KProperty<*>, nmslConfig: NmslConfig) {
+        createConfig(nmslConfig)
+    }
 }
