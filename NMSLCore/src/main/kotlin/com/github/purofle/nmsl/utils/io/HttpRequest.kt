@@ -13,12 +13,10 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.core.*
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -104,11 +102,10 @@ object HttpRequest {
      * @param files 下载信息
      * @param parallel 并行数
      * @param context 协程上下文
-     * @param progress 下载进度回调
      */
     suspend fun downloadFiles(
         files: List<DownloadInfo>,
-        parallel: Int = 32,
+        parallel: Int = 64,
         context: CoroutineContext = Dispatchers.IO,
         onDownloadComplete: (file: DownloadInfo) -> Unit = {}
     ) = withContext(context) {
@@ -116,7 +113,7 @@ object HttpRequest {
         val semaphore = Semaphore(parallel)
 
         files.map { downloadInfo ->
-            launch {
+            async {
                 semaphore.withPermit {
                     downloadFile {
                         downloadInfo(downloadInfo)
@@ -124,6 +121,6 @@ object HttpRequest {
                     onDownloadComplete(downloadInfo)
                 }
             }
-        }
+        }.awaitAll()
     }
 }
