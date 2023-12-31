@@ -23,6 +23,7 @@ import com.github.purofle.nmsl.config.NmslConfig
 import com.github.purofle.nmsl.game.GameManager
 import com.github.purofle.nmsl.utils.getGameDownloader
 import com.github.purofle.nmsl.utils.startGame
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.skiko.ClipboardManager
 import org.jetbrains.skiko.URIManager
@@ -91,8 +92,8 @@ class GamePage : Page {
                     if (selectedGame.isNotBlank()) {
                         ExtendedFloatingActionButton(
                             {
+                                scope.launch(Dispatchers.IO) {
                                 val gameDownloader = getGameDownloader(selectedGame)
-                                scope.launch {
                                     startGame(selectedGame, gameDownloader.getLauncherArgument())
                                 }
 

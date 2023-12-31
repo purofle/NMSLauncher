@@ -26,7 +26,9 @@ import com.github.purofle.nmsl.game.Manifest
 import com.github.purofle.nmsl.game.VersionType
 import com.github.purofle.nmsl.utils.getDefaultProvider
 import com.github.purofle.nmsl.utils.getGameDownloader
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -46,7 +48,9 @@ class DownloadPage : Page {
         var remoteManifest: Manifest? by rememberSaveable { mutableStateOf(null) }
 
         LaunchedEffect(Unit) {
-            remoteManifest = GameManager.downloadManifest(DownloadProvider.getDefaultProvider())
+            withContext(Dispatchers.IO) {
+                remoteManifest = GameManager.downloadManifest(DownloadProvider.getDefaultProvider())
+            }
         }
 
         val scope = rememberCoroutineScope()
