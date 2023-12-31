@@ -37,10 +37,7 @@ class GamePage : Page {
         var showMicrosoftLoginDialog by remember { mutableStateOf(false) }
 
         val scope = rememberCoroutineScope()
-
-        LaunchedEffect(Unit) {
-            gameList.addAll(GameManager.versions)
-        }
+        gameList.addAll(GameManager.versions)
 
         if (showMicrosoftLoginDialog) {
             MicrosoftLoginDialog {
