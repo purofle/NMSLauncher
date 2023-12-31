@@ -45,7 +45,7 @@ object MicrosoftAuth {
                         append("grant_type", "refresh_token")
                         append("client_id", CLIENT_ID)
                         append("refresh_token", refreshToken)
-                        append("scope", scope ?: SCOPE.joinToString("%20"))
+                        append("scope", scope ?: SCOPE.joinToString(" "))
                     })
             )
         }.body()
