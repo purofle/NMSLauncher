@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -34,7 +35,6 @@ class GamePage : Page {
 
         var searchGameText by remember { mutableStateOf("") }
         var selectedGame by remember { mutableStateOf("") }
-        val gameList = remember { mutableStateListOf<String>() }
         var showMicrosoftLoginDialog by remember { mutableStateOf(false) }
 
         val snackbarHostState = remember { SnackbarHostState() }
@@ -45,7 +45,7 @@ class GamePage : Page {
         }
 
         val scope = rememberCoroutineScope()
-        gameList.addAll(GameManager.versions)
+        val gameList: SnapshotStateList<String> = GameManager.versions.toMutableStateList()
 
         if (showMicrosoftLoginDialog) {
             MicrosoftLoginDialog({
