@@ -24,9 +24,6 @@ class HttpRequestTest {
                 files = manifest.versions.map {
                     HttpRequest.DownloadInfo(it.url, File.createTempFile(it.id, ".json"))
                 },
-                progress = { url, bytesSentTotal, contentLength ->
-                    println("$url: $bytesSentTotal/$contentLength")
-                },
             )
         }
     }
