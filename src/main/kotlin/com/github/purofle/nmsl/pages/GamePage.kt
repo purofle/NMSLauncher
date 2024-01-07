@@ -93,7 +93,7 @@ class GamePage : Page {
                         ExtendedFloatingActionButton(
                             {
                                 scope.launch(Dispatchers.IO) {
-                                val gameDownloader = getGameDownloader(selectedGame)
+                                    val gameDownloader = getGameDownloader(selectedGame)
                                     startGame(selectedGame, gameDownloader.getLauncherArgument())
                                 }
 
@@ -181,22 +181,23 @@ fun MicrosoftLoginDialog(onDismissCallback: () -> Unit, callback: () -> Unit) {
         val deviceFlow = MicrosoftAuth.getDeviceAuthorization()
         deviceCode = deviceFlow.userCode
 
-            MicrosoftAuth.authorizationFlow(deviceFlow.deviceCode).collect { auth ->
-                Config.createConfig(
-                    NmslConfig(
-                        Msa(
-                            accessToken = auth.accessToken,
-                            refreshToken = auth.refreshToken,
-                            expiresIn = auth.expiresIn
-                        ),
-                        MinecraftAuth.authenticate(auth.accessToken),
-                    )
+        MicrosoftAuth.authorization(deviceFlow.deviceCode).let { auth ->
+            Config.createConfig(
+                NmslConfig(
+                    Msa(
+                        accessToken = auth.accessToken,
+                        refreshToken = auth.refreshToken,
+                        expiresIn = auth.expiresIn
+                    ),
+                    MinecraftAuth.authenticate(auth.accessToken),
                 )
-                callback()
+            )
+            callback()
         }
     }
 
-    val text = if (deviceCode.isNotEmpty()) "复制 $deviceCode 并打开 https://www.microsoft.com/link 来登录" else "请稍等..."
+    val text =
+        if (deviceCode.isNotEmpty()) "复制 $deviceCode 并打开 https://www.microsoft.com/link 来登录" else "请稍等..."
     AlertDialog(
         onDismissRequest = { onDismissCallback() },
         title = { Text("Microsoft Login") },
