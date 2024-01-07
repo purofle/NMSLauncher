@@ -8,9 +8,6 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import java.util.concurrent.CancellationException
 
 
 object MicrosoftAuth {
@@ -51,24 +48,17 @@ object MicrosoftAuth {
         }.body()
     }
 
-    fun authorizationFlow(deviceCode: String): Flow<SuccessAuthentication> = flow {
-        var getToken = true
-        while (getToken) {
-            val result = authorizationDeviceCode(deviceCode)
-            runCatching {
-                val authError = result.toJsonObject<AuthorizationError>()
-                if (authError.error != PENDING) {
-                    throw Exception(authError.error.toString())
-                }
-            }.onFailure {
-                if (it is CancellationException) {
-                    throw it
-                }
-                emit(result.toJsonObject<SuccessAuthentication>())
-                getToken = false
-            }.onSuccess {
-                delay(5000)
+    suspend fun authorization(deviceCode: String): SuccessAuthentication {
+        val result = authorizationDeviceCode(deviceCode)
+        return try {
+            result.toJsonObject<SuccessAuthentication>()
+        } catch (e: Exception) {
+            val authError = result.toJsonObject<AuthorizationError>()
+            if (authError.error != PENDING) {
+                throw Exception(authError.error.toString())
             }
+            delay(5000)
+            authorization(deviceCode)
         }
     }
 
