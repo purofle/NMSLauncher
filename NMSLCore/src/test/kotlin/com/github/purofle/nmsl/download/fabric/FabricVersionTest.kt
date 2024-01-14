@@ -7,6 +7,7 @@ class FabricVersionTest {
     @Test
     fun getFabricVersionTest() = runBlocking {
         val fabricVersion = FabricVersion.getFabricVersion()
-        println(fabricVersion)
+        val fabricMeta = getFabricMeta(fabricVersion.first().metaUrl)
+        println(fabricMeta.launcherMeta.libraries.common.first())
     }
 }
