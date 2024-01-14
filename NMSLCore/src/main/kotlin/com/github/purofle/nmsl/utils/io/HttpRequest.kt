@@ -13,10 +13,13 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.core.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -89,8 +92,10 @@ object HttpRequest {
         download.saveFile.writeBytes(request.readBytes())
 
         // check sha1
-        require(download.sha1 != null && download.saveFile.sha1String() == download.sha1) {
-            logger.error("sha1 check failed: ${download.saveFile.name}, sha1: ${download.sha1}, file sha1: ${download.saveFile.sha1String()}")
+        if (download.sha1 != null) {
+            require(download.saveFile.sha1String() == download.sha1) {
+                logger.error("sha1 check failed: ${download.saveFile.name}, sha1: ${download.sha1}, file sha1: ${download.saveFile.sha1String()}")
+            }
         }
 
         logger.info("Downloaded ${download.url}")
