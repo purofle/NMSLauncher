@@ -7,5 +7,6 @@ suspend fun main() {
     val versions = GameManager.getVersionJson(GameManager.versions.first())
     FabricDownloader(provider, versions).apply {
         downloadFabric()
+        editGameJson()
     }
 }
