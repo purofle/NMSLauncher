@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.0"
-composePlugin = "1.5.11"
+composePlugin = "1.6.0-beta01"
 kspVersion = "1.9.0-1.0.11"
 log4jVersion = "2.20.0"
 proguardVersion = "7.3.2"
