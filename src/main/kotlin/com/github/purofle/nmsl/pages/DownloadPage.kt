@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -108,8 +109,10 @@ class DownloadPage : Page {
                             }
                         }
                         LinearProgressIndicator(
+                            progress = {
+                                downloadProcess
+                            },
                             modifier = Modifier.padding(10.dp).fillMaxWidth(),
-                            progress = downloadProcess
                         )
                     }
                 }
