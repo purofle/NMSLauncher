@@ -3,7 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    alias(libs.plugins.compose)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -39,18 +40,12 @@ dependencies {
     implementation(compose.material3)
     implementation(compose.materialIconsExtended)
 
-    implementation(project(":library"))
     implementation(project(":NMSLCore"))
 }
 
 tasks.test {
     useJUnit()
 }
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-}
-
 
 compose.desktop {
     application {
@@ -60,7 +55,7 @@ compose.desktop {
             packageName = "NMSLauncher"
             packageVersion = "1.0.0"
 
-            copyright = "Copyright (C) Purofle 2023-2023"
+            copyright = "Copyright (C) Purofle 2023-2025"
         }
         buildTypes.release.proguard {
             configurationFiles.from(project.file("compose-desktop.pro"))

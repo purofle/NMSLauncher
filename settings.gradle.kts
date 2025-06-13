@@ -5,5 +5,4 @@ pluginManagement {
     }
 }
 rootProject.name = "NMSLauncher"
-include(":library")
 include("NMSLCore")

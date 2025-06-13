@@ -1,6 +1,6 @@
 [versions]
-kotlin = "1.9.0"
-composePlugin = "1.6.0-beta01"
+kotlin = "2.1.21"
+compose-plugin = "1.8.1"
 kspVersion = "1.9.0-1.0.11"
 log4jVersion = "2.20.0"
 proguardVersion = "7.3.2"
@@ -27,7 +27,9 @@ ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorVer
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationJsonVersion" }
 
 [plugins]
-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
