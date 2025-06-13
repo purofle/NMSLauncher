@@ -15,7 +15,6 @@ fun main() {
         Config.createConfig(NmslConfig())
     }
 
-
     application {
         Window(
             title = "NMSLauncher",

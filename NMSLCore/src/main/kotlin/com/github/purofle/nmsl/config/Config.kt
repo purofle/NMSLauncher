@@ -3,6 +3,8 @@ package com.github.purofle.nmsl.config
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonObject
 import com.github.purofle.nmsl.utils.json.JsonUtils.toJsonString
 import com.github.purofle.nmsl.utils.os.OS
+import org.apache.log4j.LogManager
+import org.slf4j.LoggerFactory
 import kotlin.io.path.createDirectories
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -25,6 +27,7 @@ object Config {
     }
 
     operator fun setValue(nothing: Nothing?, property: KProperty<*>, nmslConfig: NmslConfig) {
+        LogManager.getLogger(this::class.java).info("Config has been changed to ${nmslConfig.toJsonString()}")
         createConfig(nmslConfig)
     }
 }
