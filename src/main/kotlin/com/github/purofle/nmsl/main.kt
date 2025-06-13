@@ -28,9 +28,6 @@ fun main() {
             title = "NMSLauncher",
             onCloseRequest = ::exitApplication
         ) {
-//            MonetCompatDynamicTheme(MonetCompat(seedColor())) {
-//                MainPage()
-//            }
             MaterialTheme(colorScheme = darkColorScheme()) {
                 MainPage()
             }

@@ -147,7 +147,8 @@ class DownloadPage : Page {
                         manifest.versions.filter { it.id.contains(searchGame) }.sortedBy { it.type },
                         key = { it.id }
                     ) { version ->
-                        Column(Modifier.animateItemPlacement()) {
+//                        Column(Modifier.animateItemPlacement()) {
+                        Column {
                             VersionCard(version.id, version.releaseTime, version.type) {
                                 showDownloadDialog = true
                                 downloadGame = version.id

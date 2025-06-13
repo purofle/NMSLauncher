@@ -6,10 +6,8 @@ log4jVersion = "2.20.0"
 proguardVersion = "7.3.2"
 ktorVersion = "2.3.3"
 serializationJsonVersion = "1.6.0-RC"
-composeIcons = "1.1.0"
 
 [libraries]
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 proguard-plugin = { module = "com.guardsquare:proguard-gradle", version.ref = "proguardVersion" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jVersion" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4jVersion" }
@@ -31,8 +29,3 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
-
-[bundles]
-
