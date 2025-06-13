@@ -7,15 +7,8 @@ import androidx.compose.ui.window.application
 import com.github.purofle.nmsl.config.Config
 import com.github.purofle.nmsl.config.NmslConfig
 import com.github.purofle.nmsl.pages.MainPage
-import org.apache.logging.log4j.LogManager
 
 fun main() {
-
-    Thread.setDefaultUncaughtExceptionHandler { _, e ->
-        e.printStackTrace()
-        LogManager.getLogger("error").error(e)
-    }
-
     runCatching {
         Config.config
     }.onFailure {
