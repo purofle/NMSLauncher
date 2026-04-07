@@ -25,7 +25,7 @@ buildscript {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 dependencies {
@@ -35,8 +35,8 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation(compose.desktop.currentOs)
-    implementation(compose.material3)
-    implementation(compose.materialIconsExtended)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.extended)
 
     implementation(project(":NMSLCore"))
 }
@@ -53,7 +53,7 @@ compose.desktop {
             packageName = "NMSLauncher"
             packageVersion = "1.0.0"
 
-            copyright = "Copyright (C) Purofle 2023-2025"
+            copyright = "Copyright (C) Purofle 2023-2026"
         }
         buildTypes.release.proguard {
             configurationFiles.from(project.file("compose-desktop.pro"))
